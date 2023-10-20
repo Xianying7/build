@@ -3,12 +3,13 @@
 #ini adalah data beta test shortlinks error no komplen
 //eval(str_replace("<?php","",file_get_contents("build_index.php")));
 
-//die(print_r(bypass_shortlinks("https://linksfly.me/u3iJXCBs")));
+//die(print_r(bypass_shortlinks("https://adrev.link/ZJMPEfpH")));
 //print_r(bypass_shortlinks("https://mitly.us/5HzGNE"));
 //print_r(bypass_shortlinks("https://link1s.com/fNb8aWN"));
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
-//print_r(bypass_shortlinks("https://clkmein.com/S908m6530024f1f62eSm0CyUqAyILJT?r=https://coinpayz.xyz"));
+//print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
 //print_r(bypass_shortlinks("https://go.megaurl.in/BSDJi"));
+//print_r(bypass_shortlinks("https://sox.link/jgoMW"));
 
 function build($url=0){
   if(preg_match("#(clk.st)#is",$url)){
@@ -133,7 +134,8 @@ function h_short($xml = 0, $referer = 0, $agent =0){
     }
     $headers[] = 'Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7';
     if($agent){
-    $agent =' (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+    #$agent =' (compatible; Googlebot/2.1; +http://www.google.com/bot.html! Google-InspectionTool/1.0; AdsBot-Google-Mobile; +http://www.google.com/mobile/adsbot.html; Google-Read-Aloud; +https://support.google.com/webmasters/answer/1061943; Google-Site-Verification/1.0; Mediapartners-Google/2.1; +http://www.google.com/bot.html;  (select*from(select(sleep(20)))a)';
+    $agent = ' (compatible; Google-Youtube-Links)';
     } else {
     $user_agent = user_agent();
     }
@@ -181,6 +183,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
 
 function bypass_shortlinks($url){
   ulang:
+    $url = str_replace("http:","https:",$url);
     $coundown = 15;
     $host = parse_url(
     $url)["host"];
@@ -193,22 +196,30 @@ function bypass_shortlinks($url){
       $url = "https://ser7.crazyblog.in".explode("p=",$url)[1];
       $host = parse_url($url)["host"];
     }
-    if(preg_match("#(clk.st|urlsfly.me|wefly.me|shortsfly.me|linksfly.me)#is",$host)){
+    if(preg_match("#(clk.st|urlsfly.me|wefly.me|shortsfly.me|linksfly.me)#is",$host)){fly:
       $run = build($url);
       $r = base_short($url);
+      $link = $r["url"];
+      if(preg_match("#(".$host.")#is",$link)){
+        $referer = rand(1,999)."://advertisingexcel.com";
+      } else {
+        $referer = $link;
+      }
       if(preg_match("#(clk.st)#is",$host)){
-          $referer = $r["url"];
-        } else {
-          $referer = "https://advertisingexcel.com";
-        }
-      $r1 = base_short($run["inc"],0,0,$referer,1,$r["cookie"]);
-      if($r1["url"]){
-        L($coundown+100);
+        $referer = $link;
+      }
+      $r1 = base_short($run["inc"],0,0,$referer,1)["url"];
+      if(preg_match("#(".$host.")#is",$r1)){
+        die(m."referer perlu di update".n);
+        goto fly;
+      }
+      if($r1){
+        L(100);
         print h."success";
         r();
-        return $r1["url"];
+        return $r1;
       }
-    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|ladrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|link.usalink.io|linx.cc|sox.link)#is",$host)){
+    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|link.usalink.io|linx.cc)#is",$host)){
         if(preg_match("#(link1s.com)#is",$host)){
           $referer = "https://google.com/";
         } elseif(preg_match("#(insfly.pw)#is",$host)){
@@ -222,20 +233,20 @@ function bypass_shortlinks($url){
         } elseif(preg_match("#(link.usalink.io)#is",$host)){
           $referer = "https://link.theconomy.me";
         } elseif(preg_match("#(linx.cc)#is",$host)){
-          $referer = "https://autodime.com";
+          $referer = "https://autodime.com/blog/";
         } elseif(preg_match("#(sox.link)#is",$host)){
-          $referer = "https://coincroco.com/";
+          $referer = "https://coincroco.com/markets/10-common-misconceptions-about-bitcoin/";
         }else {
           $referer = 0;
         }
-        if(preg_match("#(go.illink.net|go.birdurls.com|go.owllink.net|go.illink.net)#is",$host)){
+        if(preg_match("#(go.illink.net|go.birdurls.com|go.owllink.net|go.illink.net|sox.lik)#is",$host)){
           $cloud = 1;
         } else {
           $cloud = 0;
         }
-        $url = str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace("shrinke.us","en.shrinke.me",$url)))))))));
+        $url = str_replace("linksly.co","go.linksly.co",str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace("shrinke.us","en.shrinke.me",$url))))))))));
         $run = build($url);
-        $r = base_short($run["links"],0,0,$referer,$cloud);//die(print_r($r));
+        $r = base_short($run["links"],0,0,$referer,$cloud);
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         
@@ -254,7 +265,7 @@ function bypass_shortlinks($url){
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
         }
-        
+        /*
         if($t[1][3] == "f_n"){
           $method = "recaptchav2";
           $cap = captchaai($method,$r[$method],$run["links"]);
@@ -262,8 +273,7 @@ function bypass_shortlinks($url){
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
-        }
-        //die(print_r($r));
+        }*/
         
         if(explode('"',$t[1][2])[4] == "f_n"){
           $method = "recaptchav2";
@@ -273,10 +283,6 @@ function bypass_shortlinks($url){
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
         }
-        
-        
-        
-        //die(print_r($r));
         
         if(explode('"',$t[2][3])[0] == "2"){
           $data = data_post($t)["five"];
@@ -303,17 +309,16 @@ function bypass_shortlinks($url){
          $cookie[] = $r["cookie"];
          $t = $r["token_csrf"];
         }
-        
-        
-        //die(print_r($r));
-        
-        
-        
-       // did($data);
-
+        if(explode('"',$t[1][3])[0] == "ad_form_data"){
+          $t = array(
+            array_merge(array_diff($t[0],[$t[1][0],$t[2][0]])),
+            array_merge(array_diff($t[1], [$t[1][0], $t[2][0]])),
+            array_merge(array_diff($t[2], [$t[1][0], $t[2][0]]))
+            );print_r($r);
+        }
         if(explode('"',$t[1][2])[0] == "ad_form_data"){
-        L($coundown);
-        $data = data_post($t)["four"];
+          $data = data_post($t)["four"];
+          L($coundown);
           $r1 = base_short($run["go"][0],1,$data,0,$cloud,join('',$cookie))["json"];
           if($r1->status == "success"){
             print h.$r1->status;
@@ -522,6 +527,12 @@ function bypass_shortlinks($url){
           }
         }
       
+    } elseif(preg_match("#(sox.link)#is",$host)){
+      
+      $r = base_short("https://linx.cc/Y7vZY2M",0,0,0,1);
+      $cookie[] = $r["cookie"];die(print_r($r));
+      $t = $r["token_csrf"];
+      
     }
 }
 
@@ -593,14 +604,14 @@ function config() {
   $config[] ="Clkst";
   $config[] ="Wefly";
   $config[] ="Insfly";
-  $config[] ="Adrevlinks15";
-  $config[] ="Linkrex";
+  $config[] ="Adrevlinks";
+  //$config[] ="Linkrex";
   $config[] ="Shortsfly";
   $config[] ="Shrinkme";
   $config[] ="Linksly";
   $config[] ="Shortest";
   $config[] ="Linksfly";
-  $config[] ="Shortox";
+  //$config[] ="Shortox";
   $config[] ="Mitly";
   $config[] ="Clk-sh";
   $config[] ="Exe";
