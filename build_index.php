@@ -138,7 +138,7 @@ function an($input){
     $a = str_split($input); 
     foreach ($a as $b){
       print $b;
-      usleep(1500);
+      usleep(15000);
     }
 }
 
