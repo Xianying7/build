@@ -373,7 +373,7 @@ function bypass_shortlinks($url){
           }
       }
     } elseif(preg_match("#(linkdam.me|terafly.me|forexly.cc|insurancly.cc|goldly.cc|playstore.pw|botfly.me)#is",$host)){
-      $r = base_short($url);die(print_r($r));
+      $r = base_short($url);
       if(preg_match("#(playstore.pw)#is",$host)){
         $r["url"] = $url;
       } elseif(preg_match("#(botfly.me)#is",$host)){
