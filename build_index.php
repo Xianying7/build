@@ -17,6 +17,15 @@ function multiexplode($delimiters,$string){
     return explode($delimiters[0],$ready);
 }
 
+function arr_rand($my_array = array()) {
+  $copy = array();
+  while (count($my_array)) {
+    $element = array_rand($my_array);
+    $copy[$element] = $my_array[$element];
+    unset($my_array[$element]);
+  }
+  return array_merge($copy);
+}
 
 function set_cookie($result){
 preg_match_all('/^Set-Cookie:\s*([^;\r\n]*)/mi', $result, $matches);
@@ -109,8 +118,8 @@ function rt(){
 }
 
 function tx($a){
-    print(h."Input ".$a.c." > ".p);
-    return trim(fgets(STDIN));
+  print(h."Input ".$a.c." > ".p);
+  return trim(fgets(STDIN));
 }
 
 function ex($a,$b,$c,$d){
@@ -326,8 +335,8 @@ function user_agent(){
 }
 
 
-function hmc($xml=0){
-    global $u_a,$u_c;
+function hmc($xml=0,$u_c = 0){
+    global $u_a;
     $h[] = "Host: ".explode("/",host)[2];
     if($xml){
     $h[] = "accept: application/json, text/javascript, */*; q=0.01";
