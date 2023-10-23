@@ -1,7 +1,9 @@
 <?php
 
+
 #ini adalah data beta test shortlinks error no komplen
 //eval(str_replace("<?php","",file_get_contents("build_index.php")));
+
 
 //die(print_r(bypass_shortlinks("https://adrev.link/ZJMPEfpH")));
 //print_r(bypass_shortlinks("https://mitly.us/5HzGNE"));
@@ -9,7 +11,7 @@
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
 //print_r(bypass_shortlinks("https://go.megaurl.in/BSDJi"));
-//print_r(bypass_shortlinks("https://link.adlink.click/DTjR"));
+//print_r(bypass_shortlinks("https://linkdam.me/T2O6pzk"));
 
 function build($url=0){
   if(preg_match("#(clk.st)#is",$url)){
@@ -37,7 +39,7 @@ function visit_short($r) {
     if(!$control){
       $control = [n];
     }
-    $config = config();
+    $config = arr_rand(config());#die(print_r($config));
     $list = $r["name"];
     $exp = 0;
     for($i=0;$i<count($config);$i++) {
@@ -219,7 +221,7 @@ function bypass_shortlinks($url){
         r();
         return $r1;
       }
-    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click)#is",$host)){
+    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz)#is",$host)){
         if(preg_match("#(link1s.com)#is",$host)){
           $referer = "https://google.com/";
         } elseif(preg_match("#(insfly.pw)#is",$host)){
@@ -230,7 +232,7 @@ function bypass_shortlinks($url){
           $referer = "https://bitzite.com/";
         } elseif(preg_match("#(linksly.co)#is",$host)){
           $referer = "https://en.themezon.net/";
-        } elseif(preg_match("#(link.usalink.io)#is",$host)){
+        } elseif(preg_match("#(link.usalink.io|usalink.io)#is",$host)){
           $referer = "https://link.theconomy.me";
         } elseif(preg_match("#(ez4short.com)#is",$host)){
           $referer = "https://ez4mods.com/";
@@ -242,6 +244,8 @@ function bypass_shortlinks($url){
           $referer = "https://webseriesreel.in/";
         } elseif(preg_match("#(link.adlink.click)#is",$host)){
           $referer = "https://www.diudemy.com/";
+        } elseif(preg_match("#(url.beycoin.xyz)#is",$host)){
+          $referer = "https://adsluffa.online/";
         } else {
           $referer = 0;
         }
@@ -250,18 +254,18 @@ function bypass_shortlinks($url){
         } else {
           $cloud = 0;
         }
-        $url = str_replace("link.adlink.click","blog.adlink.click",str_replace("linksfly.link","go.linksfly.link",str_replace("shorti.io","blog.financeandinsurance.xyz",str_replace("link.shrinkme.link","blog.shrinkme.link",str_replace("go.hatelink.me","g0.hatelink.me",str_replace("linksly.co","go.linksly.co",str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace("shrinke.us","en.shrinke.me",$url)))))))))))))));
+        $url = str_replace("usalink.io","link.theconomy.me",str_replace("url.beycoin.xyz/short","url.beycoin.xyz",str_replace("link.adlink.click","blog.adlink.click",str_replace("linksfly.link","go.linksfly.link",str_replace("shorti.io","blog.financeandinsurance.xyz",str_replace("link.shrinkme.link","blog.shrinkme.link",str_replace("go.hatelink.me","g0.hatelink.me",str_replace("linksly.co","go.linksly.co",str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace("shrinke.us","en.shrinke.me",$url)))))))))))))))));
         $run = build($url);
         $r = base_short($run["links"],0,0,$referer,$cloud);
         $cookie[] = $r["cookie"];
-        $t = $r["token_csrf"];
+        $t = $r["token_csrf"];//die(print_r($r));
         
         if(preg_match("#(verify/[?]/)#is",$r["url"])){
           $verify = str_replace("http:","https:",$r["url"]);
           $r = base_short($verify,0,0,$verify,0);
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
-        }//die(print_r($r));
+        }
         
         if($t[1][2] == "f_n"){
           $method = "recaptchav2";
@@ -320,7 +324,7 @@ function bypass_shortlinks($url){
             array_merge(array_diff($t[0],[$t[1][0],$t[2][0]])),
             array_merge(array_diff($t[1], [$t[1][0], $t[2][0]])),
             array_merge(array_diff($t[2], [$t[1][0], $t[2][0]]))
-            );print_r($r);
+            );
         }
         if(explode('"',$t[1][2])[0] == "ad_form_data"){
           $data = data_post($t)["four"];
@@ -369,7 +373,7 @@ function bypass_shortlinks($url){
           }
       }
     } elseif(preg_match("#(linkdam.me|terafly.me|forexly.cc|insurancly.cc|goldly.cc|playstore.pw|botfly.me)#is",$host)){
-      $r = base_short($url);//die(print_r($r));
+      $r = base_short($url);die(print_r($r));
       if(preg_match("#(playstore.pw)#is",$host)){
         $r["url"] = $url;
       } elseif(preg_match("#(botfly.me)#is",$host)){
@@ -380,40 +384,43 @@ function bypass_shortlinks($url){
         goto ulang;
       }
       $r1 = base_short($url,0,0,$r["url"]);
+      $cookie = $r1["cookie"];
       $t = $r1["token_csrf"];
       if($t[2][2] == "continue"){
         $data = data_post($t)["five"];
-        $r2 = base_short($url,0,$data,$url,0,$r1["cookie"]);
-        $t = $r2["token_csrf"];
+        $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+        $cookie = $r1["cookie"];
+        $t = $r1["token_csrf"];
         if($t[2][2] == "continue"){
           $data = data_post($t)["five"];
-          $r3 = base_short($url,0,$data,$url,0,$r1["cookie"].$r2["cookie"]);
-          $t = $r3["token_csrf"];
+          $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+          $cookie = $r1["cookie"];
+          $t = $r1["token_csrf"];
           if($t[2][2] == "continue"){
             $data = data_post($t)["five"];
-            $r4 = base_short($url,0,$data,$url,0,$r1["cookie"].$r2["cookie"].$r3["cookie"]);
-            $final = $r4;
-            $t = $r4["token_csrf"];
+            $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+            $cookie = $r1["cookie"];
+            $t = $r1["token_csrf"];
             if($t[2][2] == "continue"){
               $data = data_post($t)["five"];
-              $r5 = base_short($url,0,$data,$url,0,$r1["cookie"].$r2["cookie"].$r3["cookie"].$r4["cookie"]);
-              $final = $r5;
-              $t = $r5["token_csrf"];
+              $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+              $cookie = $r1["cookie"];
+              $t = $r1["token_csrf"];
               if($t[2][2] == "continue"){
                 $data = data_post($t)["five"];
-                $r6 = base_short($url,0,$data,$url,0,$r1["cookie"].$r2["cookie"].$r3["cookie"].$r4["cookie"].$r5["cookie"]);
-                $final = $r6;
-                $t = $r6["token_csrf"];
+                $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+                $cookie = $r1["cookie"];
+                $t = $r1["token_csrf"];
                 if($t[2][2] == "continue"){
                   $data = data_post($t)["five"];
-                  $r7 = base_short($url,0,$data,$url,0,$r1["cookie"].$r2["cookie"].$r3["cookie"].$r4["cookie"].$r5["cookie"].$r6["cookie"]);
-                  $final = $r7;
-                  $t = $r7["token_csrf"];
+                  $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+                  $cookie = $r1["cookie"];
+                  $t = $r1["token_csrf"];
                   if($t[2][2] == "continue"){
                     $data = data_post($t)["five"];
-                    $r8 = base_short($url,0,$data,$url,0,$r1["cookie"].$r2["cookie"].$r3["cookie"].$r4["cookie"].$r5["cookie"].$r6["cookie"].$r7["cookie"]);
-                    $final = $r8;
-                    $t = $r8["token_csrf"];
+                    $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+                    $cookie = $r1["cookie"];
+                    $t = $r1["token_csrf"];
                   }
                 }
               }
@@ -428,26 +435,25 @@ function bypass_shortlinks($url){
             $method = "recaptchav2";
             $cap = captchaai($method,$final[$method],$url);
             $data = data_post($t, $method ,$cap)["five"];
-            $r9 = base_short($url,0,$data,$url,0,$r1["cookie"].$r2["cookie"].$r3["cookie"].$r4["cookie"].$r5["cookie"].$r6["cookie"].$r7["cookie"].$r8["cookie"]);
-            $final = $r9;
-              $t = $r9["token_csrf"];
+            $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
+            $cookie = $r1["cookie"];
+            $t = $r1["token_csrf"];
           }
-          $t = $final["token_csrf"];
           if($t[1][2] == "ad_form_data"){
             L($coundown);
             $data = data_post($t)["four"];
-            $r10 = base_short(build($url)["go"][2],1,$data,$url,0,$r1["cookie"].$r2["cookie"].$r3["cookie"].$r4["cookie"].$r5["cookie"].$r6["cookie"].$r7["cookie"].$r8["cookie"].$r9["cookie"])["json"];
+            $r2 = base_short(build($url)["go"][2],1,$data,$url,0,join('',$cookie))["json"];
           }
-          if($r10->status == "success"){
-           print h.$r10->status;
+          if($r2->status == "success"){
+           print h.$r2->status;
            r();
-           return $r10->url;
+           return $r2->url;
           }
       }
     } elseif(preg_match("#(destyy.com|festyy.com|gestyy.com|hestyy.com|ceesty.com|corneey.com)#is",$host)) {
         while(true) {
             $run = build($url);
-            $r = base_short($run["links"]);
+            $r = base_short($run["links"]);//die(print_r($r));
             if(!$r["url"]) {
                 continue;
             }
@@ -499,12 +505,9 @@ function bypass_shortlinks($url){
           }
         }
     } elseif(preg_match("#(cuty.io)#is",$host)){
-     // $url = str_replace("go.mtraffics.com","get.mtraffics.com",$url);
-      
-        $r = base_short($url); 
-        $cookie[] = $r["cookie"];
-        $url = $r["url"];
-     
+      $r = base_short($url); 
+      $cookie[] = $r["cookie"];
+      $url = $r["url"];
       if($r["url"]){
       $r = base_short($url,0,0,0,0,join('',$cookie));
       $cookie[] = $r["cookie"];
@@ -513,14 +516,12 @@ function bypass_shortlinks($url){
       $r = base_short($url,0,$data,0,0,join('',$cookie));//die(print_r($r));
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
-        $method = "recaptchav2";
-        $cap = captchaai($method,$r[$method],$url);
-        $data = data_post($t, $method ,$cap)["null"];
+      $method = "recaptchav2";
+      $cap = captchaai($method,$r[$method],$url);
+      $data = data_post($t, $method ,$cap)["null"];
       $r = base_short($url,0,$data,0,0,join('',$cookie));
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
-      
-      
       if(explode('"',$t[1][1])[0] == "data"){
         L($coundown);
         $data = data_post($t)["two"];
@@ -532,48 +533,14 @@ function bypass_shortlinks($url){
           }
           }
         }
-      
-    } elseif(preg_match("#(shortano.link)#is",$host)){
-      
+    } elseif(preg_match("#(test)#is",$host)){
       $r = base_short($url);
       $cookie[] = $r["cookie"];
-      $r = base_short($r["url"],0,0,0,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $r = base_short($r["url"],0,0,0,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $r = base_short("https://blog.freeoseocheck.com/random",0,0,0,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      
-      
-      $url_post = $r["url"];
-      $r = base_short($url_post,0,0,0,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
-      
-      
-      $method = "recaptchav2";
-      $cap = captchaai($method,$r[$method],$url_post);
-      $data = data_post($t, $method ,$cap)["null"];
-      $r = base_short($url_post,0,$data,0,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $t = $r["token_csrf"];
-      
-      
-      $data = data_post($t)["null"];
-      $r = base_short($url_post,0,$data,0,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $t = $r["token_csrf"];
-      
-      
-      $data = data_post($t)["null"];
-      $r = base_short($url_post,0,$data,0,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $t = $r["token_csrf"];
-      die(print_r($r));
-      
-      
     }
 }
+
+
 
 function data_post($t, $type = 0, $cap = 0){
   if($type == "recaptchav2"){
@@ -582,14 +549,14 @@ function data_post($t, $type = 0, $cap = 0){
     $resp = "h-recaptcha-response";
   }
   return [
-    "null" => str_replace("&=0&","&",http_build_query([
+    "null" => str_replace("&=0","",http_build_query([
             $t[1][0] => $t[2][0],
             $resp => $cap
             ])),
              "one" => str_replace("&=0&","&",http_build_query([
             $t[1][0] => $t[2][0],
             $t[1][1] => $t[2][1],
-            explode('"',$t[1][2])[0] => rand(11111111,99999999)
+            //explode('"',$t[1][2])[0] => rand(11111111,99999999)
             ])),
     "two" => http_build_query([
       $t[1][0] => $t[2][0],
@@ -646,6 +613,7 @@ function config() {
   $config[] ="Urlsfly.me";
   $config[] ="Chaininfo";
   $config[] ="Clkst";
+  $config[] ="Clk.st";
   $config[] ="Wefly";
   $config[] ="Wefly.me";
   $config[] ="Insfly";
@@ -657,6 +625,7 @@ function config() {
   $config[] ="Linksly";
   $config[] ="Shortest";
   $config[] ="Linksfly";
+  $config[] ="Linkfly";
   $config[] ="Linksfly.me";
   $config[] ="Hatelink";
   $config[] ="Mitly";
@@ -669,8 +638,13 @@ function config() {
   $config[] ="Megafly";
   $config[] ="Powclick";
   $config[] ="Earnify";
+  $config[] ="Earnifypro";
   $config[] ="Cuty";
   $config[] ="Usalink";
   $config[] ="ShrinkmeLink";
+  $config[] ="Beycoin";
+  $config[] ="Goldly";
+  $config[] ="Forexly";
+  $config[] ="Insurancely";
   return $config;
 }
