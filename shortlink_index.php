@@ -5,7 +5,7 @@
 //eval(str_replace("<?php","",file_get_contents("build_index.php")));
 
 
-//die(print_r(bypass_shortlinks("https://adrev.link/ZJMPEfpH")));
+//die(print_r(bypass_shortlinks("https://insurancly.cc/GkSuL")));
 //print_r(bypass_shortlinks("https://mitly.us/5HzGNE"));
 //print_r(bypass_shortlinks("https://link1s.com/fNb8aWN"));
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
@@ -384,42 +384,42 @@ function bypass_shortlinks($url){
         goto ulang;
       }
       $r1 = base_short($url,0,0,$r["url"]);
-      $cookie = $r1["cookie"];
+      $cookie[] = $r1["cookie"];
       $t = $r1["token_csrf"];
       if($t[2][2] == "continue"){
         $data = data_post($t)["five"];
         $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-        $cookie = $r1["cookie"];
+        $cookie[] = $r1["cookie"];
         $t = $r1["token_csrf"];
         if($t[2][2] == "continue"){
           $data = data_post($t)["five"];
           $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-          $cookie = $r1["cookie"];
+          $cookie[] = $r1["cookie"];
           $t = $r1["token_csrf"];
           if($t[2][2] == "continue"){
             $data = data_post($t)["five"];
             $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-            $cookie = $r1["cookie"];
+            $cookie[] = $r1["cookie"];
             $t = $r1["token_csrf"];
             if($t[2][2] == "continue"){
               $data = data_post($t)["five"];
               $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-              $cookie = $r1["cookie"];
+              $cookie[] = $r1["cookie"];
               $t = $r1["token_csrf"];
               if($t[2][2] == "continue"){
                 $data = data_post($t)["five"];
                 $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-                $cookie = $r1["cookie"];
+                $cookie[] = $r1["cookie"];
                 $t = $r1["token_csrf"];
                 if($t[2][2] == "continue"){
                   $data = data_post($t)["five"];
                   $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-                  $cookie = $r1["cookie"];
+                  $cookie[] = $r1["cookie"];
                   $t = $r1["token_csrf"];
                   if($t[2][2] == "continue"){
                     $data = data_post($t)["five"];
                     $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-                    $cookie = $r1["cookie"];
+                    $cookie[] = $r1["cookie"];
                     $t = $r1["token_csrf"];
                   }
                 }
@@ -433,10 +433,10 @@ function bypass_shortlinks($url){
           }
           if($t[2][2] == "captcha"){
             $method = "recaptchav2";
-            $cap = captchaai($method,$final[$method],$url);
+            $cap = captchaai($method,$r1[$method],$url);
             $data = data_post($t, $method ,$cap)["five"];
             $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
-            $cookie = $r1["cookie"];
+            $cookie[] = $r1["cookie"];
             $t = $r1["token_csrf"];
           }
           if($t[1][2] == "ad_form_data"){
