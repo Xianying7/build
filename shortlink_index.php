@@ -5,7 +5,7 @@
 //eval(str_replace("<?php","",file_get_contents("build_index.php")));
 
 
-//die(print_r(bypass_shortlinks("https://insurancly.cc/GkSuL")));
+//die(print_r(bypass_shortlinks("https://aii.sh/YdjluxD")));
 //print_r(bypass_shortlinks("https://mitly.us/5HzGNE"));
 //print_r(bypass_shortlinks("https://link1s.com/fNb8aWN"));
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
@@ -36,18 +36,18 @@ function build($url=0){
 
 function visit_short($r) {
     $control = file("control");
-    if(!$control){
-      $control = [n];
+    if(!$control[0]){
+      $control = ["tolol"];
     }
-    $config = arr_rand(config());#die(print_r($config));
+    $config = arr_rand(config());
     $list = $r["name"];
     $exp = 0;
     for($i=0;$i<count($config);$i++) {
         for($s=0;$s<count($list);$s++) {
-            $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",strtolower($list[$s])))[0];//die(print_r($r["left"]));
+            $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",strtolower($list[$s])))[0];
                 if(strtolower($config[$i]) == $open) {
-                    for($k=0;$k<count($control);$k++){
-                        if(strtolower($control[$k]) == $open or explode("/",trim(explode("<",$r["left"][$s])[0]))[0] == 0 or explode("/",trim(explode("<",$r["left"][$s])[0]))[0][0] == "-") {
+                    for($p=0;$p<count($control);$p++){
+                        if(strtolower(str_replace(n,"",$control[$p])) == $open or explode("/",trim(explode("<",$r["left"][$s])[0]))[0] == 0 or explode("/",trim(explode("<",$r["left"][$s])[0]))[0][0] == "-") {
                             goto up;
                         }
                     }
@@ -221,7 +221,7 @@ function bypass_shortlinks($url){
         r();
         return $r1;
       }
-    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz)#is",$host)){
+    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh)#is",$host)){
         if(preg_match("#(link1s.com)#is",$host)){
           $referer = "https://google.com/";
         } elseif(preg_match("#(insfly.pw)#is",$host)){
@@ -246,6 +246,8 @@ function bypass_shortlinks($url){
           $referer = "https://www.diudemy.com/";
         } elseif(preg_match("#(url.beycoin.xyz)#is",$host)){
           $referer = "https://adsluffa.online/";
+        } elseif(preg_match("#(xxxxc)#is",$host)){
+          $referer = "https://vcccv/";
         } else {
           $referer = 0;
         }
@@ -265,6 +267,58 @@ function bypass_shortlinks($url){
           $r = base_short($verify,0,0,$verify,0);
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
+        }
+        
+        if(explode('"',$t[2][3])[0] == "2"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        }
+        if(explode('"',$t[2][3])[0] == "3"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        }
+        
+        if(explode('"',$t[2][3])[0] == "4"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        }
+        if(explode('"',$t[2][3])[0] == "5"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        }
+        
+        if(explode('"',$t[2][3])[0] == "6"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        }
+        if(explode('"',$t[2][3])[0] == "7"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        }
+        
+        if(explode('"',$t[2][3])[0] == "8"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        }
+        if(explode('"',$t[2][3])[0] == "9"){
+          $data = data_post($t)["five"];
+          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
         }
         
         if($t[1][2] == "f_n"){
@@ -294,18 +348,7 @@ function bypass_shortlinks($url){
           $t = $r["token_csrf"];
         }
         
-        if(explode('"',$t[2][3])[0] == "2"){
-          $data = data_post($t)["five"];
-          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
-        $cookie[] = $r["cookie"];
-        $t = $r["token_csrf"];
-        }
-        if(explode('"',$t[2][3])[0] == "3"){
-          $data = data_post($t)["five"];
-          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
-        $cookie[] = $r["cookie"];
-        $t = $r["token_csrf"];
-        }
+        
         
         if(explode('"',$t[2][2])[0] == "captcha"){
           $data = data_post($t)["five"];
@@ -604,6 +647,7 @@ function config() {
   $config[] ="Shorti.io";
   $config[] ="Owllink";
   $config[] ="Birdsurl";
+  $config[] ="birdsurls.com";
   $config[] ="Link1s";
   $config[] ="ShrinkEarn";
   $config[] ="SheraLinks";
@@ -640,11 +684,22 @@ function config() {
   $config[] ="Earnify";
   $config[] ="Earnifypro";
   $config[] ="Cuty";
+  $config[] ="cuty.io";
   $config[] ="Usalink";
+  $config[] ="usa link";
   $config[] ="ShrinkmeLink";
+  $config[] ="shrinkme.link";
   $config[] ="Beycoin";
   $config[] ="Goldly";
+  $config[] ="okoo";
   $config[] ="Forexly";
+  $config[] ="forexlt.cc";
   $config[] ="Insurancely";
+  $config[] ="insurancly";
+  $config[] ="botfly";
+  $config[] ="cryptosh";
+  $config[] ="shrink.pe";
+  $config[] ="limkdam";
+  
   return $config;
 }
