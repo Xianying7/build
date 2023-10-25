@@ -724,10 +724,10 @@ function antibot($html){
   $captcha = googleapis($img[1]);
   $text_main = $captcha;
   $text_res = $captcha[1];
-  $txt[] = array('1'=>'one', '2'=>'two', '3'=>'three', '4'=>'four', '5'=>'five', '6'=>'six', '7'=>'seven', '8'=>'eight', '9'=>'nine', '10'=>'ten');
+  $txt[] = array('1'=>'one', '2'=>'two', '3'=>'three', '4'=>'four', '5'=>'five', '6'=>'six', '7'=>'seven', '8'=>'eight', '9'=>'nine', '10'=>'ten', 'NoTextReturn' => '');
   $txt[] = array('one'=>'1', 'two'=>'2', 'three'=>'3', 'four'=>'4', 'five'=>'5', 'six'=>'6', 'seven'=>'7', 'eight'=>'8', 'nine'=>'9', 'ten'=>'10');
   $txt[] = array('I'=>'1', 'II'=>'2', 'III'=>'3', 'IV'=>'4', 'V'=>'5', 'VI'=>'6', 'VII'=>'7', 'VIII'=>'8', 'IX'=>'9', 'X'=>'10');
-  $txt[] = array('C@t'=>'cat', 'd0g'=>'dog', '1!0n'=>'lion', 'T!g3r'=>'tiger', 'm0nk3y'=>'monkey', '31eph@nt'=>'elephant', 'c0w'=>'cow', 'f0x'=>'fox', 'm0us3'=>'mouse', '@nt'=>'ant');
+  $txt[] = array('C@t'=>'cat', 'd0g'=>'dog', '1!0n'=>'lion', 'T!g3r'=>'tiger', 'm0nk3y'=>'monkey', '31eph@nt'=>'elephant', 'c0w'=>'cow', 'f0x'=>'fox', 'm0us3'=>'mouse', '@nt'=>'ant', 'monkey' => 'monkey');
   $txt[] = array('1'=>'2-1', '2'=>'1+1', '3'=>'1+2', '4'=>'2+2', '5'=>'3+2', '6'=>'2+4', '7'=>'3+4', '8'=>'4+4', '9'=>'1+8', '11'=>'5+6');
   $txt[] = array('3-2'=>'1', '8-6'=>'2', '1+2'=>'3', '3+1'=>'4', '9-4'=>'5', '3+3'=>'6', '6+1'=>'7', '2*4'=>'8', '3+6'=>'9', '2+8'=>'10');
   $txt[] = array('200'=>'zoo', '020'=>'ozo', '002'=>'ooz', '500'=>'soo', '050'=>'oso', '005'=>'oos', '101'=>'lol', '505'=>'sos', '202'=>'zoz', '111'=>'lll');
@@ -770,7 +770,7 @@ function antibot($html){
   if(!$text_re[2]){
     $text_re[2] = $text_res[2];
   }
-  $alt = explode(",",str_replace(["."," "],",",$text_main[0]));
+  $alt = explode(",",str_replace([",,",",,,"],",",str_replace(["."," "],",",$text_main[0])));
   $main = str_replace([","." "],"",$text_main[0]);
   $res = [$text_re[0],$text_re[1],$text_re[2]];
   $rel = [$text_rel[0],$text_rel[1],$text_rel[2]];
@@ -845,45 +845,97 @@ function googleapis($img){
     ob_end_clean();
     $imgg[] = $data;
     $data = json_encode(["requests"=>[["features"=>[["maxResults"=> 1,"type" => "DOCUMENT_TEXT_DETECTION"]],"image" => ["content" => base64_encode($imgg[$i])]]]]);
-    $hh = [
-      "Accept-Encoding: gzip",
-      "User-Agent: Google-API-Java-Client Google-HTTP-Java-Client/1.43.3 (gzip)",
-      "x-android-package: image.to.text.ocr",
-      "x-android-cert: ad32d34755bb3b369a2ea8dfe9e0c385d73f80f0",
-      "Content-Type: application/json; charset=UTF-8",
-      "Content-Length: ".strlen($data),
-      "Host: vision.googleapis.com",
-      "Connection: Keep-Alive"
+    $package = [
+      "kr.infozone.documentrecognition_en",
+      "image.to.text.ocr",
+      "com.inverseai.image_to_text_OCR_scanner",
+      "aculix.smart.text.recognizer"
       ];
-    $h = [
-      "Accept-Encoding: gzip",
-      "User-Agent: Google-API-Java-Client Google-HTTP-Java-Client/1.23.0 (gzip)",
-      "x-android-package: kr.infozone.documentrecognition_en",
-      "x-android-cert: 00a56ee22492473e1b57670fa9c44185817e5586",
-      "Content-Type: application/json; charset=UTF-8",
-      "Content-Length: ".strlen($data),
-      "Host: vision.googleapis.com",
-      "Connection: Keep-Alive"
-      ];
-     // $api = "AIzaSyA5MInkpSbdSbmozCQSuBY3pylSTgmLlaM";
-      $api = "AIzaSyDm5IoUGFaQLpFXqoMvB9i20xc62J0taVA";
-      ulang:
-      $r = curl("https://vision.googleapis.com/v1/images:annotate?key=".$api,$h,$data)[1];
-      if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){
-        print p."Please wait, there is a limit!";
-        r();
-        goto ulang;
-      }
-      $convert = str_replace([";",":","%","′"],"",strip_tags(str_replace("﻿","",trimed(cark(json_decode($r)->responses[0]->textAnnotations[0]->description)))));
-      if($i == 0){
-        $text1 = $convert;
-      } else {
-        $text[] = $convert;
-      }
+      $cert = [
+        "00a56ee22492473e1b57670fa9c44185817e5586",
+        "ad32d34755bb3b369a2ea8dfe9e0c385d73f80f0",
+        "FDC669CB376A69B6D6065B8CCE8C188ADDDC4F3E",
+        "70E6AB2300C9406792452EA39A40690B91519C85"
+        ];
+        $h = ["Accept-Encoding: gzip",
+        "User-Agent: Dalvik/2.1.0 (Linux; U; Android 13; M2012K11AG Build/TQ3A.230901.001)",
+        "x-android-package: ".$package[$i],
+        "x-android-cert: ".$cert[$i],
+        "Content-Type: application/json; charset=UTF-8",
+        "Content-Length: ".strlen($data),
+        "Host: vision.googleapis.com",
+        "Connection: Keep-Alive"
+        ];
+        $api = [
+          "AIzaSyDm5IoUGFaQLpFXqoMvB9i20xc62J0taVA",
+          "AIzaSyA5MInkpSbdSbmozCQSuBY3pylSTgmLlaM",
+          "AIzaSyDqfshA40_b5IpjtZEuGJ8oUlRMnY4Ynk4",
+          "AIzaSyCt2nW_3i-RBp4kLM-9T0CzcbYQlHbJGek"
+          ];
+          ulang:
+            $r = curl("https://vision.googleapis.com/v1/images:annotate?key=".$api[$i],$h,$data)[1];
+            if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){
+              print p."Please wait, there is a limit!";
+              r();
+              goto ulang;
+            }
+            $convert = str_replace([n,";",":","%","′"],"",strip_tags(str_replace("﻿","",trimed(cark(json_decode($r)->responses[0]->textAnnotations[0]->description)))));
+            if($i == 0){
+              $text1 = str_replace(".",",",$convert);
+              
+            } else {
+              $text[] = str_replace([".",","," "],"",$convert);
+            }
   }
   return [$text1,$text];
 }
 
+function cardscanner($img){
+  for($i = 0;$i<count($img);$i++){
+    ob_start();
+    $base64_string = base64_decode($img[$i]);
+    $image = imagecreatefromstring($base64_string);
+    imagefilter($image, IMG_FILTER_SMOOTH, 1);
+    imagefilter($image,IMG_FILTER_NEGATE);
+    imagefilter($image, IMG_FILTER_GRAYSCALE);
+    imagecropauto($image , IMG_CROP_DEFAULT);
+    imagepng($image);
+    $data = ob_get_contents();
+    ob_end_clean();
+    $imgg[] = $data;
+    $code = uniqid();
+    $boundary = "----dio-boundary-";
+    $disposition = 'content-disposition: form-data; name=';
+    $eol = "\n";
+    $data = '';
+    $data .= $boundary.$code.$eol;
+    $data .= $disposition.'"api"'.$eol.$eol;
+    $data .= 'c3c35a68edd632e4be0d619e57a8fff0'.$eol;
+    $data .= $boundary.$code.$eol;
+    $data .= $disposition.'"image"; filename="IMG12510202311206.jpg"'.$eol;
+    $data .= 'content-type: application/octet-stream'.$eol.$eol;
+    $data .= $imgg[$i].$eol.$boundary.$code.'--';
+    $h = [
+      "user-agent: Dart/3.0 (dart:io)",
+      "content-type: multipart/form-data; boundary=--dio-boundary-".$code,
+      "accept-encoding: gzip",
+      "content-length: ".strlen($data),
+      "host: www.cardscanner.co"
+      ];
+      $r = curl("https://www.cardscanner.co/api/imagetotext",$h,$data)[1];
+      $info = json_decode($r)->Error;
+      if($info == "cardscanner API key in invalid"){
+        die(m.$info.n);
+      }
+      $convert = str_replace([n,";",":","%","′"],"",strip_tags(str_replace("﻿","",trimed(cark(json_decode($r)->text)))));
+      if($i == 0){
+        $text1 = str_replace(".",",",$convert);
+      } else {
+        $text[] = str_replace([".",","," "],"",$convert);
+      }
+  }
+  return [$text1,$text];
+}
 
 function ifimageediting($img, $main = false){
   for($i = 0;$i<count($img);$i++){
