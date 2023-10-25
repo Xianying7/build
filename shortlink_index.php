@@ -553,7 +553,7 @@ function bypass_shortlinks($url){
         $r = base_short($url,0,$data,$url,0,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
-        if(explode('"',$t[1][2])[0] == "ad_form_data" or $r["timer"] or $r["timer"] == 0){
+        if(explode('"',$t[1][2])[0] == "ad_form_data"){
           L($coundown);
           $data = data_post($t)["four"];
           $r1 = base_short(build($url)["go"][0],1,$data,0,0,join('',$cookie))["json"];
