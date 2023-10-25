@@ -5,7 +5,7 @@
 #eval(str_replace("<?php","",file_get_contents("build_index.php")));
 
 
-#die(print_r(bypass_shortlinks("https://try2link.com/4tWaxN")));
+#die(print_r(bypass_shortlinks("http://festyy.com/ehkPeL")));
 //print_r(bypass_shortlinks("https://fc-lc.xyz/BuqwW8z"));
 #print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
@@ -216,12 +216,12 @@ function bypass_shortlinks($url){
         goto fly;
       }
       if($r1){
-        L(100);
+        L(90);
         print h."success";
         r();
         return $r1;
       }
-    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro)#is",$host)){
+    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com)#is",$host)){
         if(preg_match("#(link1s.com)#is",$host)){
           $referer = "https://google.com/";
         } elseif(preg_match("#(insfly.pw)#is",$host)){
@@ -250,6 +250,10 @@ function bypass_shortlinks($url){
           $referer = "https://phongcachsao.vn/";
         } elseif(preg_match("#(bestlink.pro)#is",$host)){
           $referer = "https://go.linksly.co/";
+        } elseif(preg_match("#(bestlink.pro)#is",$host)){
+          $referer = "https://anhdep24.com/";
+        } elseif(preg_match("#(adbull.me)#is",$host)) {
+          $referer = "https://deportealdia.live/";
         } else {
           $referer = 0;
         }
@@ -258,7 +262,7 @@ function bypass_shortlinks($url){
         } else {
           $cloud = 0;
         }
-        $url = str_replace("link.vielink.top","short.vielink.top",str_replace("usalink.io","link.theconomy.me",str_replace("url.beycoin.xyz/short","url.beycoin.xyz",str_replace("link.adlink.click","blog.adlink.click",str_replace("linksfly.link","go.linksfly.link",str_replace("shorti.io","blog.financeandinsurance.xyz",str_replace("link.shrinkme.link","blog.shrinkme.link",str_replace("go.hatelink.me","g0.hatelink.me",str_replace("linksly.co","go.linksly.co",str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace("shrinke.us","en.shrinke.me",$url))))))))))))))))));
+        $url = str_replace("short.dash-free.com","dash-free.com",str_replace("link.vielink.top","short.vielink.top",str_replace("usalink.io","link.theconomy.me",str_replace("url.beycoin.xyz/short","url.beycoin.xyz",str_replace("link.adlink.click","blog.adlink.click",str_replace("linksfly.link","go.linksfly.link",str_replace("shorti.io","blog.financeandinsurance.xyz",str_replace("link.shrinkme.link","blog.shrinkme.link",str_replace("go.hatelink.me","g0.hatelink.me",str_replace("linksly.co","go.linksly.co",str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace("shrinke.us","en.shrinke.me",$url)))))))))))))))))));
         $run = build($url);
         $r = base_short($run["links"],0,0,$referer,$cloud);
         $cookie[] = $r["cookie"];
@@ -507,13 +511,13 @@ function bypass_shortlinks($url){
         $r = base_short($url);
         $cookie[] = $r["cookie"];
         $link = $r["url"];
-        if($link){            
+        if(!$link){            
           continue;
         }
         $r = base_short($link,0,0,0,0,join('',$cookie));
         $cookie[] = $r["cookie"];
         $sessionId = $r["sessionId"];
-        if($sessionId){
+        if(!$sessionId){
           continue;
         }
         L($coundown);
@@ -716,15 +720,21 @@ function config() {
   $config[] ="Wefly.me";
   $config[] ="TryLink";
   $config[] ="Try2link";
+  $config[] ="try2link.com";
   $config[] ="shorti";
   $config[] ="Shorti.io";
   $config[] ="Owllink";
+  $config[] ="owllink.net";
   $config[] ="Birdsurl";
+  $config[] ="birdurls.com";
   $config[] ="birdsurls.com";
   $config[] ="Link1s";
+  $config[] ="link1s.com";
   $config[] ="ShrinkEarn";
+  $config[] ="shrinkearn.com";
   $config[] ="SheraLinks";
   $config[] ="AdLink";
+  $config[] ="adlink.click";
   $config[] ="LinksFly.link";
   $config[] ="Chaininfo";
   $config[] ="Clkst";
@@ -737,34 +747,43 @@ function config() {
   $config[] ="Shortest";
   $config[] ="Hatelink";
   $config[] ="Mitly";
+  $config[] ="mitly.us";
   $config[] ="clkSH";
   $config[] ="Clk-sh";
+  $config[] ="clk.sh";
   $config[] ="Exe";
   $config[] ="Exe.io";
   $config[] ="CPLink";
   $config[] ="Mtraffics";
   $config[] ="Megaurl";
+  $config[] ="Megaurl.in";
   $config[] ="Megafly";
+  $config[] ="Megafly.in";
   $config[] ="Powclick";
   $config[] ="Earnify";
   $config[] ="Earnifypro";
   $config[] ="Cuty";
   $config[] ="cuty.io";
   $config[] ="Usalink";
-  $config[] ="usa link";
+  $config[] ="usalink.io";
   $config[] ="ShrinkmeLink";
   $config[] ="shrinkme.link";
   $config[] ="Beycoin";
   $config[] ="Goldly";
+  $config[] ="goldly.cc";
   $config[] ="okoo";
   $config[] ="Forexly";
   $config[] ="forexlt.cc";
   $config[] ="Insurancely";
   $config[] ="insurancly";
+  $config[] ="insurancly.cc";
   $config[] ="botfly";
+  $config[] ="botfly.me";
   $config[] ="cryptosh";
   $config[] ="shrink.pe";
   $config[] ="limkdam";
+  $config[] ="linkdam";
+  $config[] ="linkdam.me";
   $config[] ="vielink";
   $config[] ="oii";
   $config[] ="oii.io";
@@ -772,5 +791,19 @@ function config() {
   $config[] ="fc-lc";
   $config[] ="fc.lc";
   $config[] ="Bestlink";
+  $config[] ="1shorten.com";
+  $config[] ="ccurl.net";
+  $config[] ="adbull";
+  $config[] ="adbull.net";
+  $config[] ="dashfree";
+  $config[] ="dash-free";
+  $config[] ="dash-free.com";
+  $config[] ="tmearn";
+  $config[] ="tmearn.net";
+  $config[] ="hrshort";
+  $config[] ="hrshort.com";
+  $config[] ="exfoary";
+  $config[] ="ex-foary";
+  $config[] ="ex-foary.com";
   return $config;
 }
