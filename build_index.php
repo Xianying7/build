@@ -138,7 +138,7 @@ function an($input){
     $a = str_split($input); 
     foreach ($a as $b){
       print $b;
-      usleep(15000);
+      usleep(1500);
     }
 }
 
@@ -428,6 +428,9 @@ function azcaptcha($method,$sitekey,$pageurl,$rr = 0){
 function captchaai($method,$sitekey,$pageurl,$rr = 0){
     if($method == 'hcaptcha' or $method == 'recaptchav3'){
         die(m.'sorry anti byppass '.$method.n);
+    }
+    if($method == 'invisible_recaptchav2'){
+      $method = 'recaptchav2';
     }
     refresh: 
     print p;
