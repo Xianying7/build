@@ -601,121 +601,6 @@ function icon_bits(){
     return $answer;
 }
 
-function icon($method,$sitekey,$pageurl,$rr){
-$a = [ 
-    "622a6ffcaeeacb79bc56443917af9caa",
-    "5e32f1a4613053667a3227f2508807d7",
-    "d9f89b6a52bbba354b173df8621ac6cd",
-    "ba7161f4628fcab9e7417b989dc7779c",
-    "d67322b3de1b3ed804933c173e5eb7e4",
-    "95038481908ea9bda3504470f03d28b8",
-    "e035d3e0ff51e7f3dd8f105cf35b50f0",
-    "725057ccbb051378d4d0d683d08f4cdb",
-    "c1512a7116ec7a35056cae89f773e339",
-    "2e9b312f3bba89adf0f1156567b896ac",
-    "0604566890fe2a6eb7bef2bb18347b55",
-    "e987905dc94ca0e566f26102c71b0b36",
-    "39660e8ce374b155d61052152ec97037",
-    "8aa8909044c1a6d2a0e2f11436020833",
-    "a612410bdf846901f751b224551ae384",
-    "e0493af430a9d1dec913e2f921dd4e4e",
-    "1f361f4e51279b0e2fa40d66651ef7dc",
-    "81f720b4af6d8308a17544a068ce3680",
-    "e28dadc4f30e38e5b78b041027ef5df9",
-    "8f4f7fc6e2d993af2a89b85f32022a90",
-    "05dc184a81ab12be43dece0b47938501",
-    "cd0a210489200cb9024177ff6bca42e0",
-    "5f9ad682f98ad933f1c24839c8eb5a09",
-    "a9d688d3a320926c1b181b4fd25f892a",
-    "3e67c5cbc07f2d554d41f33949c05151",
-    "94eba227efb0cc9804998fd57454ceaf",
-    "8b21839d7e9b0338681a601cc8ad4979",
-    "1c146ca637af84fac3020b4ed9018b41",
-    "82cb8d270e954d518e9504741ba3028d",
-    "b9751aedc9a6994908c9cf5bd859a77f",
-    "25764185e8ee536ac417719bb6b2806b",
-    "e5bd0f213163919b1b8ebf2949b77053",
-    "1854831c88a0d886429d2f53a94e56cd",
-    "e1d73340439b36fa1424a1a4f800c8b6",
-    "b0be1d9962309d629314e5e100b10e3c",
-    "cf5bb328fe5e2068cd6d5103d066e701",
-    "10d4bbc30d936b446b5a328989af50cb",
-    "01cceaf6efaf0b57f7c92574006107cd",
-    "19f7e075103a00a80e44cd2c67ac5959",
-    "6a224fc7bd454f0f5d0a1ecc2b09626e",
-    "e69a18ad19a81fdcd44795751303aa2d",
-    "a582c5aa4311986cf6afe1e6dc4a9de4",
-    "2b9327bf2e8d3fa531b639943e063adc",
-    "64962b266e4f6a93988e709dc28e5259",
-    "7f2b97ac7bba3debc7183412c9cf50c7",
-    "e8680cf6b8a33f2ba0174a9101fea26c",
-    "40e6c896e2374b2f6639bb4300fb6d78",
-    "87cf7190c2c99baadb4b1bca329583dd",
-    "48b6b6516bb66d2cb3fd3f1cbff9c755",
-    "92bf126e2d1f2d400acc5b06cabe7946",
-    "5e78748c47c4c0902777d72b7abbd6e3",
-    "630c1e42e115e208a574dadb681f054f",
-    "0e6837e093b981881e9b637bd56ef211",
-    "adba08a7b5176202d4b246e1877e8922",
-    "d79468b2d6bd2cba72ac29bb839f08f6",
-    "8afdbf34bd1459e97288ccb196e4805f",
-    "b66be23ed22f5b410327704a3bce6fea",
-    "b7f3d177a4178c4964a03715dcf41aef",
-    "904f52621849ec2bbafb5f6e1ed1906d",
-    "048f62365211dd9be3ab9f3e58bcd6ae",
-    "25ad74bc4fcbf9e826e89bf1f3839ca5",
-    "89d24982402ad6bec5e712d5c1ce1c38",
-    "bb5693d2dced651638fd2f84a3887d47",
-    "dfca78d834c950592d59bb8adc9281e8",
-    "f43d64180dc7c7533ea731eeb0b6f3f1",
-    "6df2e3d1efcf981b1a09bf3ec5fba234",
-    "e748c3ee158c953b2b98bcf3746568b6",
-    "bf150291d7c5204fa2d87e4afd6577ee",
-    "26370f7790ec5e964e1d2e171d04ecad",
-    "c9c22757126884deae95d0cc66ede8ac",
-    "c5eb45c2638560df17506530bcd99c65",
-    "6c799b4bd0fcc07a577a0e5c1fde1062",
-    "426bb68a133bd7edf9a6ccc8a3f7e535",
-    "134f59f2951fba5d8a99508b6242cb25",
-    "3dde9bc8f564f08cb72611c98e9d8ceb",
-    "758021ded1af737e167d60afedf32a93",
-    "b5e149d7b5024cc56e150212f45136b8",
-    "fa03bf8e3eb8bf4d1f986bac8d58fc2e",
-    "9f6823dae3d8a1108c855c1c681b20a1",
-    "31ec8e3e209567f4d5fac49c03c7fdc4",
-    "7e235151ae9c56a6f7bd37978e89bfd1",
-    "74283144ff69795ce61a690fab102811",
-    "0b4d9a3b6edddda03c8068eed3f5b18d",
-    "ec4eb6068abc34ed2f78d645d0640a6b",
-    "dbc0c8017c1fc057fadccab2482cc912",
-    "67aa29bff108e19690cff8202b3a7b58",
-    "bda34197f517974d452750fe911af5fa",
-    "991bba1e5908a053e963a9710e69ad3f",
-    "91b15509d2de8e93730557e1971d8888",
-    "e4bb54f8bb840e9ccb6e26f88989ffc9",
-    "29b18d8e47d0267423345c947aa48180",
-    "4204082566766a279bc2f3152071454b",
-    "8793f7d7cc7a548bd36d789838e11643",
-    "c5db28ec22ed9b715176504975690ef6",
-    "0444b2c617da4717dad0a82cc89e966c",
-    "cc57d4f905ac9cd3777647fb0c9c69f3",
-    "b8e82e0f0de4381cf29c86fb8794cbec",
-    "3fbb62835eef93de682d20585f2b8b76",
-    "d3fb247637c4da13847247c8cbb7f066",
-    "aa836f7f7bfcc29b193623dfb0c1f151"
-];
-preg_match('#unescape(.*?)"(.*?)"#is',$rr,$dec);
-$r = urldecode($dec[2]);
-    for($i = 0;$i<=4;$i++){
-        preg_match_all("#data-value='(.*?)' src='data:image/png;base64,(.*?)'#is",$r,$b);
-        for($n = 0;$n<500;$n++){
-            if($a[$n]==md5($b[2][$i])){
-                return $b[1][$i];
-            }
-        }
-    }
-}
-
 
 function antibot($html){
   preg_match_all('#rel=\\\"(.*?)\\\">#is',$html,$rell);
@@ -724,19 +609,42 @@ function antibot($html){
   $captcha = googleapis($img[1]);
   $text_main = $captcha;
   $text_res = $captcha[1];
-  $txt[] = array('1'=>'one', '2'=>'two', '3'=>'three', '4'=>'four', '5'=>'five', '6'=>'six', '7'=>'seven', '8'=>'eight', '9'=>'nine', '10'=>'ten', 'NoTextReturn' => '');
+  $txt[] = array('1'=>'one', '2'=>'two', '3'=>'three', '4'=>'four', '5'=>'five', '6'=>'six', '7'=>'seven', '8'=>'eight', '9'=>'nine', '10'=>'ten', 'notextreturn' => '');
   $txt[] = array('one'=>'1', 'two'=>'2', 'three'=>'3', 'four'=>'4', 'five'=>'5', 'six'=>'6', 'seven'=>'7', 'eight'=>'8', 'nine'=>'9', 'ten'=>'10');
-  $txt[] = array('I'=>'1', 'II'=>'2', 'III'=>'3', 'IV'=>'4', 'V'=>'5', 'VI'=>'6', 'VII'=>'7', 'VIII'=>'8', 'IX'=>'9', 'X'=>'10');
-  $txt[] = array('C@t'=>'cat', 'd0g'=>'dog', '1!0n'=>'lion', 'T!g3r'=>'tiger', 'm0nk3y'=>'monkey', '31eph@nt'=>'elephant', 'c0w'=>'cow', 'f0x'=>'fox', 'm0us3'=>'mouse', '@nt'=>'ant', 'monkey' => 'monkey');
+  $txt[] = array('i'=>'1', 'ii'=>'2', 'iii'=>'3', 'iv'=>'4', 'v'=>'5', 'vi'=>'6', 'vii'=>'7', 'viii'=>'8', 'ix'=>'9', 'x'=>'10');
+  $txt[] = array('c@t'=>'cat', 'd0g'=>'dog', '1!0n'=>'lion', 't!g3r'=>'tiger', 'm0nk3y'=>'monkey', '31eph@nt'=>'elephant', 'c0w'=>'cow', 'f0x'=>'fox', 'm0us3'=>'mouse', '@nt'=>'ant');
   $txt[] = array('1'=>'2-1', '2'=>'1+1', '3'=>'1+2', '4'=>'2+2', '5'=>'3+2', '6'=>'2+4', '7'=>'3+4', '8'=>'4+4', '9'=>'1+8', '11'=>'5+6');
   $txt[] = array('3-2'=>'1', '8-6'=>'2', '1+2'=>'3', '3+1'=>'4', '9-4'=>'5', '3+3'=>'6', '6+1'=>'7', '2*4'=>'8', '3+6'=>'9', '2+8'=>'10');
   $txt[] = array('200'=>'zoo', '020'=>'ozo', '002'=>'ooz', '500'=>'soo', '050'=>'oso', '005'=>'oos', '101'=>'lol', '505'=>'sos', '202'=>'zoz', '111'=>'lll');
-  $txt[] = array('2*A'=>'AA', '3*A'=>'AAA', '2*B'=>'BB', '3*B'=>'BBB', '1*A+1*B'=>'AB', '1*A+2*B'=>'ABB', '2*A+2*B'=>'AABB', '2*C'=>'CC', '3*C'=>'CCC', '1*C+1*A'=>'CA', '1*C+1*B'=>'CB', '1*C+2*A'=>'CAA', '1*C+2*B'=>'CBB', '2*C+1*A'=>'CCA');
-  $txt[] = array('AA'=>'2*A', 'AAA'=>'3*A', 'BB'=>'2*B', 'BBB'=>'3*B', 'AB'=>'1*A+1*B', 'ABB'=>'1*A+2*B', 'AABB'=>'2*A+2*B', 'CC'=>'2*C', 'CCC'=>'3*C', 'CA'=>'1*C+1*A', 'CB'=>'1*C+1*B', 'CAA'=>'1*C+2*A', 'CBB'=>'1*C+2*B', 'CCA'=>'2*C+1*A');
+  $txt[] = array('2*a'=>'aa', '3*a'=>'aaa', '2*b'=>'bb', '3*b'=>'bbb', '1*a+1*b'=>'ab', '1*a+2*b'=>'abb', '2*a+2*b'=>'aabb', '2*c'=>'cc', '3*c'=>'ccc', '1*c+1*a'=>'ca', '1*c+1*b'=>'cb', '1*c+2*a'=>'caa', '1*c+2*b'=>'cbb', '2*c+1*a'=>'cca');
+  $txt[] = array('aa'=>'2*a', 'aaa'=>'3*a', 'bb'=>'2*b', 'bbb'=>'3*b', 'ab'=>'1*a+1*b', 'abb'=>'1*a+2*b', 'aabb'=>'2*a+2*b', 'cc'=>'2*c', 'ccc'=>'3*c', 'ca'=>'1*c+1*a', 'cb'=>'1*c+1*b', 'caa'=>'1*c+2*a', 'cbb'=>'1*c+2*b', 'cca'=>'2*c+1*a');
   $txt[] = array('--+'=>'oox', '-+-'=>'oxo', '+--'=>'xoo', '++-'=>'xxo', '-++'=>'oxx', '+-+'=>'xox', '---'=>'ooo', '+++'=>'xxx', '+-+-'=>'xoxo', '+-+'=>'-oxox');
-  $txt[] = array('OOX'=>'--x', 'OXO'=>'-x-', 'XOO'=>'x--', 'XXO'=>'xx-', 'XXO'=>'-xx', 'XOX'=>'x-x', 'OOO'=>'---', 'XXX'=>'xxx', 'XOXO'=>'x-x-', 'OXOX'=>'-x-x');
+  $txt[] = array('oox'=>'--x', 'oxo'=>'-x-', 'xoo'=>'x--', 'xxo'=>'xx-', 'xxo'=>'-xx', 'xox'=>'x-x', 'ooo'=>'---', 'xxx'=>'xxx', 'xoxo'=>'x-x-', 'oxox'=>'-x-x');
   $txt[] = array('--+'=>'--x', '-+-'=>'-x-', '+--'=>'x--', '++-'=>'xx-', '-++'=>'-xx', '+-+'=>'x-x', '---'=>'xxx', '+++'=>'---', '+-+-'=>'x-x-', '-+-+'=>'-x-x');
   $txt[] = array('oo+'=>'--x', 'o+o'=>'-x-', '+oo'=>'x--', '++o'=>'xx-', 'o++'=>'-xx', '+o+'=>'x-x', 'ooo'=>'---', '+++'=>'xxx', '+o+o'=>'x-x-', 'o+o+'=>'-x-x');
+  #tambahan
+  $txt[] = array('1'=>'-one', '2'=>'-two', '3'=>'-three', '4'=>'-four', '5'=>'-five', '6'=>'-six', '7'=>'-seven', '8'=>'-eight', '9'=>'-nine', '10'=>'-ten');
+  $txt[] = array('one'=>'-1', 'two'=>'-2', 'three'=>'-3', 'four'=>'-4', 'five'=>'-5', 'six'=>'-6', 'seven'=>'-7', 'eight'=>'-8', 'nine'=>'-9', 'ten'=>'-10');
+  $txt[] = array('cat'=>'cat', 'dog'=>'dog', 'lion'=>'lion', 'tiger'=>'tiger', 'monkey'=>'monkey', 'elephant'=>'elephant', 'cow'=>'cow', 'fox'=>'fox', 'mouse'=>'mouse', 'ant'=>'ant');
+  $txt[] = array('c@t'=>'-cat', 'd0g'=>'-dog', '1!0n'=>'-lion', 't!g3r'=>'-tiger', 'm0nk3y'=>'-monkey', '31eph@nt'=>'-elephant', 'c0w'=>'-cow', 'f0x'=>'-fox', 'm0us3'=>'-mouse', '@nt'=>'-ant');
+  $txt[] = array('zoo'=>'zoo', 'ozo'=>'ozo', 'ooz'=>'ooz', 'soo'=>'soo', 'oso'=>'oso', 'oos'=>'oos', 'lol'=>'lol', 'sos'=>'sos', 'zoz'=>'zoz', 'lll'=>'lll');
+  $txt[] = array('200'=>'200', '020'=>'020', '002'=>'002', '500'=>'500', '050'=>'050', '005'=>'005', '101'=>'101', '505'=>'505', '202'=>'202', '111'=>'111');
+  $txt[] = array('zoo'=>'200', 'ozo'=>'020', 'ooz'=>'002', 'soo'=>'500', 'oso'=>'050', 'oos'=>'005', 'lol'=>'101', 'sos'=>'505', 'zoz'=>'202', 'lll'=>'111');
+  $txt[] = array('one'=>'one', 'two'=>'two', 'three'=>'three', 'four'=>'four', 'five'=>'five', 'six'=>'six', 'seven'=>'seven', 'eight'=>'eight', 'nine'=>'nine', 'ten'=>'ten');
+  $txt[] = array('z00'=>'200', '0z0'=>'020', '00z'=>'002', 's00'=>'500', '0s0'=>'050', '00s'=>'005', 'i0i'=>'i0i', 's0s'=>'505', 'z0z'=>'202', 'iii'=>'111');
+  $txt[] = array('200'=>'z00', '020'=>'0z0', '002'=>'00z', '500'=>'s00', '050'=>'0s0', '005'=>'00s', '101'=>'i0i', '505'=>'s0s', '202'=>'z0z', '111'=>'iii');
+  #noise
+  $txt[] = array('lol'=>'lot','mouss'=>'mouse','com'=>'cow','tig3r'=>'tiger','snow'=>'mouse','cet'=>'cat','mous3'=>'mouse','cot'=>'cat','bor'=>'dog','bor'=>'dog');
+  $txt[] = array('monk'=>'monkey','mous3e'=>'mouse','bleph@nt'=>'elephant','seved'=>'seven','ent'=>'ant','10'=>'fen','ten'=>'fen','tion'=>'lion','monk3y'=>'monkey','m0nkey'=>'monkey');
+  $txt[] = array('3lephenta'=>'elephant','esnow'=>'mouse','nt'=>'ant','c@t'=>'caf','c0t'=>'cat','111'=>'|||','|||'=>'111','tlg3r'=>'tiger','jet'=>'cat','tigar'=>'tiger');
+  $txt[] = array('tig@r'=>'tiger','tlg@r'=>'tiger','mqus3'=>'mouse','don'=>'lion','moo'=>'cow','tan'=>'ten','t@n'=>'ten','ton'=>'ten','tg3r'=>'tiger','tgar'=>'tiger');
+  $txt[] = array('fig³r'=>'tiger','tig³r'=>'tiger','tg³r'=>'tiger','tlg³r'=>'tiger','t!g³r'=>'tiger','ssnom'=>'mouse','l¹on'=>'lion','t¹on'=>'lion','mous³'=>'mouse','m0us³','m⁰use'=>'mouse');
+  $txt[] = array('3fephent'=>'elephant','3feph@nt'=>'elephant','3faphent'=>'elephant','3fephant'=>'elephant','3f@ph@nt'=>'elephant','3!ephent'=>'elephant','e!eph@nt'=>'elephant','3lephenf'=>'elephant','eleph@nt'=>'elephant','sieph@nt'=>'elephant');
+  $txt[] = array('101'=>'lot','3lephant'=>'elephant','110n'=>'lion','3lephent'=>'elephant','cou'=>'cow','cov'=>'cow','tg³r4'=>'tiger','ent14'=>'ant','jxc'=>'fox','monksy'=>'monkey');
+  $txt[] = array('110n'=>'tion','cet4'=>'cat','3teph@nt'=>'elephant','eteph@nt'=>'elephant','etephant'=>'elephant','3tephant'=>'elephant','1g3r'=>'tiger','monk3'=>'monkey','monk3'=>'-monkey','hon'=>'lion');
+  $txt[] = array('700'=>'200','007'=>'002','070'=>'020','900'=>'500','009'=>'005','090'=>'050','005'=>'០០s','505'=>'sus','blephant'=>'elephant');
+  $txt[] = array('one'=>'-one', 'two'=>'-two', 'three'=>'-three', 'four'=>'-four', 'five'=>'-five', 'six'=>'-six', 'seven'=>'-seven', 'eight'=>'-eight', 'nine'=>'-nine', 'ten'=>'-ten');
+  $txt[] = array('3leph@nt'=>'elephant','31ephant'=>'elephant','coww'=>'cow','cⓐt'=>'cat','bat'=>'cat','cor'=>'cow','voil'=>'lion','008'=>'005','800'=>'500','080'=>'050');
   for($u = 0;$u<count($txt);$u++){
     for($b = 0;$b<count($text_res);$b++){
       if(explode(",",$text_main[0])[$b] == $txt[$u][$text_res[0]]){
@@ -770,8 +678,8 @@ function antibot($html){
   if(!$text_re[2]){
     $text_re[2] = $text_res[2];
   }
-  $alt = explode(",",str_replace([",,",",,,"],",",str_replace(["."," "],",",$text_main[0])));
-  $main = str_replace([","." "],"",$text_main[0]);
+  $alt = explode(",",$text_main[0]);
+  $main = str_replace(",","",$text_main[0]);
   $res = [$text_re[0],$text_re[1],$text_re[2]];
   $rel = [$text_rel[0],$text_rel[1],$text_rel[2]];
   $input = [
@@ -815,23 +723,77 @@ function antibot($html){
           " ".$rel[2]." ".$rel[1]." ".$rel[0]
           ];
           for($i = 0;$i<count($input);$i++){
-            if(!str_replace([".",","," "],"",$input1[$i]) || !str_replace([".",","," "],"",$input2[$i]) || !str_replace([".",","," "],"",$input3[$i])){
+            if(!$input1[$i] || !$input2[$i] || !$input3[$i]){
               print k."refresh antibot captcha!";
               r();
               break;
             }
-            if(str_replace([".",","," "],"",$input[$i]) == str_replace([".",","," "],"",$main)){
+            if($input[$i] == $main){
               return $output[$i];
-              break;
             }
-            if(str_replace([".",","," "],"",$input1[$i]) == $alt[0].$alt[1] || str_replace([".",","," "],"",$input2[$i]) == $alt[1].$alt[2] || str_replace([".",","," "],"",$input3[$i]) == $alt[0].$alt[2]){
+            if($input1[$i] == $alt[0].$alt[1]){
+              return $output[$i];
+            }
+            if($input2[$i] == $alt[1].$alt[2]){
+              return $output[$i];
+            }
+            if($input3[$i] == $alt[0].$alt[2]){
               return $output[$i];
             }
           }
 }
 
+function arr_api(){
+$package = [
+"",
+"",
+"",
+"kr.infozone.documentrecognition_en",
+"com.inverseai.image_to_text_OCR_scanner",
+"aculix.smart.text.recognizer"
+];
+$cert = [
+"",
+"",
+"",
+"00a56ee22492473e1b57670fa9c44185817e5586",
+"FDC669CB376A69B6D6065B8CCE8C188ADDDC4F3E",
+"70E6AB2300C9406792452EA39A40690B91519C85",
 
-function googleapis($img){
+];
+
+$api = [
+"AIzaSyAfci4iiOtZc_ORMF2gXlQcG-0Uu2k2mgE",
+"AIzaSyDSfHPltpIGd0etqy9CnVdIQGReCIrE35k",
+"AIzaSyAwmW3dg4fP99_hGS6QzXb7jKwwnOcBtsE",
+"AIzaSyDm5IoUGFaQLpFXqoMvB9i20xc62J0taVA",
+"AIzaSyDqfshA40_b5IpjtZEuGJ8oUlRMnY4Ynk4",
+"AIzaSyCt2nW_3i-RBp4kLM-9T0CzcbYQlHbJGek"
+];
+
+for($i=0;$i<count($cert);$i++) {
+$h[] = ["Accept-Encoding: gzip",
+      "User-Agent: Dalvik/2.1.0 (Linux; U; Android 13; M2012K11AG Build/TQ3A.230901.001)",
+      "x-android-package: ".$package[$i],
+      "x-android-cert: ".$cert[$i],
+      "Content-Type: application/json; charset=UTF-8",
+      "Host: vision.googleapis.com",
+      "Connection: Keep-Alive"];
+}
+
+$array = [
+["api" => $api[0],"header" => $h[0]],
+["api" => $api[1],"header" => $h[1]],
+["api" => $api[2],"header" => $h[2]],
+["api" => $api[3],"header" => $h[3]],
+["api" => $api[4],"header" => $h[4]],
+["api" => $api[5],"header" => $h[5]]
+];
+return arr_rand($array);
+}
+
+function googleapis($img, $type=0){
+  $arr_api = arr_api();
   for($i = 0;$i<count($img);$i++){
     ob_start();
     $base64_string = base64_decode($img[$i]);
@@ -845,93 +807,24 @@ function googleapis($img){
     ob_end_clean();
     $imgg[] = $data;
     $data = json_encode(["requests"=>[["features"=>[["maxResults"=> 1,"type" => "DOCUMENT_TEXT_DETECTION"]],"image" => ["content" => base64_encode($imgg[$i])]]]]);
-    $package = [
-      "kr.infozone.documentrecognition_en",
-      "image.to.text.ocr",
-      "com.inverseai.image_to_text_OCR_scanner",
-      "aculix.smart.text.recognizer"
-      ];
-      $cert = [
-        "00a56ee22492473e1b57670fa9c44185817e5586",
-        "ad32d34755bb3b369a2ea8dfe9e0c385d73f80f0",
-        "FDC669CB376A69B6D6065B8CCE8C188ADDDC4F3E",
-        "70E6AB2300C9406792452EA39A40690B91519C85"
-        ];
-        $h = ["Accept-Encoding: gzip",
-        "User-Agent: Dalvik/2.1.0 (Linux; U; Android 13; M2012K11AG Build/TQ3A.230901.001)",
-        "x-android-package: ".$package[$i],
-        "x-android-cert: ".$cert[$i],
-        "Content-Type: application/json; charset=UTF-8",
-        "Content-Length: ".strlen($data),
-        "Host: vision.googleapis.com",
-        "Connection: Keep-Alive"
-        ];
-        $api = [
-          "AIzaSyDm5IoUGFaQLpFXqoMvB9i20xc62J0taVA",
-          "AIzaSyA5MInkpSbdSbmozCQSuBY3pylSTgmLlaM",
-          "AIzaSyDqfshA40_b5IpjtZEuGJ8oUlRMnY4Ynk4",
-          "AIzaSyCt2nW_3i-RBp4kLM-9T0CzcbYQlHbJGek"
-          ];
-          ulang:
-            $r = curl("https://vision.googleapis.com/v1/images:annotate?key=".$api[$i],$h,$data)[1];
-            if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){
-              print p."Please wait, there is a limit!";
-              r();
-              goto ulang;
-            }
-            $convert = str_replace([n,";",":","%","′"],"",strip_tags(str_replace("﻿","",trimed(cark(json_decode($r)->responses[0]->textAnnotations[0]->description)))));
-            if($i == 0){
-              $text1 = str_replace(".",",",$convert);
-              
-            } else {
-              $text[] = str_replace([".",","," "],"",$convert);
-            }
-  }
-  return [$text1,$text];
-}
-
-function cardscanner($img){
-  for($i = 0;$i<count($img);$i++){
-    ob_start();
-    $base64_string = base64_decode($img[$i]);
-    $image = imagecreatefromstring($base64_string);
-    imagefilter($image, IMG_FILTER_SMOOTH, 1);
-    imagefilter($image,IMG_FILTER_NEGATE);
-    imagefilter($image, IMG_FILTER_GRAYSCALE);
-    imagecropauto($image , IMG_CROP_DEFAULT);
-    imagepng($image);
-    $data = ob_get_contents();
-    ob_end_clean();
-    $imgg[] = $data;
-    $code = uniqid();
-    $boundary = "----dio-boundary-";
-    $disposition = 'content-disposition: form-data; name=';
-    $eol = "\n";
-    $data = '';
-    $data .= $boundary.$code.$eol;
-    $data .= $disposition.'"api"'.$eol.$eol;
-    $data .= 'c3c35a68edd632e4be0d619e57a8fff0'.$eol;
-    $data .= $boundary.$code.$eol;
-    $data .= $disposition.'"image"; filename="IMG12510202311206.jpg"'.$eol;
-    $data .= 'content-type: application/octet-stream'.$eol.$eol;
-    $data .= $imgg[$i].$eol.$boundary.$code.'--';
-    $h = [
-      "user-agent: Dart/3.0 (dart:io)",
-      "content-type: multipart/form-data; boundary=--dio-boundary-".$code,
-      "accept-encoding: gzip",
-      "content-length: ".strlen($data),
-      "host: www.cardscanner.co"
-      ];
-      $r = curl("https://www.cardscanner.co/api/imagetotext",$h,$data)[1];
-      $info = json_decode($r)->Error;
-      if($info == "cardscanner API key in invalid"){
-        die(m.$info.n);
+    ulang:
+      #"image.to.text.ocr",
+      #"FDC669CB376A69B6D6065B8CCE8C188ADDDC4F3E",
+      #"AIzaSyA5MInkpSbdSbmozCQSuBY3pylSTgmLlaM",
+      $r = curl("https://vision.googleapis.com/v1/images:annotate?key=".$arr_api[$i]["api"],$arr_api[$i]["header"],$data)[1];
+      if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){
+        print p."Please wait, there is a limit!";
+        r();
+        goto ulang;
       }
-      $convert = str_replace([n,";",":","%","′"],"",strip_tags(str_replace("﻿","",trimed(cark(json_decode($r)->text)))));
+      if($type == "normal"){
+        return trimed(strip_tags(transliterator_transliterate('Any-Latin;Latin-ASCII;',str_replace([n,"﻿"],"",json_decode($r)->responses[0]->textAnnotations[0]->description))));
+      }
+      $convert = strtolower(str_replace([",,,,,,",",,,,,",",,,,",",,,",",,"],",",str_replace([" ",":","&",":","$","★","{","}","(",")","·",";","°","¯","`",".","ʾ","✔","#","_","܀","ʿ","܆","'"],",",rtrim(ltrim(strip_tags(transliterator_transliterate('Any-Latin;Latin-ASCII;',str_replace([n,"﻿"],"",json_decode($r)->responses[0]->textAnnotations[0]->description))))))));
       if($i == 0){
-        $text1 = str_replace(".",",",$convert);
+        $text1 = $convert;
       } else {
-        $text[] = str_replace([".",","," "],"",$convert);
+        $text[] = str_replace(",","",$convert);
       }
   }
   return [$text1,$text];
@@ -1018,7 +911,7 @@ function ifimageediting($img, $main = false){
           "accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
           ];
           $r3 = curl("https://ifimageediting.com/text-conversion",$h3,$data2,0,0, set_cookie($r[0][2]).set_cookie($r2[0][2]))[1];
-          $convert = str_replace(["%","′"],"",strip_tags(str_replace("﻿","",trimed(cark(json_decode(($r3))->t)))));
+          $convert = str_replace(["%","′"],"",strip_tags(str_replace("﻿","",trimed(transliterator_transliterate('Any-Latin;Latin-ASCII;',json_decode(($r3))->t)))));
           if($i == 0){
             $text1 = $convert;
           } else {
@@ -1028,198 +921,6 @@ function ifimageediting($img, $main = false){
       return [$text1,$text];
 }
 
-
-
-function imagetotext($img, $main = false){
-  if($main == "main"){
-    $from = 0;
-    $count = 1;
-  } else {
-    $from = 1;
-    $count = count($img);
-  }
-  for($i = $from;$i<$count;$i++){
-    $code = uniqid();
-    if($main == false){
-      $x = $i-1;
-    } else {
-      $x = $i;
-    }
-    ob_start();
-    $base64_string = base64_decode($img[$i]);
-    $image = imagecreatefromstring($base64_string);
-    imagefilter($image, IMG_FILTER_SMOOTH, 1);
-    imagefilter($image,IMG_FILTER_NEGATE);
-    imagefilter($image, IMG_FILTER_GRAYSCALE);
-    imagecropauto($image , IMG_CROP_DEFAULT);
-    imagepng($image);
-    $data = ob_get_contents();
-    ob_end_clean();
-    $imgg[] = $data;
-  }
-  $h = [
-    "Host: www.imagetotext.io",
-    "cache-control: max-age=0",
-    "user-agent: ".user_agent(),
-    "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-    "accept-language: id,id-ID;q=0.9,en-US;q=0.8,en;q=0.7"
-    ];
-    $r = curl("https://www.imagetotext.io/id",$h);
-    preg_match('#name="_token" content="(.*?)"#is',$r[1],$cs);
-    for($i = 0;$i<count($imgg);$i++){
-      $code = uniqid();
-      if($main == false){
-        $x = $i-1;
-      } else {
-        $x = $i;
-      }
-      $data = '------WebKitFormBoundary'.$code."\n".'Content-Disposition: form-data; name="imgArr"; filename="images.jpeg"'."\n".'Content-Type: image/jpeg'."\n\n".$imgg[$i]."\n".'------WebKitFormBoundary'.$code."\n".'Content-Disposition: form-data; name="count"'."\n".$i."\n".'------WebKitFormBoundary'.$code."\n".'Content-Disposition: form-data; name="tool"'."\n\n".'imageotext'."\n".'------WebKitFormBoundary'.$code.'--';
-      $h2 = [
-        "Host: www.imagetotext.io",
-        "content-length: ".strlen($data),
-        "accept: */*","x-csrf-token: ".$cs[1],
-        "x-requested-with: XMLHttpRequest",
-        "user-agent: ".user_agent(),
-        "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$code,
-        "origin: https://www.imagetotext.io",
-        "referer: https://www.imagetotext.io/",
-        "accept-language: id,id-ID;q=0.9,en-US;q=0.8,en;q=0.7"
-        ];
-        $r2 = curl("https://www.imagetotext.io/image-to-text",$h2,$data,0,0, set_cookie($r[0][2]))[1];
-        $convert = strip_tags(str_replace("﻿","",trimed(cark(json_decode(($r2))->text))));
-        $target = $convert;
-        $text[] = str_replace(["%","′"],"",$convert);
-    }
-    return $text;
-}
-
-function jpgtotext($img, $main = false){
-  if($main == "main"){
-    $from = 0;
-    $count = 1;
-  } else {
-    $from = 1;
-    $count = count($img);
-  }
-  for($i = $from;$i<$count;$i++){
-    $code = uniqid();
-    if($main == false){
-      $x = $i-1;
-    } else {
-      $x = $i;
-    }
-      ob_start();
-      $base64_string = base64_decode($img[$i]);
-      $image = imagecreatefromstring($base64_string);
-      imagefilter($image, IMG_FILTER_SMOOTH, 1);
-      imagefilter($image,IMG_FILTER_NEGATE);
-      imagefilter($image, IMG_FILTER_GRAYSCALE);
-      imagecropauto($image , IMG_CROP_DEFAULT);
-      imagepng($image);
-      $data = ob_get_contents();
-      ob_end_clean();
-      $imgg[] = $data;
-  }
-  $h = [
-    "Host: www.jpgtotext.com",
-    "cache-control: max-age=0",
-    "user-agent: ".user_agent(),
-    "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-    "accept-language: id,id-ID;q=0.9,en-US;q=0.8,en;q=0.7"
-    ];
-    $r = curl("https://www.jpgtotext.com/id/gambar-ke-teks",$h);
-    preg_match('#csrf-token" content="(.*?)"#is',$r[1],$cs);
-    for($i = 0;$i<count($imgg);$i++){
-      $code = uniqid();
-      if($main == false){
-        $x = $i-1;
-      } else {
-        $x = $i;
-      }
-      $data ='------WebKitFormBoundary'.$code."\n".'Content-Disposition: form-data; name="language"'."\n\n".'eng'."\n".'------WebKitFormBoundary'.$code."\n".'Content-Disposition: form-data; name="file[]"; filename="g.png"'.$code."\n".'Content-Type: image/png'."\n\n".$imgg[$i]."\n".'------WebKitFormBoundary'.$code.'--';
-      $h2 = [
-        "Host: www.jpgtotext.com",
-        "content-length: ".strlen($data),
-        "accept: */*","x-csrf-token: ".$cs[1],
-        "x-requested-with: XMLHttpRequest",
-        "user-agent: ".user_agent(),
-        "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$code,
-        "origin: https://www.jpgtotext.com",
-        "referer: https://www.jpgtotext.com/",
-        "accept-language: id,id-ID;q=0.9,en-US;q=0.8,en;q=0.7"
-        ];
-        $r2 = curl("https://www.jpgtotext.com/file-upload",$h2,$data,0,0, set_cookie($r[0][2]))[1];
-        $convert = strip_tags(str_replace("﻿","",trimed(cark(json_decode(($r2))->text))));
-        $target = $convert;
-        $text[] = str_replace(["%","′"],"",$convert);
-    }
-    return $text;
-}
-
-
-function imagetotext2($img, $main = false){
-  if($main == "main"){
-    $from = 0;
-    $count = 1;
-    } else {
-      $from = 1;
-      $count = count($img);
-      }
-      
-      for($i = $from;$i<$count;$i++){
-          $code = uniqid();
-          if($main == false){
-            $x = $i-1;
-            } else {
-              $x = $i;
-              }
-              ob_start();
-              $base64_string = base64_decode($img[$i]);
-              $image = imagecreatefromstring($base64_string);
-              imagefilter($image, IMG_FILTER_SMOOTH, 1);
-              imagefilter($image,IMG_FILTER_NEGATE);
-              imagefilter($image, IMG_FILTER_GRAYSCALE);
-              imagecropauto($image , IMG_CROP_DEFAULT);
-              imagepng($image);
-              $data = ob_get_contents();
-              ob_end_clean();
-              $imgg[] = $data;
-      }
-      $h = [
-        "Host: www.imagetotext.cc",
-        "cache-control: max-age=0",
-        "user-agent: ".user_agent(),
-        "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "accept-language: id,id-ID;q=0.9,en-US;q=0.8,en;q=0.7"
-        ];
-        $r = curl("https://www.imagetotext.cc/id/konverter-gambar-ke-teks",$h);
-        preg_match('#csrf-token" content="(.*?)"#is',$r[1],$cs);
-        for($i = 0;$i<count($imgg);$i++){
-          $code = uniqid();
-          if($main == false){
-            $x = $i-1;
-          } else {
-            $x = $i;
-          }
-          $data = '------WebKitFormBoundary'.$code."\n".'Content-Disposition: form-data; name="images"; filename="g.png"'."\n".'Content-Type: image/png'."\n\n".$imgg[$i]."\n".'------WebKitFormBoundary'.$code.'--';
-          $h2 = [
-            "Host: www.imagetotext.cc",
-            "content-length: ".strlen($data),
-            "accept: */*","x-csrf-token: ".$cs[1],
-            "x-requested-with: XMLHttpRequest",
-            "user-agent: ".user_agent(),
-            "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$code,
-            "origin: https://www.imagetotext.cc",
-            "referer: https://www.imagetotext.cc/",
-            "accept-language: id,id-ID;q=0.9,en-US;q=0.8,en;q=0.7"
-            ];
-            $r2 = curl("https://www.imagetotext.cc/file-upload",$h2,$data,0,0, set_cookie($r[0][2]))[1];
-            $convert = strip_tags(str_replace("﻿","",trimed(cark(json_decode(($r2))->text))));
-            $target = $convert;
-            $text[] = str_replace(["%","′"],"",$convert);
-        }
-        return $text;
-}
 
 
 function mtk($a,$b,$c){
@@ -1264,48 +965,3 @@ const b = "\033[1;34m",
       u = "\033[1;35m",
       d = "\033[0m",
       n = "\n";
-
-function cark($field){
-    $replace = [
-        '&Uuml;' => '','&Ouml;' => '','&Auml;' => '','&auml;' => '',
-        '&ouml;' => '','&lt;' => '','&gt;' => '','&#039;' => '',
-        '&quot;' => '','À' => 'A','Á' => 'A','Â' => 'A','Ã' => 'A',
-        'Ä' => 'Ae','Å' => 'A','Ā' => 'A','Ą' => 'A','Ă' => 'A',
-        'Æ' => 'A','Ç' => 'C','Ć' => 'C','Č' => 'C', 'Ĉ' => 'C',
-        'Ċ' => 'C','Ď' => 'D','Đ' => 'D','Ð' => 'D','È' => 'E',
-        'É' => 'E','Ê' => 'E','Ë' => 'E','Ē' => 'E','Ę' => 'E',
-        'Ě' => 'E','Ĕ' => 'E','Ė' => 'E','Ĝ' => 'G','Ğ' => 'G',
-        'Ġ' => 'G','Ģ' => 'G','Ĥ' => 'H','Ħ' => 'H','Ì' => 'I',
-        'Í' => 'I','Î' => 'I','Ï' => 'I','Ī' => 'I','Ń' => 'N',
-        'Ĩ' => 'I','Ĭ' => 'I','Į' => 'I','İ' => 'I','ŏ' => 'o',
-        'Ĵ' => 'J','Ķ' => 'K','Ł' => 'L','Ľ' => 'L','ô' => 'o',
-        'Ĺ' => 'L','Ļ' => 'L','Ŀ' => 'L','Ñ' => 'N','о' => 'o',
-        'Ň' => 'N','Ņ' => 'N','Ŋ' => 'N','Ò' => 'O','Ó' => 'O',
-        'Ô' => 'O','Õ' => 'O','Ö' => 'O','Ø' => 'O','Ō' => 'O',
-        'Ő' => 'O','Ŏ' => 'O','Ŕ' => 'R','Ř' => 'R','Ŗ' => 'R',
-        'Ś' => 'S','Š' => 'S','Ş' => 'S','Ŝ' => 'S','Ș' => 'S',
-        'Ť' => 'T','Ţ' => 'T','Ŧ' => 'T','Ț' => 'T','ŕ' => 'r',
-        'Ù' => 'U','Ú' => 'U','Û' => 'U','Ü' => 'U','ı' => 'i',
-        'Ū' => 'U', 'Ů' => 'U','Ű' => 'U','Ŭ' => 'U','ĺ' => 'l',
-        'Ũ' => 'U','Ų' => 'U','Ŵ' => 'W','Ý' => 'Y','К' => 'K',
-        'Ŷ' => 'Y','Ÿ' => 'Y','Ź' => 'Z','Ž' => 'Z','М' => 'M',
-        'Ż' => 'Z','à' => 'a','á' => 'a','â' => 'a','û' => 'u',
-        'ã' => 'a','ä' => 'a','å' => 'a','ā' => 'a','ü' => 'u',
-        'ą' => 'a','ă' => 'a','ç' => 'c','ć' => 'c','ē' => 'e',
-        'č' => 'c','ĉ' => 'c','ċ' => 'c','ď' => 'd','đ' => 'd',
-        'ð' => 'd','è' => 'e','é' => 'e','ê' => 'e','ë' => 'e',
-        'ę' => 'e','ě' => 'e','ĕ' => 'e','ė' => 'e','ƒ' => 'f',
-        'ĝ' => 'g','ğ' => 'g','ġ' => 'g','ģ' => 'g','ĥ' => 'h',
-        'ħ' => 'h','ì' => 'i','í' => 'i','î' => 'i','ï' => 'i',
-        'ĵ' => 'j','ķ' => 'k','ĸ' => 'k','ł' => 'l','ľ' => 'l',
-        'ļ' => 'l','ŀ' => 'l','ñ' => 'n','ń' => 'n','ň' => 'n',
-        'ņ' => 'n','ŉ' => 'n','ŋ' => 'n','ò' => 'o','ó' => 'o',
-        'õ' => 'o','ö' => 'o','ø' => 'o','ō' => 'o','ő' => 'o',
-        'ř' => 'r','ŗ' => 'r','š' => 's','ù' => 'u','ú' => 'u',
-        'ū' => 'u','ů' => 'u','ű' => 'u','ŭ' => 'u','ũ' => 'u',
-        'ų' => 'u','ŵ' => 'w','ý' => 'y','ÿ' => 'y','ŷ' => 'y',
-        'ž' => 'z','ż' => 'z','ź' => 'z','А' => 'A','Е' => 'E',
-        'О' => 'O','Т' => 'T','а' => 'a','е' => 'e','м' => 'm'
-        ];
-        return str_replace(array_keys($replace), $replace, $field);
-}
