@@ -11,7 +11,7 @@
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
 //print_r(bypass_shortlinks("https://go.megaurl.in/BSDJi"));
-//print_r(bypass_shortlinks("https://bestlink.pro/ft2Wgza"));
+#print_r(bypass_shortlinks("http://festyy.com/ehk3KH"));
 
 function build($url=0){
   if(preg_match("#(clk.st)#is",$url)){
@@ -159,6 +159,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
     preg_match_all("#(url='|location.href ='|<a href='|var api =".n."  ')(.*?)(')#is",$r[1],$url2);
     preg_match_all("#window.open(.*?)'(.*?)'#is",$r[1],$url3);
     preg_match('#share(.*?)url=(.*?)"#is',$r[1],$url4);
+    preg_match('#skip_button" href="(.*?)"#is',$r[1],$url5);
     preg_match_all('#hidden" name="(.*?)" value="(.*?)"#is',$r[1],$token_csrf);
     preg_match('#(id="second">|varcountdownValue=|PleaseWait|class="timer"value="|class="timer">)([0-9]{1}|[0-9]{2})(;|"|<|s)#is',str_replace([n," "],"",$r[1]),$timer);
     preg_match_all('#(dirrectSiteCode = |ai_data_id=|ai_ajax_url=)"(.*?)(")#is',$r[1],$code_data_ajax);
@@ -177,6 +178,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
         "url2" => $url2[2],
         "url3" => $url3[2],
         "url4" => $url4[2],
+        "url5" => $url5[1],
         "code_data_ajax" => $code_data_ajax[2],
         "sessionId" => $sessionId[2]
     ];
@@ -198,11 +200,11 @@ function bypass_shortlinks($url){
       $url = "https://ser7.crazyblog.in".explode("p=",$url)[1];
       $host = parse_url($url)["host"];
     }
-    if(preg_match("#(clk.st|urlsfly.me|wefly.me|shortsfly.me|linksfly.me)#is",$host)){fly:
+    if(preg_match("#(clk.st|urlsfly.me|wefly.me|shortsfly.me|linksfly.me)#is",$host)){
       $run = build($url);
       $r = base_short($url);
       $link = $r["url"];
-      if(preg_match("#(".$host.")#is",$link)){
+      if(preg_match("#(limit)#is",$link)){
         $referer = "wss://advertisingexcel.com";
       } else {
         $referer = $link;
@@ -212,8 +214,7 @@ function bypass_shortlinks($url){
       }
       $r1 = base_short($run["inc"],0,0,$referer,1)["url"];
       if(preg_match("#(".$host.")#is",$r1)){
-        die(m."referer perlu di update".n);
-        goto fly;
+        die(m."shortlinks  $host perlu di update".n);
       }
       if($r1){
         L(90);
@@ -508,20 +509,27 @@ function bypass_shortlinks($url){
       }
     } elseif(preg_match("#(destyy.com|festyy.com|gestyy.com|hestyy.com|ceesty.com|corneey.com)#is",$host)) {
       while(true) {
-        $r = base_short($url);
+        $r = base_short($url,0,$url);
         $cookie[] = $r["cookie"];
         $link = $r["url"];
-        if(!$link){            
-          continue;
+        if(preg_match("#(freeze)#is",$link)){
+          $r = base_short($link,0,0,0,0,join('',$cookie));
+          $cookie[] = $r["cookie"];
+          L($coundown);
+          $r = base_short($url,0,0,$link,0,join('',$cookie));
+          $cookie[] = $r["cookie"]; 
         }
-        $r = base_short($link,0,0,0,0,join('',$cookie));
-        $cookie[] = $r["cookie"];
+        if(preg_match("#(sessio)#is",$link)){
+          $url = $link;
+          $r = base_short($link,0,0,0,0,join('',$cookie));
+          $cookie[] = $r["cookie"];
+        }
         $sessionId = $r["sessionId"];
         if(!$sessionId){
           continue;
         }
         L($coundown);
-        $r1 = base_short("https://clkmein.com/shortest-url/end-adsession?adSessionId=".$sessionId."&adbd=0&callback=reqwest_".time(),0,0,$link,0,join('',$cookie))["res"];
+        $r1 = base_short("https://clkmein.com/shortest-url/end-adsession?adSessionId=".$sessionId."&adbd=0&callback=reqwest_".time(),0,0,$url,0,join('',$cookie))["res"];
         if(ex('":"','"',2,$r1) == "ok") {
           print h."succses";
           r();
