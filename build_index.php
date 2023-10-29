@@ -16,7 +16,7 @@ function multiexplode($delimiters,$string){
     $ready = str_replace($delimiters, $delimiters[0],$string);
     return explode($delimiters[0],$ready);
 }
-
+exit;
 function arr_rand($my_array = array()) {
   $copy = array();
   while (count($my_array)) {
