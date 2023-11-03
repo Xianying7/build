@@ -1,7 +1,42 @@
 <?php
 
-
-
+$Authorization = json_encode([
+  "grant_type" => "password",#<-biarin gausah diisi
+  "client_id" => "943",
+  "client_secret" => "BvPLlsZAc3cjakJlf9s8SwWyr2KF09NdosP2f9xd",
+  "username" => "wikij59092@wanbeiz.com",
+   "password" => "wikij59092@wanbeiz.com"
+   ]);
+function demo($methode,$sitekey,$site){
+  while(true){
+    $host = "recaptcha-v3-solver-0-1-score.p.rapidapi.com";
+    $h = array(
+      'X-RapidAPI-Key: bb5ef0f9f7msh7c6f6bbd32b20e5p138ee2jsn7f7e780ec6f8',
+      'X-RapidAPI-Host: '.$host);
+      $response = curl("https://".$host."/?siteKey=".$sitekey."&action=examples/v3scores&site=".$site,$h);
+      if($response[0][0]["x-ratelimit-requests-remaining"] == 0){die($response[1]);
+      }
+      if(!$response[2]->token){
+        continue;
+      }
+      return $response[2]->token;
+  }
+}
+function demok($methode,$sitekey,$site){
+  while(true){
+    $host = "recaptcha-v2-solver.p.rapidapi.com";
+    $h = array(
+      'X-RapidAPI-Key: 5a6415fc95msh3d2bd7a05de9698p123541jsnc5536eda498e',
+      'X-RapidAPI-Host: '.$host);
+      $response = curl("https://".$host."/?siteKey=".$sitekey."&site=".$site,$h);
+      if($response[0][0]["x-ratelimit-requests-remaining"] == 0){die($response[1]);
+      }
+      if(!$response[2]->token){
+        continue;
+      }
+      return $response[2]->token;
+  }
+}
 
 function c(){
     if(strtoupper(substr(PHP_OS,0,3)) == 'WIN'){
@@ -16,7 +51,7 @@ function multiexplode($delimiters,$string){
     $ready = str_replace($delimiters, $delimiters[0],$string);
     return explode($delimiters[0],$ready);
 }
-exit;
+
 function arr_rand($my_array = array()) {
   $copy = array();
   while (count($my_array)) {
@@ -127,9 +162,12 @@ function ex($a,$b,$c,$d){
 }
 
 function Save($a){
-    if(file_exists($a)){$b=file_get_contents($a);
+    if(file_exists($a)){
+      $b=file_get_contents($a);
     } else {
-        $b = tx($a);n;file_put_contents($a,$b);
+        $b = tx($a);
+        n;
+        file_put_contents($a,$b);
     }
     return $b;
 }
@@ -247,7 +285,7 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
         continue;
       }
       print p;
-      return [[$header_array, $info, $output],$response];
+      return [[$header_array, $info, $output],$response, json_decode($response)];
   }
 }
 
@@ -357,8 +395,54 @@ function hac($xml=0){
     return $h;
 }
 
+function metabypass($method,$sitekey,$pageurl,$rr = 0){
+    if($method == 'invisible_recaptchav2' or $method = 'recaptchav2'){
+    $method = 2;
+    }
+  //eval(file_get_contents("Authorization.php"));
+  global $Authorization;
+  $h = [
+    'Content-Type: application/json',
+    'Accept: application/json'
+    ];
+    $access_token = curl("https://app.metabypass.tech/CaptchaSolver/oauth/token",$h,$Authorization)[2]->access_token;
+    if(!$access_token){
+      die(m."terjadi kesalahan Authorization");
+    }
+    $h1 = [
+      'Content-Type: application/json',
+      'Accept: application/json',
+      'Authorization: Bearer '.$access_token
+      ];
+      $data2 = json_encode([
+        "url" => $pageurl ,
+        "sitekey" => $sitekey,
+        "version" => $method
+        ]);
+        $recaptcha_id = curl("https://app.metabypass.tech/CaptchaSolver/api/v1/services/bypassReCaptcha",$h1,$data2)[2]; print_r($recaptcha_id);
+        if($recaptcha_id->status_code == 200){
+          while(true){
+            sleep(10);
+            $response = curl("https://app.metabypass.tech/CaptchaSolver/api/v1/services/getCaptchaResult?recaptcha_id=".$recaptcha_id->data->RecaptchaId,$h1)[2];
+            if($response->status_code == 200){
+              r();
+              return $response->data->RecaptchaResponse;
+              } else {
+                r();
+                print $response->message;
+              }
+          }
+        }
+}
+
 
 function azcaptcha($method,$sitekey,$pageurl,$rr = 0){
+    if($method == 'hcaptcha' or $method == 'recaptchav3'){
+        die(m.'sorry anti byppass '.$method.n);
+    }
+    if($method == 'invisible_recaptchav2'){
+      $method = 'recaptchav2';
+    }
     refresh: 
     print p;
     $name_api = "apikey_azcaptcha";
@@ -402,7 +486,7 @@ function azcaptcha($method,$sitekey,$pageurl,$rr = 0){
         r();
         continue;
         }
-        sleep(5);
+        sleep(15);
         while(true){
             $r1 = curl("https://azcaptcha.com/res.php?".http_build_query([
                 "key" => $apikey,
@@ -508,6 +592,78 @@ function captchaai($method,$sitekey,$pageurl,$rr = 0){
     }
 }
 
+
+function multibot($method,$sitekey,$pageurl,$rr = 0){
+    if($method == 'invisible_recaptchav2'){
+      $method = 'recaptchav2';
+    }
+    refresh: 
+    print p;
+    $host = "api.multibot.in";
+    $name_api = "apikey_multibot";
+    $apikey = save($name_api);
+    $recaptchav2 = http_build_query([
+        "key" => $apikey,
+        "method" => "userrecaptcha",
+        "googlekey" => $sitekey,
+        "pageurl" => $pageurl
+    ]);
+    
+    $hcaptcha = http_build_query([
+        "key" => $apikey,
+        "method" => "hcaptcha",
+        "sitekey" => $sitekey,
+        "pageurl" => $pageurl
+    ]);
+    $type=[
+        "recaptchav2" => $recaptchav2,
+        "hcaptcha" => $hcaptcha
+    ];
+    $ua = [
+        "host: ".$host,
+        "content-type: application/json/x-www-form-urlencoded"
+    ];
+    $s = 0;
+    while(true){
+        $s++;
+        $r = curl("http://".$host."/in.php?".$type[$method],$ua)[1];
+        if($r == "ERROR_USER_BALANCE_ZERO"){
+            unlink($name_api);
+            goto refresh;
+        } elseif($r == "ERROR_WRONG_USER_KEY"){
+            if($s == 3){
+                unlink($name_api);
+                goto refresh;
+            }
+        }
+        $id = explode('|',$r)[1];
+        if(!$id){
+            print "Get ID Captcha";
+            r();
+            continue;
+        }
+        sleep(5);
+        while(true){
+            $r1 = curl("http://".$host."/res.php?".http_build_query([
+                "key" => $apikey,
+                "action" => "get",
+                "id" => $id
+            ]),$ua)[1];
+            if($r1 == "CAPCHA_NOT_READY"){
+                print str_replace("_"," ",$r1);
+                sleep(10);
+                r();
+                continue;
+            } elseif(strlen($r1) >= 50){
+                return explode('|', $r1)[1];
+            } else {
+                print str_replace("_"," ",$r1);
+                r();
+                goto refresh;
+            }
+        }
+    }
+}
 
 function anycaptcha($method,$sitekey,$pageurl,$rr=0){
     refresh:
@@ -745,30 +901,32 @@ function antibot($html){
 
 function arr_api(){
 $package = [
-"",
+//"",
 "",
 "",
 "kr.infozone.documentrecognition_en",
 "com.inverseai.image_to_text_OCR_scanner",
-"aculix.smart.text.recognizer"
+"aculix.smart.text.recognizer",
+"image.to.text.ocr"
 ];
 $cert = [
-"",
+//"",
 "",
 "",
 "00a56ee22492473e1b57670fa9c44185817e5586",
 "FDC669CB376A69B6D6065B8CCE8C188ADDDC4F3E",
 "70E6AB2300C9406792452EA39A40690B91519C85",
-
+"FDC669CB376A69B6D6065B8CCE8C188ADDDC4F3E"
 ];
 
 $api = [
-"AIzaSyAfci4iiOtZc_ORMF2gXlQcG-0Uu2k2mgE",
+//"AIzaSyAfci4iiOtZc_ORMF2gXlQcG-0Uu2k2mgE",
 "AIzaSyDSfHPltpIGd0etqy9CnVdIQGReCIrE35k",
 "AIzaSyAwmW3dg4fP99_hGS6QzXb7jKwwnOcBtsE",
 "AIzaSyDm5IoUGFaQLpFXqoMvB9i20xc62J0taVA",
 "AIzaSyDqfshA40_b5IpjtZEuGJ8oUlRMnY4Ynk4",
-"AIzaSyCt2nW_3i-RBp4kLM-9T0CzcbYQlHbJGek"
+"AIzaSyCt2nW_3i-RBp4kLM-9T0CzcbYQlHbJGek",
+"AIzaSyA5MInkpSbdSbmozCQSuBY3pylSTgmLlaM"
 ];
 
 for($i=0;$i<count($cert);$i++) {
@@ -787,7 +945,7 @@ $array = [
 ["api" => $api[2],"header" => $h[2]],
 ["api" => $api[3],"header" => $h[3]],
 ["api" => $api[4],"header" => $h[4]],
-["api" => $api[5],"header" => $h[5]]
+//["api" => $api[5],"header" => $h[5]]
 ];
 return arr_rand($array);
 }
@@ -808,11 +966,11 @@ function googleapis($img, $type=0){
     $imgg[] = $data;
     $data = json_encode(["requests"=>[["features"=>[["maxResults"=> 1,"type" => "DOCUMENT_TEXT_DETECTION"]],"image" => ["content" => base64_encode($imgg[$i])]]]]);
     ulang:
-      #"image.to.text.ocr",
-      #"FDC669CB376A69B6D6065B8CCE8C188ADDDC4F3E",
-      #"AIzaSyA5MInkpSbdSbmozCQSuBY3pylSTgmLlaM",
+      
+      
+      
       $r = curl("https://vision.googleapis.com/v1/images:annotate?key=".$arr_api[$i]["api"],$arr_api[$i]["header"],$data)[1];
-      if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){
+      if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){print_r($r);die($arr_api[$i]["api"]);
         print p."Please wait, there is a limit!";
         r();
         goto ulang;
