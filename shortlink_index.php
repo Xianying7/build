@@ -4,7 +4,7 @@
 #ini adalah data beta test shortlinks error no komplen
 #eval(str_replace("<?php","",file_get_contents("build_index.php")));
 
-#print_r(bypass_shortlinks("https://ctr.sh/NXrsBx9"));
+#print_r(bypass_shortlinks("https://ouo.io/M5RwDi"));
 #die(print_r(bypass_shortlinks("https://easycut.io/eG7Jq8")));
 #print_r(bypass_shortlinks("https://oii.io/QXDN2ip"));
 #print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
@@ -29,7 +29,8 @@ function build($url=0){
             "https://".$r["host"]."/links/go",
             "https://".$r["host"]."/go".$r["path"],
             "https://".$r["host"]."/".explode("/",$r["path"])[1]."/links/go",
-            "https://go/".$r["host"].$r["path"]
+            "https://go/".$r["host"].$r["path"],
+            "https://".$r["host"]."/xreallcygo".$r["path"]
         ]
     ];
 }
@@ -156,7 +157,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
     preg_match('#(reCAPTCHA_site_key":"|data-sitekey=")(.*?)(")#is',$r[1],$recaptchav2);
     preg_match('#(invisible_reCAPTCHA_site_key":")(.*?)(")#is',$r[1],$invisible_recaptchav2);
     preg_match('#(hcaptcha_checkbox_site_key":"|h-captcha" data-sitekey=")(.*?)(")#is',$r[1],$hcaptcha);
-    preg_match('#(g-recaptcha btn btn-warning" data-sitekey=")(.*?)(")#is',$r[1],$recaptchav3);
+    preg_match('#(render=|g-recaptcha btn btn-warning" data-sitekey=")(.*?)(")#is',$r[1],$recaptchav3);
     preg_match_all('#(submit_data" action="|<a href="|action="|href = ")(.*?)(")#is',$r[1],$url1);
     preg_match_all("#(url='|location.href ='|<a href='|var api =".n."  ')(.*?)(')#is",$r[1],$url2);
     preg_match_all("#window.open(.*?)'(.*?)'#is",$r[1],$url3);
@@ -165,6 +166,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
     preg_match('#</noscript><title>(.*?)<#is',$r[1],$url5);
     preg_match('#url=(.*?)"#is',$r[1],$url6);
     preg_match_all('#hidden" name="(.*?)" value="(.*?)"#is',$r[1],$token_csrf);
+    preg_match_all('#(t|") name="(.*?)" type="hidden" value="(.*?)"#is',$r[1],$token_csrf2);
     preg_match('#(id="second">|varcountdownValue=|PleaseWait|class="timer"value="|class="timer">)([0-9]{1}|[0-9]{2})(;|"|<|s)#is',str_replace([n," "],"",$r[1]),$timer);
     preg_match_all('#(dirrectSiteCode = |ai_data_id=|ai_ajax_url=)"(.*?)(")#is',$r[1],$code_data_ajax);
     preg_match('#(sessionId: ")(.*?)(")#is',$r[1],$sessionId);
@@ -177,6 +179,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
         "recaptchav3" => $recaptchav3[2],
         "invisible_recaptchav2" => $invisible_recaptchav2[2],
         "token_csrf" => $token_csrf,
+        "token_csrf2" => $token_csrf2,
         "timer" => $timer[2],
         "json" => json_decode($r[1]),
         "url" => $r[0][1]["redirect_url"],
@@ -788,6 +791,28 @@ function bypass_shortlinks($url){
                 }
               }
       }
+    } elseif(preg_match("#(ouo.io)#is",$host)){
+      $url = str_replace("ouo.io","ouo.press",$url);
+      $run = build($url);
+      $r = base_short($run["links"]);
+      $cookie[] = $r["cookie"];
+      $t = $r["token_csrf2"];
+      $method = "recaptchav3";
+      if($r[$method]){
+        $cap = demo($method,$r[$method],$run["links"]);
+        $data = http_build_query([
+          explode('"',$t[2][0])[0] => $t[3][0],
+          explode('"',$t[2][1])[0] => $cap,
+          "v-token" => "bx"
+          ]);
+          L($coundown);
+          $r1 = base_short($run["go"][4],0,$data,$run["links"],0,join('',$cookie));
+          if($r1["url"]){
+            print h."success";
+            r();
+            return $r1["url"];
+          }
+      }
     }
 }
 
@@ -970,5 +995,6 @@ function config(){
   $config[] = "Clicksfly";
   $config[] = "Genlink";
   $config[] = "ctr";
+  $config[] = "ouo";
   return $config;
 }
