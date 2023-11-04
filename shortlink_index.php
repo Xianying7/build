@@ -4,8 +4,8 @@
 #ini adalah data beta test shortlinks error no komplen
 #eval(str_replace("<?php","",file_get_contents("build_index.php")));
 
-#print_r(bypass_shortlinks("https://ouo.io/M5RwDi"));
-#die(print_r(bypass_shortlinks("https://easycut.io/eG7Jq8")));
+#print_r(bypass_shortlinks("https://ouo.io/bWWjbcG"));
+#die(print_r(bypass_shortlinks("https://ctr.sh/qr0K")));
 #print_r(bypass_shortlinks("https://oii.io/QXDN2ip"));
 #print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
@@ -233,7 +233,7 @@ function bypass_shortlinks($url){
         r();
         return $r1;
       }
-    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com|shrinkme.info)#is",$host)){
+    } elseif(preg_match("#(link1s.com|insfly.pw|earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com|shrinkme.info|shortplus.xyz)#is",$host)){
         if(preg_match("#(link1s.com)#is",$host)){
           $referer = "https://google.com/";
         } elseif(preg_match("#(insfly.pw)#is",$host)){
@@ -266,6 +266,8 @@ function bypass_shortlinks($url){
           $referer = "https://anhdep24.com/";
         } elseif(preg_match("#(adbull.me)#is",$host)){
           $referer = "https://deportealdia.live/";
+        } elseif(preg_match("#(shortplus.xyz)#is",$host)){
+          $referer = "https://1.newworldnew.com/";
         } else {
           $referer = 0;
         }
@@ -647,7 +649,7 @@ function bypass_shortlinks($url){
           }
         }
       }
-    } elseif(preg_match("#(earnow.online)#is",$host)){
+    } elseif(preg_match("#(earhnow.online)#is",$host)){
       $r = base_short($url);
       $cookie[] = $r["cookie"];
       
@@ -746,7 +748,8 @@ function bypass_shortlinks($url){
         $r = base_short($url1,0,0,$url,0,join('',$cookie));
         $cookie[] = $r["cookie"];
         $method = "recaptchav3";
-        $cap = demo($method,$r[$method],$url1);
+        $cap = recaptchav3($r[$method],$url1);
+        #$cap = demo($method,$r[$method],$url1);
         $data = http_build_query([
           "g-recaptcha-response" => $cap,
           "validator" => "true"
@@ -799,7 +802,8 @@ function bypass_shortlinks($url){
       $t = $r["token_csrf2"];
       $method = "recaptchav3";
       if($r[$method]){
-        $cap = demo($method,$r[$method],$run["links"]);
+       # $cap = demo($method,$r[$method],$run["links"]);
+        $cap = recaptchav3($r[$method],$run["links"]);
         $data = http_build_query([
           explode('"',$t[2][0])[0] => $t[3][0],
           explode('"',$t[2][1])[0] => $cap,
@@ -996,5 +1000,6 @@ function config(){
   $config[] = "Genlink";
   $config[] = "ctr";
   $config[] = "ouo";
+  $config[] = "shortplus.xyz";
   return $config;
 }
