@@ -1,5 +1,51 @@
 <?php
 
+function recaptchav3($sitekey,$pageurl){
+  $az = range("a","z");
+  $a_z = range("A","Z");
+  $no = range("0","9");
+  $n_o = '';
+  $azz = '';
+  $a_zz = '';
+  for($i=0;$i<count($az);$i++){
+    $azz .= $az[$i];
+    $a_zz .= $a_z[$i];
+    $n_o .= $no[$i];
+  }
+  $h = [
+    "host: www.google.com",
+    "content-type: application/x-www-form-urlencoded/json, text/javascript, */*; q=0.01",
+    "user-agent: Googlebot/2.1 (+http://www.google.com/bot.html)"
+    ];
+    sleep(2);
+    $anchor_url = "https://www.google.com/recaptcha/api2/anchor?ar=1&k=".$sitekey."&co=".str_replace("=",".",base64_encode("https://".parse_url($pageurl)["host"].":433"))."&hl=id&v=".substr(str_shuffle($azz.$a_zz.$n_o),0,24)."3sU2vDRVDmUU2E0Ro4VadvPr&size=invisible&cb=".substr(str_shuffle($azz),0,12);
+    $query = parse_url($anchor_url);
+    foreach(explode("&",$query["query"]) as $i => $line){
+      list($key, $value ) = explode('=',$line);
+      $results[$key] = $value;
+    }
+    $r = curl($anchor_url,$h);
+    preg_match('/"recaptcha-token" value="(.*?)"/', $r[1], $token);
+    sleep(2);
+    $data = http_build_query([
+      "v" => $results["v"],
+      "reason" => "q",
+      "c" => $token[1],
+      "k" => $results["k"],
+      "co" => $results["co"]
+      ]);
+      $r1 = curl("https://www.google.com/recaptcha/api2/reload?k=".$results["k"],$h,$data);
+      if(preg_match('/120/', $r1[1])){
+        preg_match('/"rresp","(.*?)"/', $r1[1], $rresp);
+        return $rresp[1];
+      }
+}
+
+
+
+
+
+
 $Authorization = json_encode([
   "grant_type" => "password",#<-biarin gausah diisi
   "client_id" => "943",
