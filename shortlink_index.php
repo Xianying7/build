@@ -4,9 +4,9 @@
 #ini adalah data beta test shortlinks error no komplen
 #eval(str_replace("<?php","",file_get_contents("build_index.php")));
 
-#print_r(bypass_shortlinks("https://ouo.io/bWWjbcG"));
+#print_r(bypass_shortlinks("https://easycut.io/KqlRy"));
 #die(print_r(bypass_shortlinks("https://ctr.sh/qr0K")));
-#print_r(bypass_shortlinks("https://oii.io/QXDN2ip"));
+##print_r(bypass_shortlinks("https://oii.io/QXDN2ip"));
 #print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
 //print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
@@ -396,6 +396,7 @@ function bypass_shortlinks($url){
           if($r1->status == "success"){
             print h.$r1->status;
             r();
+            unset($cookie);
             return $r1->url;
           }
         }
@@ -415,6 +416,7 @@ function bypass_shortlinks($url){
             if($r2->status == "success"){
               print h.$r2->status;
               r();
+              unset($cookie);
               return $r2->url;
             }
         }
@@ -437,6 +439,7 @@ function bypass_shortlinks($url){
           if($r1->status == "success"){
             h.$r1->status;
             r();
+            unset($cookie);
             return $r1->url;
           }
         }
@@ -499,6 +502,7 @@ function bypass_shortlinks($url){
         }
         if(!$t[0][0]){
           L(5);
+          unset($cookie);
           goto ulang;
           }
           if($t[2][2] == "captcha"){
@@ -517,6 +521,7 @@ function bypass_shortlinks($url){
           if($r2->status == "success"){
            print h.$r2->status;
            r();
+           unset($cookie);
            return $r2->url;
           }
       }
@@ -538,6 +543,7 @@ function bypass_shortlinks($url){
         }
         $sessionId = $r["sessionId"];
         if(!$sessionId){
+          unset($cookie);
           continue;
         }
         L($coundown);
@@ -556,25 +562,26 @@ function bypass_shortlinks($url){
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
       $data = data_post($t)["five2"];
-        $r = base_short($url,0,$data,$url,0,join('',$cookie));
-        $cookie[] = $r["cookie"];
-        $t = $r["token_csrf"];
-        $method = "invisible_recaptchav2";
-        $cap = multibot($method,$r[$method],$url);
-        $data = data_post($t, $method, $cap)["five"];
-        $r = base_short($url,0,$data,$url,0,join('',$cookie));
-        $cookie[] = $r["cookie"];
-        $t = $r["token_csrf"];
-        if(explode('"',$t[1][2])[0] == "ad_form_data"){
-          L($coundown);
-          $data = data_post($t)["four"];
-          $r1 = base_short(build($url)["go"][0],1,$data,0,0,join('',$cookie))["json"];
-          if($r1->status == "success"){
-            h.$r1->status;
-            r();
-            return $r1->url;
-          }
+      $r = base_short($url,0,$data,$url,0,join('',$cookie));
+      $cookie[] = $r["cookie"];//die(print_r($r));
+      $t = $r["token_csrf"];
+      $method = "invisible_recaptchav2";
+      $cap = multibot($method,$r[$method],$url);
+      $data = data_post($t, $method, $cap)["five"];
+      $r = base_short($url,0,$data,$url,0,join('',$cookie));
+      $cookie[] = $r["cookie"];
+      $t = $r["token_csrf"];
+      if(explode('"',$t[1][2])[0] == "ad_form_data"){
+        L($coundown);
+        $data = data_post($t)["four"];
+        $r1 = base_short(build($url)["go"][0],1,$data,0,0,join('',$cookie))["json"];
+        if($r1->status == "success"){
+          h.$r1->status;
+          r();
+          unset($cookie);
+          return $r1->url;
         }
+      }
     } elseif(preg_match("#(cuty.io)#is",$host)){
       $r = base_short($url); 
       $cookie[] = $r["cookie"];
@@ -600,6 +607,7 @@ function bypass_shortlinks($url){
           if($r1["url"]){
             print h."success";
             r();
+            unset($cookie);
             return $r1["url"];
           }
         }
@@ -645,6 +653,7 @@ function bypass_shortlinks($url){
           if(preg_match("#(https)#is",$r1->url)){
             h."success";
             r();
+            unset($cookie);
             return $r1->url;
           }
         }
@@ -729,6 +738,7 @@ function bypass_shortlinks($url){
         if($r1->status == "success"){
         h.$r1->status;
         r();
+        unset($cookie);
         return $r1->url;
         }
       }
@@ -737,19 +747,24 @@ function bypass_shortlinks($url){
         if(preg_match("#(ctr.sh)#is",$host)){
           $re = "https://sinonimos.de/?url8j=";
         } elseif(preg_match("#(easycut.io)#is",$host)){
-          $re = "https://quesignifi.ca/?url8j=";
+          $re = "https://antonimos.de/?url8j=";
         }
         $r = base_short($re.$url);
         $cookie[] = $r["cookie"];
         $url1 = $r["url1"][0];
         if(!$url1){
+          unset($cookie);
           continue;
         }
-        $r = base_short($url1,0,0,$url,0,join('',$cookie));
+        $r = base_short($url1,0,0,$url1,0,join('',$cookie));
         $cookie[] = $r["cookie"];
-        $method = "recaptchav3";
-        $cap = recaptchav3($r[$method],$url1);
-        #$cap = demo($method,$r[$method],$url1);
+        if(preg_match("#(ctr.sh)#is",$host)){
+          $method = "recaptchav3";
+          $cap = recaptchav3($r[$method],$url1);
+        } elseif(preg_match("#(easycut.io)#is",$host)){
+          $method = "recaptchav2";
+        $cap = multibot($method,$r[$method],$url1);
+        }
         $data = http_build_query([
           "g-recaptcha-response" => $cap,
           "validator" => "true"
@@ -758,6 +773,7 @@ function bypass_shortlinks($url){
           $cookie[] = $r["cookie"];
           $url2 = $r["url"];
           if(!$url2){
+            unset($cookie);
             break;
           }
           $data = http_build_query([
@@ -768,31 +784,32 @@ function bypass_shortlinks($url){
             $cookie[] = $r["cookie"];
             $url3 = $r["url"];
             if(!$url3){
+              unset($cookie);
               continue;
             }
-            $data = http_build_query([
-              "no-recaptcha-noresponse" => "true",
-              "validator" => "true"
-              ]);
-              $r = base_short($url3,1,$data,$url3,0,join('',$cookie));
+            $r = base_short($url3,0,$data,$url3,0,join('',$cookie));
+            $cookie[] = $r["cookie"];
+            $final = $r["url6"];
+            if(!$final){
+              $url4 = $r["url"];
+              $r = base_short($url4,0,$data,$url4,0,join('',$cookie));
               $cookie[] = $r["cookie"];
               $final = $r["url6"];
-              if(!$final){
-                continue;
+            }
+            $r = base_short(str_replace("&tk","?token",$final),0,0,0,0,join('',$cookie));
+            $cookie[] = $r["cookie"];
+            $t = $r["token_csrf"];
+            if(explode('"',$t[1][2])[0] == "ad_form_data"){
+              $data = data_post($t)["four"];
+              L($coundown);
+              $r1 = base_short(build($final)["go"][0],1,$data,0,0,join('',$cookie))["json"];
+              if($r1->status == "success"){
+                print h.$r1->status;
+                r();
+                unset($cookie);
+                return $r1->url;
               }
-              $r = base_short(str_replace("&tk","?token",$final),0,0,0,0,join('',$cookie));
-              $cookie[] = $r["cookie"];
-              $t = $r["token_csrf"];
-              if(explode('"',$t[1][2])[0] == "ad_form_data"){
-                $data = data_post($t)["four"];
-                L($coundown);
-                $r1 = base_short(build($final)["go"][0],1,$data,0,0,join('',$cookie))["json"];
-                if($r1->status == "success"){
-                  print h.$r1->status;
-                  r();
-                  return $r1->url;
-                }
-              }
+            }
       }
     } elseif(preg_match("#(ouo.io)#is",$host)){
       $url = str_replace("ouo.io","ouo.press",$url);
@@ -802,7 +819,6 @@ function bypass_shortlinks($url){
       $t = $r["token_csrf2"];
       $method = "recaptchav3";
       if($r[$method]){
-       # $cap = demo($method,$r[$method],$run["links"]);
         $cap = recaptchav3($r[$method],$run["links"]);
         $data = http_build_query([
           explode('"',$t[2][0])[0] => $t[3][0],
@@ -814,6 +830,7 @@ function bypass_shortlinks($url){
           if($r1["url"]){
             print h."success";
             r();
+            unset($cookie);
             return $r1["url"];
           }
       }
