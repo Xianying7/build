@@ -1017,6 +1017,7 @@ function config(){
   $config[] = "Genlink";
   $config[] = "ctr";
   $config[] = "ouo";
+  $config[] = "easycut";
   $config[] = "shortplus.xyz";
   return $config;
 }
