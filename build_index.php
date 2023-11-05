@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 $Authorization = json_encode([
   "grant_type" => "password",#<-biarin gausah diisi
   "client_id" => "943",
@@ -304,6 +301,10 @@ function ket_line($a,$aa,$b=0,$bb=0,$c=0,$cc=0){
 
 function curl($url, $header = false, $post = false,  $followlocation = false, $cookiejar = false, $alternativ_cookie = false){
     while(true){
+      if(!parse_url($url)["scheme"]){
+        print m."url tidak valid".n;
+        break;
+      }
       $default[CURLOPT_URL] = $url;
       if($followlocation){
         $default[CURLOPT_FOLLOWLOCATION] = $followlocation;
