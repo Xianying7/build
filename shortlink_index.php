@@ -8,9 +8,9 @@
 #die(print_r(bypass_shortlinks("https://ctr.sh/qr0K")));
 ##print_r(bypass_shortlinks("https://oii.io/QXDN2ip"));
 #print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
-//print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
+#print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
-#print_r(bypass_shortlinks("https://go.megaurl.in/BSDJi"));
+#print_r(bypass_shortlinks("https://clks.pro/onfbBNh7OOdd0JS"));
 #print_r(bypass_shortlinks("http://festyy.com/ehk3KH"));
 
 function build($url=0){
@@ -20,9 +20,8 @@ function build($url=0){
           $inc = "/flyinc.";
         }
     $r = parse_url($url);
-    $az = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return [
-        "client_id" => substr(str_shuffle($az),0,8)."-".substr(str_shuffle($az),0,4)."-".substr(str_shuffle($az),0,4)."-".substr(str_shuffle($az),0,4)."-".substr(str_shuffle($az),0,16),
+        "client_id" => az_num(8)."-".az_num(4)."-".az_num(4)."-".az_num(4)."-".az_num(16),
         "links" => "https://".$r["host"].$r["path"],
         "inc" => "https://".$r["host"].$inc.$r["path"],
         "go" => [
@@ -137,7 +136,7 @@ function h_short($xml = 0, $referer = 0, $agent =0){
     $headers[] = 'Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7';
     if($agent){
     #$agent = ' (compatible; Google-Youtube-Links)';
-    $agent = ' (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+    $agent = ' (compatible; Googlebot/2.1; +https://www.google.com/bot.html)';
     } else {
     $user_agent = user_agent();
     }
@@ -658,60 +657,30 @@ function bypass_shortlinks($url){
           }
         }
       }
-    } elseif(preg_match("#(earhnow.online)#is",$host)){
+    } elseif(preg_match("#(clks.pro)#is",$host)){
+      while(true){
       $r = base_short($url);
       $cookie[] = $r["cookie"];
-      
+      $t = $r["token_csrf"];
+      $blog = $r["url1"][0];
+      $data = data_post($t)["one"];
+      $r = base_short($blog,1,$data,$url,0,join('',$cookie));
+      $cookie[] = $r["cookie"];
       $url1 = $r["url"];
+      if(!preg_match("#(www.google.com)#is",$url1)){
+        unset($cookie);
+        continue;
+      }
+      
       $r = base_short($url1,0,0,$url,0,join('',$cookie));
       $cookie[] = $r["cookie"];
-      $url2 = $r["url"];
-      $r = base_short($url2,0,0,$url1,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $url3 = str_replace("http:","https:",$r["url5"]);
-      $r = base_short($url3,0,0,$url2,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $url4 = $r["url"];
-      $r = base_short($url4,0,0,$url3,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $t = $r["token_csrf"];
-      
-      $method = "recaptchav2";
-      $cap = multibot($method,$r[$method],$url4);
-      $data = data_post($t,$method, $cap)["null"];
-      $r = base_short($url4,1,$data,$url4,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $t = $r["token_csrf"];
-      $data = data_post($t)["null"];
-     if(!$t[1][0]){
-       exit;
-     }
-      $r = base_short($url4,1,$data,$url4,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $t = $r["token_csrf"];
-      $data = data_post($t)["null"];
-      if(!$t[1][0]){
-       exit;
-     }
-      
-      L(15);
-      $r = base_short($url4,1,$data,$url4,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $url1 = $r["url"];
-     /* if(!$r["url1"][0]){
-        
-      }*/
-      $r = base_short($url1,0,0,$url4,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-     // die(print_r($r));
-      
       $url2 = $r["url2"][0];
       $r = base_short($url2,0,0,$url1,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $url3 = str_replace("http:","https:",$r["url5"]);
-      $r = base_short($url3,0,0,$url2,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
+      die(print_r(base64_decode(str_replace(".","_",explode("'",$r["res"])[3]))));
       die(print_r($r));
+      $cookie[] = $r["cookie"];
+      $t = $r["token_csrf"];
+    }
       
       
     } elseif(preg_match("#(clk.asia)#is",$host)){
