@@ -1,48 +1,5 @@
 <?php
 
-function recaptchav3($sitekey,$pageurl){
-  $az = range("a","z");
-  $a_z = range("A","Z");
-  $no = range("0","9");
-  $n_o = '';
-  $azz = '';
-  $a_zz = '';
-  for($i=0;$i<count($az);$i++){
-    $azz .= $az[$i];
-    $a_zz .= $a_z[$i];
-    $n_o .= $no[$i];
-  }
-  $h = [
-    "host: www.google.com",
-    "content-type: application/x-www-form-urlencoded/json, text/javascript, */*; q=0.01",
-    "user-agent: Googlebot/2.1 (+http://www.google.com/bot.html)"
-    ];
-    sleep(2);
-    $anchor_url = "https://www.google.com/recaptcha/api2/anchor?ar=1&k=".$sitekey."&co=".str_replace("=",".",base64_encode("https://".parse_url($pageurl)["host"].":433"))."&hl=id&v=".substr(str_shuffle($azz.$a_zz.$n_o),0,24)."3sU2vDRVDmUU2E0Ro4VadvPr&size=invisible&cb=".substr(str_shuffle($azz),0,12);
-    $query = parse_url($anchor_url);
-    foreach(explode("&",$query["query"]) as $i => $line){
-      list($key, $value ) = explode('=',$line);
-      $results[$key] = $value;
-    }
-    $r = curl($anchor_url,$h);
-    preg_match('/"recaptcha-token" value="(.*?)"/', $r[1], $token);
-    sleep(2);
-    $data = http_build_query([
-      "v" => $results["v"],
-      "reason" => "q",
-      "c" => $token[1],
-      "k" => $results["k"],
-      "co" => $results["co"]
-      ]);
-      $r1 = curl("https://www.google.com/recaptcha/api2/reload?k=".$results["k"],$h,$data);
-      if(preg_match('/120/', $r1[1])){
-        preg_match('/"rresp","(.*?)"/', $r1[1], $rresp);
-        return $rresp[1];
-      }
-}
-
-
-
 
 
 
@@ -92,6 +49,64 @@ function c(){
     }
     pclose(popen($clear,'w'));
 }
+
+
+
+function recaptchav3($sitekey,$pageurl){
+  $az = range("a","z");
+  $a_z = range("A","Z");
+  $no = range("0","9");
+  $n_o = '';
+  $azz = '';
+  $a_zz = '';
+  for($i=0;$i<count($az);$i++){
+    $azz .= $az[$i];
+    $a_zz .= $a_z[$i];
+    $n_o .= $no[$i];
+  }
+  $h = [
+    "Host: www.recaptcha.net",
+    "User-Agent: Googlebot/2.1 (+http://www.google.net/bot.html)",
+    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    "Referer: ".$pageurl,
+    "Accept-Encoding: gzip, deflate, br",
+    "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
+    ];
+    $anchor_url = "https://www.recaptcha.net/recaptcha/api2/anchor?ar=1&k=".$sitekey."&co=".str_replace("=",".",base64_encode("https://".parse_url($pageurl)["host"].":443"))."&hl=id&v=".substr(str_shuffle($azz.$a_zz.$n_o),0,24)."&size=invisible&cb=".substr(str_shuffle($azz),0,12);
+    $query = parse_url($anchor_url);
+    foreach(explode("&",$query["query"]) as $i => $line){
+      list($key, $value ) = explode('=',$line);
+      $results[$key] = $value;
+    }
+    $r = curl($anchor_url,$h);
+    preg_match('/"recaptcha-token" value="(.*?)"/', $r[1], $token);
+    sleep(3);
+    $data = http_build_query([
+      "v" => $results["v"],
+      "reason" => "q",
+      "c" => $token[1],
+      "k" => $results["k"],
+      "co" => $results["co"]
+      ]);
+      $h1 = [
+        "Host: www.recaptcha.net",
+        "Content-Length: ".strlen($data),
+        "User-Agent: Googlebot/2.1 (+http://www.google.net/bot.html)",
+        "Accept: */*",
+        "Origin: https://www.recaptcha.net",
+        "Referer: ".$anchor_url,
+        "Accept-Encoding: gzip, deflate, br",
+        "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
+        ];
+        $r1 = curl("https://www.recaptcha.net/recaptcha/api2/reload?k=".$results["k"],$h1,$data);
+        preg_match("/\d+/", explode('"',$r1[1])[4],$s);
+        if($s[0] >= 110){
+          preg_match('/"rresp","(.*?)"/', $r1[1], $rresp);
+          return $rresp[1];
+        }
+}
+
+
 
 function multiexplode($delimiters,$string){
     $ready = str_replace($delimiters, $delimiters[0],$string);
@@ -465,7 +480,7 @@ function metabypass($method,$sitekey,$pageurl,$rr = 0){
         "sitekey" => $sitekey,
         "version" => $method
         ]);
-        $recaptcha_id = curl("https://app.metabypass.tech/CaptchaSolver/api/v1/services/bypassReCaptcha",$h1,$data2)[2]; print_r($recaptcha_id);
+        $recaptcha_id = curl("https://app.metabypass.tech/CaptchaSolver/api/v1/services/bypassReCaptcha",$h1,$data2)[2];
         if($recaptcha_id->status_code == 200){
           while(true){
             sleep(10);
@@ -1016,7 +1031,7 @@ function googleapis($img, $type=0){
       
       
       $r = curl("https://vision.googleapis.com/v1/images:annotate?key=".$arr_api[$i]["api"],$arr_api[$i]["header"],$data)[1];
-      if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){print_r($r);die($arr_api[$i]["api"]);
+      if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){#print_r($r);die($arr_api[$i]["api"]);
         print p."Please wait, there is a limit!";
         r();
         goto ulang;
