@@ -1,12 +1,8 @@
 <?php
 
-$Authorization = json_encode([
-  "grant_type" => "password",#<-biarin gausah diisi
-  "client_id" => "943",
-  "client_secret" => "BvPLlsZAc3cjakJlf9s8SwWyr2KF09NdosP2f9xd",
-  "username" => "wikij59092@wanbeiz.com",
-   "password" => "wikij59092@wanbeiz.com"
-   ]);
+
+
+
 function demo($methode,$sitekey,$site){
   while(true){
     $host = "recaptcha-v3-solver-0-1-score.p.rapidapi.com";
@@ -62,48 +58,6 @@ function az_num($amount = false){
   }
 }
 
-function recaptchav3($sitekey,$pageurl){
-  $h = [
-    "Host: www.recaptcha.net",
-    "User-Agent: Googlebot/2.1 (+https://www.google.net/bot.html)",
-    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-    "Referer: ".$pageurl,
-    "Accept-Encoding: gzip, deflate, br",
-    "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-    ];
-    $anchor_url = "https://www.recaptcha.net/recaptcha/api2/anchor?ar=1&k=".$sitekey."&co=".str_replace("=",".",base64_encode("https://".parse_url($pageurl)["host"].":443"))."&hl=id&v=".az_num(24)."&size=invisible&cb=".strtolower(az_num(12));
-    $query = parse_url($anchor_url);
-    foreach(explode("&",$query["query"]) as $i => $line){
-      list($key, $value ) = explode('=',$line);
-      $results[$key] = $value;
-    }
-    $r = curl($anchor_url,$h);
-    preg_match('/"recaptcha-token" value="(.*?)"/', $r[1], $token);
-    sleep(3);
-    $data = http_build_query([
-      "v" => $results["v"],
-      "reason" => "q",
-      "c" => $token[1],
-      "k" => $results["k"],
-      "co" => $results["co"]
-      ]);
-      $h1 = [
-        "Host: www.recaptcha.net",
-        "Content-Length: ".strlen($data),
-        "User-Agent: Googlebot/2.1 (+https://www.google.net/bot.html)",
-        "Accept: */*",
-        "Origin: https://www.recaptcha.net",
-        "Referer: ".$anchor_url,
-        "Accept-Encoding: gzip, deflate, br",
-        "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-        ];
-        $r1 = curl("https://www.recaptcha.net/recaptcha/api2/reload?k=".$results["k"],$h1,$data);
-        preg_match("/\d+/", explode('"',$r1[1])[4],$s);
-        if($s[0] >= 110){
-          preg_match('/"rresp","(.*?)"/', $r1[1], $rresp);
-          return $rresp[1];
-        }
-}
 
 
 
@@ -257,6 +211,19 @@ function tmr($a,$tmr){
     endwhile;
 }
 
+function countdown($countdown){
+    for($i=0;$i<count($countdown);$i++){
+        $timer = bcdiv($countdown[$i],1000)-time();
+        if($timer >= -2){
+            if($timer >= 5500){
+            continue;
+            } else {
+                tmr(1,$timer);
+                break;
+            }
+        }
+    }
+}
 function L($t){
     r();
     $col = [b,c,h,k,m,p,u];
@@ -312,6 +279,8 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       $default[CURLOPT_RETURNTRANSFER] = 1;
       $default[CURLOPT_ENCODING] = 'gzip,deflate';
       $default[CURLOPT_HEADER] = 1;
+     # $default[CURLOPT_SSL_VERIFYPEER] = 0;
+     # $default[CURLOPT_SSL_VERIFYHOST] = 0;
       if($header){
         $default[CURLOPT_HTTPHEADER] = $header;
       }
@@ -333,7 +302,8 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       $response = substr($output,curl_getinfo($ch,CURLINFO_HEADER_SIZE));
       $info = curl_getinfo($ch);
       curl_close($ch);
-      if(curl_errno($ch) == 0){
+      if($info["primary_ip"]){
+      #if(curl_errno($ch) == 0){
         foreach(explode("\r\n",substr($output,0,strpos($output,"\r\n\r\n"))) as $i => $line){
           if($i == 0){
             $headers['http_code'] = $line;
@@ -350,7 +320,7 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       }
       print p.movePage()[$info["http_code"]];
       r();
-      return [[$header_array, $info, $output],$response, json_decode($response)];
+      return [[$header_array, $info, $output],$response, json_decode(str_replace([n,"﻿"],"",strip_tags($response)))];
   }
 }
 
@@ -437,67 +407,24 @@ function user_agent(){
   return $user_agent;
 }
 
-
-function hmc($xml=0,$u_c = 0){
-    global $u_a;
-    $h[] = "Host: ".explode("/",host)[2];
-    if($xml){
-    $h[] = "accept: application/json, text/javascript, */*; q=0.01";
-    $h[] = "x-requested-with: XMLHttpRequest";}
-    $h[] = "cache-control: max-age=0";
-    $h[] = "cookie: ".$u_c;
-    $h[] = "user-agent: ".$u_a;
-    return $h;
-}
-        
-function hac($xml=0){
-    $h[] = "Host:".explode("/",host)[2];
-    $h[] = "cache-control: max-age=0";
-    if($xml){
-    $h[] = "accept: application/json, text/javascript, */*; q=0.01";
-    $h[] = "x-requested-with: XMLHttpRequest";}
-    $h[] = "user-agent: ".user_agent();
-    return $h;
-}
-
-function metabypass($method,$sitekey,$pageurl,$rr = 0){
-    if($method == 'invisible_recaptchav2' or $method = 'recaptchav2'){
-    $method = 2;
-    }
-  //eval(file_get_contents("Authorization.php"));
-  global $Authorization;
-  $h = [
-    'Content-Type: application/json',
-    'Accept: application/json'
-    ];
-    $access_token = curl("https://app.metabypass.tech/CaptchaSolver/oauth/token",$h,$Authorization)[2]->access_token;
-    if(!$access_token){
-      die(m."terjadi kesalahan Authorization");
-    }
-    $h1 = [
-      'Content-Type: application/json',
-      'Accept: application/json',
-      'Authorization: Bearer '.$access_token
-      ];
-      $data2 = json_encode([
-        "url" => $pageurl ,
-        "sitekey" => $sitekey,
-        "version" => $method
-        ]);
-        $recaptcha_id = curl("https://app.metabypass.tech/CaptchaSolver/api/v1/services/bypassReCaptcha",$h1,$data2)[2]; print_r($recaptcha_id);
-        if($recaptcha_id->status_code == 200){
-          while(true){
-            sleep(10);
-            $response = curl("https://app.metabypass.tech/CaptchaSolver/api/v1/services/getCaptchaResult?recaptcha_id=".$recaptcha_id->data->RecaptchaId,$h1)[2];
-            if($response->status_code == 200){
-              r();
-              return $response->data->RecaptchaResponse;
-              } else {
-                r();
-                print $response->message;
-              }
-          }
-        }
+function head($xml = 0,  $boundary = 0){
+  global $u_a, $u_c;
+  $header = array();
+  $header[] = "Host: ".explode("/",host)[2];
+  if($boundary){
+    $header[] = "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$boundary;
+  }
+  if($xml){
+    $header[] = "x-requested-with: XMLHttpRequest";
+  }
+  if(!$u_a){
+    $u_a = user_agent();
+  }
+  $header[] = "user-agent: ".$u_a;
+  if($u_c){
+    $header[] = "cookie: ".$u_c;
+  }
+  return $header;
 }
 
 
@@ -730,63 +657,48 @@ function multibot($method,$sitekey,$pageurl,$rr = 0){
     }
 }
 
-function anycaptcha($method,$sitekey,$pageurl,$rr=0){
-    refresh:
-    $name_api = "apikey_anycaptcha";
-    $apikey = save($name_api);
-    $h = [
-        "Host: api.anycaptcha.com",
-        "Content-Type: application/json"
+
+function recaptchav3($sitekey,$pageurl){
+  $h = [
+    "Host: www.recaptcha.net",
+    "User-Agent: Googlebot/2.1 (+https://www.google.com/bot.html)",
+    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+    "Referer: ".$pageurl,
+    "Accept-Encoding: gzip, deflate, br",
+    "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
     ];
-    $data = json_encode([
-        "clientKey" => $apikey
-    ]);
-    $r = json_decode(curl("https://api.anycaptcha.com/getBalance",$h,$data)[1],1);
-    if($r["balance"] <= 0){
-        unlink($name_api);
-        goto refresh;
+    $anchor_url = "https://www.recaptcha.net/recaptcha/api2/anchor?ar=1&k=".$sitekey."&co=".str_replace("=",".",base64_encode("https://".parse_url($pageurl)["host"].":443"))."&hl=id&v=".az_num(24)."&size=invisible&cb=".strtolower(az_num(12));
+    $query = parse_url($anchor_url);
+    foreach(explode("&",$query["query"]) as $i => $line){
+      list($key, $value ) = explode('=',$line);
+      $results[$key] = $value;
     }
-    $recaptchav2=json_encode([
-        "clientKey" => $apikey,
-        "task" => [
-            "type" => "RecaptchaV2TaskProxyless",
-            "websiteURL" => $pageurl,
-            "websiteKey" => $sitekey,
-            "isInvisible" => false
-            ]
-        ]);
-    $hcaptcha = json_encode([
-        "clientKey" => $apikey,
-        "task" => [
-        "type" => "HCaptchaTaskProxyless",
-        "websiteURL" => $pageurl,
-        "websiteKey" => $sitekey
-            ]
-        ]);
-            $type=[
-                "hcaptcha" => $hcaptcha,
-                "recaptchav2" => $recaptchav2
-            ];
-            $Create = json_decode(curl('https://api.anycaptcha.com/createTask',$h,$type[$method])[1]);
-            if($Create->errorId>0){
-                exit(m.$Create->errorCode.n);
-    } else {
-        while(true){
-            $base = json_encode([
-                "clientKey" => $apikey,
-                "taskId" => $Create->taskId
-            ]);
-            $Result = json_decode(curl('https://api.anycaptcha.com/getTaskResult',$h,$base)[1]);
-            if($Result->status == 'processing'){
-                print p.$Result->status;
-                sleep(5);
-                r();
-                continue;
-            }
-            r();
-            return $Result->solution->gRecaptchaResponse;
+    $r = curl($anchor_url,$h);
+    preg_match('/"recaptcha-token" value="(.*?)"/', $r[1], $token);
+    sleep(3);
+    $data = http_build_query([
+      "v" => $results["v"],
+      "reason" => "q",
+      "c" => $token[1],
+      "k" => $results["k"],
+      "co" => $results["co"]
+      ]);
+      $h1 = [
+        "Host: www.recaptcha.net",
+        "Content-Length: ".strlen($data),
+        "User-Agent: Googlebot/2.1 (+https://www.google.com/bot.html)",
+        "Accept: */*",
+        "Origin: https://www.recaptcha.net",
+        "Referer: ".$anchor_url,
+        "Accept-Encoding: gzip, deflate, br",
+        "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
+        ];
+        $r1 = curl("https://www.recaptcha.net/recaptcha/api2/reload?k=".$results["k"],$h1,$data);
+        preg_match("/\d+/", explode('"',$r1[1])[4],$s);
+        if($s[0] >= 110){
+          preg_match('/"rresp","(.*?)"/', $r1[1], $rresp);
+          return $rresp[1];
         }
-    }
 }
 
 function icon_bits(){
@@ -1026,14 +938,12 @@ function googleapis($img, $type=0){
     imagefilter($image, IMG_FILTER_GRAYSCALE);
     imagecropauto($image , IMG_CROP_DEFAULT);
     imagepng($image);
+    imagedestroy($image);
     $data = ob_get_contents();
     ob_end_clean();
     $imgg[] = $data;
     $data = json_encode(["requests"=>[["features"=>[["maxResults"=> 1,"type" => "DOCUMENT_TEXT_DETECTION"]],"image" => ["content" => base64_encode($imgg[$i])]]]]);
     ulang:
-      
-      
-      
       $r = curl("https://vision.googleapis.com/v1/images:annotate?key=".$arr_api[$i]["api"],$arr_api[$i]["header"],$data)[1];
       if(preg_match("#(error|quota_limit_value|RESOURCE_EXHAUSTED)#is",$r)){print_r($r);die($arr_api[$i]["api"]);
         print p."Please wait, there is a limit!";
@@ -1053,97 +963,206 @@ function googleapis($img, $type=0){
   return [$text1,$text];
 }
 
-function ifimageediting($img, $main = false){
-  for($i = 0;$i<count($img);$i++){
-    ob_start();
-    $base64_string = base64_decode($img[$i]);
-    $image = imagecreatefromstring($base64_string);
-    imagefilter($image, IMG_FILTER_SMOOTH, 1);
-    imagefilter($image,IMG_FILTER_NEGATE);
-    imagefilter($image, IMG_FILTER_GRAYSCALE);
-    imagecropauto($image , IMG_CROP_DEFAULT);
-    imagepng($image);
-    $data = ob_get_contents();
-    ob_end_clean();
-    $imgg[] = $data;
+
+function icon_answer(){
+  $eol = "\n";
+  $boundary = "------WebKitFormBoundary";
+  $content = 'Content-Disposition: form-data; name="payload"';
+  while(true){
+  sleep(2);
+  $code = az_num(16);
+  $data = '';
+  $data .= $boundary.$code.$eol;
+  $data .= $content.$eol.$eol;
+  $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "dark", "ts" => round(time() * 1000)])).$eol;
+  $data .= $boundary.$code.'--';
+  $r = base_run(host."system/libs/captcha/request.php", $data, 1, $code);
+  if($r["status"] == 403){
+    print m."there is an error!!";
+    sleep(5);
+    r();
+    break;
   }
-  $h = [
-    "Host: ifimageediting.com",
-    "cache-control: max-age=0",
-    "user-agent: ".user_agent(),
-    "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-    "accept-language: id,id-ID;q=0.9,en-US;q=0.8,en;q=0.7"
-    ];
-    $r = curl("https://ifimageediting.com/id/image-to-text",$h,0);
-    preg_match('#csrf-token" content="(.*?)"#is',$r[1],$cs);
-    $code = uniqid();
-    $boundary = "------WebKitFormBoundary";
-    $type = 'Content-Type: ';
-    $disposition = 'Content-Disposition: form-data; name=';
-    $eol = "\n";
-    $data = '';
-    $data .= $boundary.$code.$eol;
-    $data .= $disposition.'"_token"'.$eol.$eol;
-    $data .= $cs[1].$eol;
-    for($z = 0;$z<count($imgg);$z++){
-      $data .= $boundary.$code.$eol;
-      $data .= $disposition.'"upload_img[]"; filename="img'.$z.'.png"'.$eol;
-      $data .= $type.'image/png'.$eol.$eol;
-      $data .= $imgg[$z].$eol;
-    }
-    $data .= $boundary.$code.$eol;
-    $data .= $disposition.'"upload_img[]"; filename=""'.$eol;
-    $data .= $type.'application/octet-stream'.$eol.$eol;
-    for($x = 0;$x<count($imgg);$x++){
-      $data .= $boundary.$code.$eol;
-      $data .= $disposition.'"images[]"; filename="img'.$x.'.png"'.$eol;
-      $data .= $type.'image/png'.$eol.$eol;
-      $data .= $imgg[$x].$eol;
-    }
-    $data .= $boundary.$code.'--';
-    $h2 = [
-      "Host: ifimageediting.com",
-      "content-length: ".strlen($data),
-      "cache-control: max-age=0",
-      "origin: https://ifimageediting.com",
-      "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$code,
-      "user-agent: ".user_agent(),
-      "accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-      "referer: https://ifimageediting.com/id/image-to-text",
-      "accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"];
-      $r2 = curl("https://ifimageediting.com/id/image-to-text",$h2,$data,0,0, set_cookie($r[0][2]));
-      preg_match('#csrf-token" content="(.*?)"#is',$r2[1],$css);
-      preg_match_all('#data-hash="(.*?)"#is',$r2[1],$hash);
-      for($i = 0;$i<count($imgg);$i++){
-        $code = uniqid();
-        $data2 = '';
-        $data2 .= $boundary.$code.$eol;
-        $data2 .= 'Content-Disposition: form-data; name="hash"'.$eol.$eol;
-        $data2 .= $hash[1][$i].$eol;
-        $data2 .= $boundary.$code.'--';
-        $h3 = [
-          "Host: ifimageediting.com",
-          "content-length: ".strlen($data2),
-          "x-csrf-token: ".$css[1],
-          "user-agent: ".user_agent(),
-          "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$code,
-          "accept: application/json, text/javascript, */*; q=0.01",
-          "x-requested-with: XMLHttpRequest",
-          "origin: https://ifimageediting.com",
-          "referer: https://ifimageediting.com/id/image-to-text",
-          "accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-          ];
-          $r3 = curl("https://ifimageediting.com/text-conversion",$h3,$data2,0,0, set_cookie($r[0][2]).set_cookie($r2[0][2]))[1];
-          $convert = str_replace(["%","′"],"",strip_tags(str_replace("﻿","",trimed(transliterator_transliterate('Any-Latin;Latin-ASCII;',json_decode(($r3))->t)))));
-          if($i == 0){
-            $text1 = $convert;
-          } else {
-            $text[] = $convert;
-          }
-      }
-      return [$text1,$text];
+  sleep(2);
+  $r = base_run(host."system/libs/captcha/request.php?payload=".base64_encode(json_encode(["i" => 1, "ts" => round(time() * 1000)])));
+  if($r["status"] == 403){
+    print p."no captcha wait!";
+    L(60);
+    r();
+    break;
+  }
+  $analysis_icon = analysis_icon($r["res"]);
+  if(!$analysis_icon["token"]){
+    break;
+  }
+  $code1 = az_num(16);
+  $data1 = '';
+  $data1 .= $boundary.$code1.$eol;
+  $data1 .= $content.$eol.$eol;
+  $data1 .= $analysis_icon["token"].$eol;
+  $data1 .= $boundary.$code1.'--';
+  $r = base_run(host."system/libs/captcha/request.php", $data1, 1, $code1);
+  if($r["status"] == 200){
+    return $analysis_icon["answer"];
+  }
+  print p."error captcha not solve";
+  sleep(2);
+  r();
+  }
 }
 
+
+
+function analysis_icon($img){
+  $isx[] = [0, 54, 108, 162, 214, 267];
+  $isx[] = [0, 67, 140, 202, 262];
+  for($y=0;$y<count($isx);$y++){
+    if(300 >= strlen($img)){
+      print m."image not found!";
+      r();
+      break;
+    }
+    for($z=0;$z<count($isx[$y]);$z++){
+      ob_start();
+      $image = imagecreatefromstring($img);
+      $size = min(imagesx($image), imagesy($image));
+      $image = imagecrop($image, ['x' => $isx[$y][$z], 'y' => 0, 'width' => $size, 'height' => $size]);
+      imagefilter($image, IMG_FILTER_GRAYSCALE);
+      imagecropauto($image, IMG_CROP_WHITE);
+      imagepng($image);
+      imagedestroy($image);
+      $data = ob_get_contents();
+      ob_end_clean();
+      $file[] = strlen($data);
+    }
+    for($t=count($file);-1<$t;$t--){
+      for($p=0;$p<count($file);$p++){
+        if($file[$t] == $file[$p]){
+          $cek[] = "@";
+        }
+      }
+    }
+    if($y == 1){
+      if(6 >= count($cek) || 5 >= count($cek)){
+        print m."failed to analyze!";
+        r();
+        break;
+      }
+    }
+    if(6 == count($cek) || 5 == count($cek)){
+      continue;
+    }
+    unset($size);
+    
+    $size = $file;
+    for($i=0;$i<count($size);$i++){
+      if($size[5] == $size[$i]){
+        if($size[5] == !$size[$i]){
+          $hash1[] = $size[0];
+          $proses = 0;
+        } else {
+          $hash1[] = $size[$i];
+        }
+      }
+      if($size[4] == $size[$i]){
+        $hash2[] = $size[$i];
+      }
+      if($size[3] == $size[$i]){
+        $hash3[] = $size[$i];
+      }
+      if($size[2] == $size[$i]){
+        $hash4[] = $size[$i];
+      }
+      if($size[1] == $size[$i]){
+        $hash5[] = $size[$i];
+      }
+      if($size[0] == $size[$i]){
+        $hash6[] = $size[$i];
+      }
+    }
+    $code[] = $hash1;
+    $code[] = $hash2;
+    $code[] = $hash3;
+    $code[] = $hash4;
+    $code[] = $hash5;
+    $code[] = $hash6;
+    for($i=0;$i<count($code);$i++){
+      if(count($code[0]) == 1){
+        $proses = 5;
+        break;
+      }
+      if(count($code[1]) == 1){
+        $proses = 4;
+        break;
+      }
+      if(count($code[2]) == 1){
+        $proses = 3;
+        break;
+      }
+      if(count($code[3]) == 1){
+        $proses = 2;
+        break;
+      }
+      if(count($code[4]) == 1){
+        $proses = 1;
+        break;
+      }
+      if(count($code[5]) == 1){
+        $proses = 0;
+        break;
+      }
+    }
+    if(!$proses){
+      for($i=0;$i<count($code);$i++){
+        if(count($code[0]) == 2){
+          $proses = 5;
+          break;
+        }
+        if(count($code[1]) == 2){
+          $proses = 4;
+          break;
+        }
+        if(count($code[2]) == 2){
+          $proses = 3;
+          break;
+        }
+        if(count($code[3]) == 2){
+          $proses = 2;
+          break;
+        }
+        if(count($code[4]) == 2){
+          $proses = 1;
+          break;
+        }
+        if(count($code[5]) == 2){
+          $proses = 0;
+          break;
+        }
+      }
+    }
+    $key = [
+      rand(25, 30),
+      rand(85, 90),
+      rand(135, 140),
+      rand(185, 190),
+      rand(235, 240),
+      rand(285, 290)
+      ];
+      $n = rand(25,30);
+      $microtime = ["ts" => round(time() * 1000)];
+      $load = ["i","x","y","w","a"];
+      $results = $key[$proses];
+      $pay = [1, $results, $n, 314.661, 2];
+      if($results){
+        $answer = array_combine($load,$pay);
+        $answer_enc = json_encode(array_merge($answer,$microtime));
+        return [
+          "token" => base64_encode($answer_enc),
+          "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]])
+          ];
+      }
+  }
+}
 
 
 function mtk($a,$b,$c){
