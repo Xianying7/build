@@ -702,38 +702,47 @@ function recaptchav3($sitekey,$pageurl){
 }
 
 function icon_bits(){
-    $data = http_build_query([
-        "cID" => 0,
-        "rT" => 1,
-        "tM" => "light"
+  $data = http_build_query([
+    "cID" => false,
+    "rT" => true,
+    "tM" => "light"
     ]);
-    $hash = base_run(host."system/libs/captcha/request.php",$data)["json"];
-    for ($x = 0; $x < 5; $x++){
-        $image = curl(host."system/libs/captcha/request.php?cid=0&hash=".$hash[$x],hmc(),0,true)[1];
-        $file_sizes[] = strlen($image);
+    $r = base_run(host."system/libs/captcha/request.php",$data, 1);
+    if($r["status"] >= 201){
+      return "";
     }
-    for ($z = 0;$z<5;$z++){
-        if($file_sizes[$z] !== $file_sizes[0]){
-            if($z == 1){
-                if($file_sizes[1] == $file_sizes[2]){
-                    $ind = 0;
-                    goto fix;
-                }
-            }
-            $ind = $z;
-        }
+    $hash = $r["json"];
+    for ($x = 0; $x < count($hash); $x++){
+      $r1 = base_run(host."system/libs/captcha/request.php?cid=0&hash=".$hash[$x]);
+      if($r1["status"] >= 201){
+        return "";
+      }
+      $file_size[] = strlen(str_replace([n," "],"",trimed($r1["res"])));
     }
-    fix:
-    $answer = $hash[$ind];
+    $array = array_count_values($file_size);
+    for($i = 0; $i < count($file_size); $i++){
+      if(!$file_size[$i]){
+        break;
+      }
+      $code[] = $array[$file_size[$i]];
+    }
+    for($i = 0; $i < count($file_size); $i++){
+      if($code[$i] == 1){
+        $proses  = "$i";
+        break;
+      }
+    }
+    $answer = $hash[$proses];
     $data1 = http_build_query([
-        "cID" => 0,
-        "pC" => $answer,
-        "rT" => 2
-    ]);
-    base_run(host."system/libs/captcha/request.php",$data1);
-    return $answer;
+      "cID" => false,
+      "pC" => $answer,
+      "rT" => 2
+      ]);
+      $r = base_run(host."system/libs/captcha/request.php",$data1, 1);
+      if($r["status"] == 200){
+        return $answer;
+      }
 }
-
 
 function antibot($html){
   preg_match_all('#rel=\\\"(.*?)\\\">#is',$html,$rell);
@@ -993,7 +1002,7 @@ function icon_answer(){
   }
   $analysis_icon = analysis_icon($r["res"]);
   if(!$analysis_icon["token"]){
-    break;
+    return "";
   }
   $code1 = az_num(16);
   $data1 = '';
@@ -1011,158 +1020,136 @@ function icon_answer(){
   }
 }
 
-
-
 function analysis_icon($img){
-  $isx[] = [0, 54, 108, 162, 214, 267];
-  $isx[] = [0, 67, 140, 202, 262];
-  for($y=0;$y<count($isx);$y++){
-    if(300 >= strlen($img)){
-      print m."image not found!";
-      r();
-      break;
-    }
-    for($z=0;$z<count($isx[$y]);$z++){
-      ob_start();
-      $image = imagecreatefromstring($img);
-      $size = min(imagesx($image), imagesy($image));
-      $image = imagecrop($image, ['x' => $isx[$y][$z], 'y' => 0, 'width' => $size, 'height' => $size]);
-      imagefilter($image, IMG_FILTER_GRAYSCALE);
-      imagecropauto($image, IMG_CROP_WHITE);
-      imagepng($image);
-      imagedestroy($image);
-      $data = ob_get_contents();
-      ob_end_clean();
-      $file[] = strlen($data);
-    }
-    for($t=count($file);-1<$t;$t--){
-      for($p=0;$p<count($file);$p++){
-        if($file[$t] == $file[$p]){
-          $cek[] = "@";
-        }
-      }
-    }
-    if($y == 1){
-      if(6 >= count($cek) || 5 >= count($cek)){
-        print m."failed to analyze!";
-        r();
-        break;
-      }
-    }
-    if(6 == count($cek) || 5 == count($cek)){
-      continue;
-    }
-    unset($size);
-    
-    $size = $file;
-    for($i=0;$i<count($size);$i++){
-      if($size[5] == $size[$i]){
-        if($size[5] == !$size[$i]){
-          $hash1[] = $size[0];
-          $proses = 0;
-        } else {
-          $hash1[] = $size[$i];
-        }
-      }
-      if($size[4] == $size[$i]){
-        $hash2[] = $size[$i];
-      }
-      if($size[3] == $size[$i]){
-        $hash3[] = $size[$i];
-      }
-      if($size[2] == $size[$i]){
-        $hash4[] = $size[$i];
-      }
-      if($size[1] == $size[$i]){
-        $hash5[] = $size[$i];
-      }
-      if($size[0] == $size[$i]){
-        $hash6[] = $size[$i];
-      }
-    }
-    $code[] = $hash1;
-    $code[] = $hash2;
-    $code[] = $hash3;
-    $code[] = $hash4;
-    $code[] = $hash5;
-    $code[] = $hash6;
-    for($i=0;$i<count($code);$i++){
-      if(count($code[0]) == 1){
-        $proses = 5;
-        break;
-      }
-      if(count($code[1]) == 1){
-        $proses = 4;
-        break;
-      }
-      if(count($code[2]) == 1){
-        $proses = 3;
-        break;
-      }
-      if(count($code[3]) == 1){
-        $proses = 2;
-        break;
-      }
-      if(count($code[4]) == 1){
-        $proses = 1;
-        break;
-      }
-      if(count($code[5]) == 1){
-        $proses = 0;
-        break;
-      }
-    }
-    if(!$proses){
-      for($i=0;$i<count($code);$i++){
-        if(count($code[0]) == 2){
-          $proses = 5;
-          break;
-        }
-        if(count($code[1]) == 2){
-          $proses = 4;
-          break;
-        }
-        if(count($code[2]) == 2){
-          $proses = 3;
-          break;
-        }
-        if(count($code[3]) == 2){
-          $proses = 2;
-          break;
-        }
-        if(count($code[4]) == 2){
-          $proses = 1;
-          break;
-        }
-        if(count($code[5]) == 2){
-          $proses = 0;
-          break;
-        }
-      }
-    }
-    $key = [
-      rand(25, 30),
-      rand(85, 90),
-      rand(135, 140),
-      rand(185, 190),
-      rand(235, 240),
-      rand(285, 290)
-      ];
-      $n = rand(25,30);
-      $microtime = ["ts" => round(time() * 1000)];
-      $load = ["i","x","y","w","a"];
-      $results = $key[$proses];
-      $pay = [1, $results, $n, 314.661, 2];
-      if($results){
-        $answer = array_combine($load,$pay);
-        $answer_enc = json_encode(array_merge($answer,$microtime));
-        return [
-          "token" => base64_encode($answer_enc),
-          "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]])
-          ];
-      }
+  #$img = file_get_contents("coba4.png");
+  if(300 >= strlen($img)){
+    print m."image not found!";
+    r();
+    return "";
   }
+  $isx = [
+    [0, 54, 108, 162, 214, 267],
+    [0, 67, 140, 202, 262]
+    ];
+    for($o=0;$o<count($isx);$o++){
+      for($z=0;$z<count($isx[$o]);$z++){
+        ob_start();
+        $image = imagecreatefromstring($img);
+        $pixel = min(imagesx($image), imagesy($image));
+        $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $pixel, 'height' => $pixel]);
+        imagefilter($image, IMG_FILTER_NEGATE);
+        imagepng($image);
+        imagedestroy($image);
+        $data = ob_get_contents();
+        ob_end_clean();
+        $file_size[] = strlen(str_replace([n," "],"",trimed($data)));
+      }
+      if(count($file_size) == 6){
+        $arr = [
+          $file_size[0],
+          $file_size[1],
+          $file_size[2],
+          $file_size[3],
+          $file_size[4],
+          $file_size[5]
+          ];
+          $valid = 0;
+          $value = $arr[0];
+          foreach($arr as $val){
+            if($value != $val){
+              $valid = 1;
+              break;
+            }
+          }
+          if($valid == 0){
+            unset($file_size);
+            continue;
+          }
+      }
+      if(
+        $file_size[1] == $file_size[2] || $file_size[1] == $file_size[3] || $file_size[2] == $file_size[3] || $file_size[3] == $file_size[5] || $file_size[4] == $file_size[1] || $file_size[4] == $file_size[2] || $file_size[4] == $file_size[5] || $file_size[0] == $file_size[2] || $file_size[0] == $file_size[3] || $file_size[5] == $file_size[2] || $file_size[0] == $file_size[1]){
+          $file = [count($isx[$o])+1,$file_size];
+          if(count($isx[$o]) == 5){
+          $array = array_count_values($file_size);
+          for($i=0;$i<count($file_size);$i++){
+            if(!$file_size[$i]){
+              break;
+            }
+            $code[] = $array[$file_size[$i]];
+          }
+          for($i=0;$i<count($file_size);$i++){
+            if($code[$i] == 1){
+              $proses  = "$i";
+              break;
+            }
+          }
+          if($proses == null){
+            for($i=0;$i<count($file_size);$i++){
+              if($code[$i] == 2){
+                $proses  = "$i";
+                break;
+              }
+            }
+          };;
+          } elseif(count($isx[$o]) == 6){
+            $array = array_count_values($file_size);
+            for($i=0;$i<count($file_size);$i++){
+              if(!$file_size[$i]){
+                break;
+              }
+              $code[] = $array[$file_size[$i]];
+            }
+            for($i=0;$i<count($file_size);$i++){
+              if($code[$i] == 1){
+                $proses  = "$i";  
+                break;
+              }
+            }
+            if($proses == null){
+              for($i=0;$i<count($file_size);$i++){
+                if($code[$i] == 2){
+                  $proses  = "$i";
+                  break;
+                }
+              }
+            }
+          }
+          if(count($isx[$o]) == 5){
+            $key = [
+              rand(20, 40),
+              rand(80,95),
+              rand(160,180),
+              rand(220, 240),
+              rand(260, 300)
+              ];
+          } elseif(count($isx[$o]) == 6){
+            $key = [
+              rand(30, 40),
+              rand(80, 90),
+              rand(130, 140),
+              rand(190, 200),
+              rand(230, 240),
+              rand(290, 300)
+              ];
+          }
+          $y = rand(20,rand(25,30));
+          $microtime = ["ts" => round(time() * 1000)];
+          $load = ["i", "x", "y", "w", "a"];
+          $results = $key[$proses];
+          $pay = [1, $results, $y, 314.661, 2];
+          if($results){
+            $answer = array_combine($load,$pay);
+            $answer_enc = json_encode(array_merge($answer,$microtime));
+            return [
+              "token" => base64_encode($answer_enc),
+              "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]
+              ])];
+          }
+        }
+        unset($file_size);
+    }
 }
+
 
 
 function mtk($a,$b,$c){
