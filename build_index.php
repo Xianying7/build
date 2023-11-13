@@ -269,8 +269,8 @@ function ket_line($a,$aa,$b=0,$bb=0,$c=0,$cc=0){
 function curl($url, $header = false, $post = false,  $followlocation = false, $cookiejar = false, $alternativ_cookie = false){
     while(true){
       if(!parse_url($url)["scheme"]){
-        print m."url tidak valid".n;
-        break;
+        print m."url tidak valid".r();
+        "";
       }
       $default[CURLOPT_URL] = $url;
       if($followlocation){
@@ -279,8 +279,10 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       $default[CURLOPT_RETURNTRANSFER] = 1;
       $default[CURLOPT_ENCODING] = 'gzip,deflate';
       $default[CURLOPT_HEADER] = 1;
-     # $default[CURLOPT_SSL_VERIFYPEER] = 0;
-     # $default[CURLOPT_SSL_VERIFYHOST] = 0;
+      $default[CURLOPT_SSL_VERIFYPEER] = 0;
+      $default[CURLOPT_SSL_VERIFYHOST] = 0;
+      $default[CURLOPT_CONNECTTIMEOUT] = 40;
+      $default[CURLOPT_TIMEOUT] = 20;
       if($header){
         $default[CURLOPT_HTTPHEADER] = $header;
       }
@@ -303,7 +305,6 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       $info = curl_getinfo($ch);
       curl_close($ch);
       if($info["primary_ip"]){
-      #if(curl_errno($ch) == 0){
         foreach(explode("\r\n",substr($output,0,strpos($output,"\r\n\r\n"))) as $i => $line){
           if($i == 0){
             $headers['http_code'] = $line;
