@@ -644,7 +644,7 @@ function multibot($method,$sitekey,$pageurl,$rr = 0){
             ]),$ua)[1];
             if($r1 == "CAPCHA_NOT_READY"){
                 print str_replace("_"," ",$r1);
-                sleep(10);
+                sleep(5);
                 r();
                 continue;
             } elseif(strlen($r1) >= 50){
