@@ -270,7 +270,7 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
     while(true){
       if(!parse_url($url)["scheme"]){
         print m."url tidak valid".r();
-        "";
+        return "";
       }
       $default[CURLOPT_URL] = $url;
       if($followlocation){
@@ -631,9 +631,12 @@ function multibot($method,$sitekey,$pageurl,$rr = 0){
         }
         $id = explode('|',$r)[1];
         if(!$id){
-            print "Get ID Captcha";
-            r();
-            continue;
+          if($s == 3){
+            return "";
+          }
+          print "Get ID Captcha";
+          r();
+          continue;
         }
         sleep(5);
         while(true){
