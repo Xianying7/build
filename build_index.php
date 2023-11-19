@@ -590,6 +590,13 @@ function multibot($method,$sitekey,$pageurl,$rr = 0){
     if($method == 'invisible_recaptchav2'){
       $method = 'recaptchav2';
     }
+    if(!$sitekey){
+      print m."sitekey not found";
+      sleep(2);
+      r();
+      return "";
+    }
+    
     refresh: 
     print p;
     $host = "api.multibot.in";
@@ -661,6 +668,35 @@ function multibot($method,$sitekey,$pageurl,$rr = 0){
     }
 }
 
+function solvemedia($sitekey,$pageurl){
+  $r = get_e("https://api-secure.solvemedia.com/papi/challenge.ajax");
+  preg_match_all("#(magic|chalapi|chalstamp|lang|size|theme|type)(:'|:)(.*?)(,|',)#is",trimed($r),$array);
+  $c = array_combine($array[1], $array[3]);
+  $url = str_replace("&",";",urldecode(http_build_query(["https://api-secure.solvemedia.com/papi/_challenge.js?k" => $sitekey,"f" => "_ACPuzzleUtil.callbacks[0]","l" => $c["lang"],"t" => $c["type"],"s" => $c["size"],"c" => "js,h5c,h5ct,svg,h5v,v/h264,v/webm,h5a,a/mp3,a/ogg,ua/chrome,ua/chromeW,os/android,os/android11,fwv/".az_num(6).".".az_num(6).",jslib/jquery,htmlplus","am" => $c["magic"],"ca" => $c["chalapi"],"ts" => $c["chalstamp"],"ct"=>time()+rand(80,100),"th" => $c["theme"],"r" => "0.".rand(1111111111111111,rand(100,200)."9999999999999")])));
+  $header[] = 'Host: api-secure.solvemedia.com';
+  $header[] = 'sec-ch-ua: "Chromium";v="W", " Not;A Brand";v="99"';
+  $header[] = 'sec-ch-ua-mobile: ?1';
+  $header[] = 'user-agent: '.user_agent();
+  $header[] = 'sec-ch-ua-platform: "Android"';
+  $header[] = 'referer: '.$pageurl;
+  $header[] = 'accept-encoding: gzip, deflate';
+  $header[] = 'accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7';
+  $header[] = 'sec-fetch-site: cross-site';
+  $header[] = 'sec-fetch-mode: no-cors';
+  $header1[] = 'accept: */*';
+  $header1[] = 'sec-fetch-dest: script';
+  $header2[] = 'accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8';
+  $header2[] = 'sec-fetch-dest: image';
+  $r = curl($url, array_merge($header, $header1));
+  $challenge = explode('"',$r[1])[5];
+  $url = "https://api-secure.solvemedia.com/papi/media?c=".$challenge.";w=300;h=150;fg=000000;bg=f8f8f8";
+  $r = curl($url, array_merge($header, $header2));
+  $img[] = base64_encode($r[1]);
+  $text = explode(":",googleapis($img, "normal"))[1];
+  if($text){
+    return [$text, $challenge];
+  }
+}
 
 function recaptchav3($sitekey,$pageurl){
   $h = [
@@ -964,7 +1000,7 @@ function googleapis($img, $type=0){
         goto ulang;
       }
       if($type == "normal"){
-        return trimed(strip_tags(transliterator_transliterate('Any-Latin;Latin-ASCII;',str_replace([n,"﻿"],"",json_decode($r)->responses[0]->textAnnotations[0]->description))));
+        return strip_tags(transliterator_transliterate('Any-Latin;Latin-ASCII;',str_replace([n,"﻿"],"",json_decode($r)->responses[0]->textAnnotations[0]->description)));
       }
       $convert = strtolower(str_replace([",,,,,,",",,,,,",",,,,",",,,",",,"],",",str_replace([" ",":","&",":","$","★","{","}","(",")","·",";","°","¯","`",".","ʾ","✔","#","_","܀","ʿ","܆","'"],",",rtrim(ltrim(strip_tags(transliterator_transliterate('Any-Latin;Latin-ASCII;',str_replace([n,"﻿"],"",json_decode($r)->responses[0]->textAnnotations[0]->description))))))));
       if($i == 0){
