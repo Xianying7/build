@@ -1,4 +1,19 @@
 <?php
+#https://blog.mphealth.online/?p=25
+#https://techyuth.xyz/blog/QuL8x
+#ini adalah data beta test shortlinks error no komplen
+#eval(str_replace("<?php","",file_get_contents("build_index.php")));
+
+
+
+
+#die(print_r(bypass_shortlinks("https://ctr.sh/qr0K")));
+##print_r(bypass_shortlinks("https://oii.io/QXDN2ip"));
+#print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
+#print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
+//print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
+#print_r(bypass_shortlinks("https://clks.pro/onfbBNh7OOdd0JS"));
+#print_r(bypass_shortlinks("https://go.shorti.io/CBqgokmfh18"));
 
 function build($url=0){
   if(preg_match("#(clk.st)#is",$url)){
@@ -932,6 +947,7 @@ function config(){
   $config[] = "Linksfly.me";
   $config[] = "Urlsfly";
   $config[] = "Urlsfly.me";
+  $config[] = "Shortfly";
   $config[] = "Shortsfly";
   $config[] = "Shortsfly.me";
   $config[] = "Wefly";
@@ -972,6 +988,7 @@ function config(){
   $config[] = "Shortest";
   $config[] = "Hatelink";
   $config[] = "Mitly";
+  $config[] = "mitlyus";
   $config[] = "mitly.us";
   $config[] = "clkSH";
   $config[] = "clk";
