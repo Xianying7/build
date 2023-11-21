@@ -37,7 +37,8 @@ function build($url=0){
 }
 
 function visit_short($r, $site_url = 0, $data_token = 0){
-    $control = file("control");
+    $file_name = "control";
+    $control = file($file_name);
     if(!$control[0]){
       $control = ["tolol"];
     }
@@ -49,7 +50,7 @@ function visit_short($r, $site_url = 0, $data_token = 0){
             $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",strtolower($list[$s])))[0];
                 if(strtolower($config[$i]) == $open){
                     for($p=0;$p<count($control);$p++){
-                        if(strtolower(str_replace(n,"",$control[$p])) == $open or explode("•",$r["left"][$s])[0] == explode("•",$r["left"][$s])[1] or explode("/",trim(explode("<",$r["left"][$s])[0]))[0] == 0 or explode("/",trim(explode("<",$r["left"][$s])[0]))[0][0] == "-"){
+                        if(strtolower(str_replace(n,"",$control[$p])) == host.$open or strtolower(str_replace(n,"",$control[$p])) == $open or explode("•",$r["left"][$s])[0] == explode("•",$r["left"][$s])[1] or explode("/",trim(explode("<",$r["left"][$s])[0]))[0] == 0 or explode("/",trim(explode("<",$r["left"][$s])[0]))[0][0] == "-"){
                             goto up;
                         }
                     }
@@ -115,6 +116,13 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                         }
                         run:
                         if(!parse_url($r1["url"])["scheme"]){
+                          #if(preg_match("#refresh#is", $res->message)){
+                              if(!file_get_contents($file_name)){
+                                file_put_contents($file_name, host.$list[$s]);
+                              } else {
+                                file_put_contents($file_name, get_e($file_name).n.host.$list[$s]);
+                              }
+                           # }
                             print m."Failed to generate this link ".p.$list[$s];
                             r();
                             return "refresh";
