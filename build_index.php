@@ -269,7 +269,8 @@ function ket_line($a,$aa,$b=0,$bb=0,$c=0,$cc=0){
 function curl($url, $header = false, $post = false,  $followlocation = false, $cookiejar = false, $alternativ_cookie = false){
     while(true){
       if(!parse_url($url)["scheme"]){
-        print m."url tidak valid".r();
+        print m."url tidak valid";
+        r();
         return "";
       }
       $default[CURLOPT_URL] = $url;
@@ -672,7 +673,7 @@ function solvemedia($sitekey,$pageurl){
   $r = get_e("https://api-secure.solvemedia.com/papi/challenge.ajax");
   preg_match_all("#(magic|chalapi|chalstamp|lang|size|theme|type)(:'|:)(.*?)(,|',)#is",trimed($r),$array);
   $c = array_combine($array[1], $array[3]);
-  $url = str_replace("&",";",urldecode(http_build_query(["https://api-secure.solvemedia.com/papi/_challenge.js?k" => $sitekey,"f" => "_ACPuzzleUtil.callbacks[0]","l" => $c["lang"],"t" => $c["type"],"s" => $c["size"],"c" => "js,h5c,h5ct,svg,h5v,v/h264,v/webm,h5a,a/mp3,a/ogg,ua/chrome,ua/chromeW,os/android,os/android11,fwv/".az_num(6).".".az_num(6).",jslib/jquery,htmlplus","am" => $c["magic"],"ca" => $c["chalapi"],"ts" => $c["chalstamp"],"ct"=>time()+rand(80,100),"th" => $c["theme"],"r" => "0.".rand(1111111111111111,rand(100,200)."9999999999999")])));
+  $url = str_replace("&",";",urldecode(http_build_query(["https://api-secure.solvemedia.com/papi/_challenge.js?k" => $sitekey,"f" => "_ACPuzzleUtil.callbacks[0]","l" => $c["lang"],"t" => $c["type"],"s" => $c["size"],"c" => "js,h5c,h5ct,svg,h5v,v/h264,v/webm,h5a,a/mp3,a/ogg,ua/chrome,ua/chromeW,os/android,os/android11,fwv/".az_num(6).".".az_num(6).",jslib/jquery,htmlplus","am" => $c["magic"],"ca" => $c["chalapi"],"ts" => $c["chalstamp"],"ct" => time()+rand(80,100),"th" => $c["theme"],"r" => "0.".rand(1111111111111111,rand(100,200)."9999999999999")])));
   $header[] = 'Host: api-secure.solvemedia.com';
   $header[] = 'sec-ch-ua: "Chromium";v="W", " Not;A Brand";v="99"';
   $header[] = 'sec-ch-ua-mobile: ?1';
