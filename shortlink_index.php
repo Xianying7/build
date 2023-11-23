@@ -96,10 +96,6 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                             }
                         } elseif(mode == "only_site"){
                             $r1 = base_run($site_url.$r["visit"][$s]);
-                            if($r1["login"]){
-  unlink(cookie_only);
-  goto DATA;
-} 
                             if($r1["url1"]){
                               $r1["url"] = $r1["url1"];
                             }
