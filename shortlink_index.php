@@ -461,7 +461,8 @@ function bypass_shortlinks($url){
             return $r1->url;
           }
         }
-    } elseif(preg_match("#(tii.la)#is",$host)){
+    } elseif(preg_match("#(tii.la|tei.ai)#is",$host)){
+      $url = str_replace("tei.ai", "tii.la", $url);
       $run = build($url);
       $r = base_short($run["links"]);
       $t = $r["token_csrf"];
