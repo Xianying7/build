@@ -94,8 +94,15 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                             if($r1["url1"]){
                                 $r1["url"] = $r1["url1"];
                             }
-                        } elseif(mode == "sl_jepangwah"){
-                            $r1 = base_run(host."litecoin/".$r["visit"][$s]);
+                        } elseif(mode == "only_site"){
+                            $r1 = base_run($site_url.$r["visit"][$s]);
+                            if($r1["login"]){
+  unlink(cookie_only);
+  goto DATA;
+} 
+                            if($r1["url1"]){
+                              $r1["url"] = $r1["url1"];
+                            }
                         } elseif(mode == "path"){
                             $r1 = base_run(host.$r["visit"][$s]);
                         } elseif(mode == "ofer"){
