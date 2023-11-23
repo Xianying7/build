@@ -194,6 +194,24 @@ function an($input){
     }
 }
 
+function text_line($input){
+  $n = "\n";
+  $a = str_split(" ".$input.n); 
+  foreach ($a as $b => $c){
+    if(strlen($input) >= 80){
+      if($b >= strlen($input) / 2){
+        if($c == " "){
+          print $n;
+          unset($n);
+        }
+      }
+    }
+    print $c;
+    usleep(1500);
+  }
+  line();
+}
+
 function tmr($a,$tmr){
     date_default_timezone_set('UTC').r();
     $timr = time()+$tmr;
@@ -1235,3 +1253,5 @@ const b = "\033[1;34m",
       u = "\033[1;35m",
       d = "\033[0m",
       n = "\n";
+
+
