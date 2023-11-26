@@ -101,6 +101,21 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                             }
                         } elseif(mode == "path"){
                             $r1 = base_run(host.$r["visit"][$s]);
+                        } elseif(mode == "firefaucet"){
+                           $data = $r[$list[$s]];
+                            for($rq=0;$rq<count($data[1]);$rq++){
+                              if($data[0][$rq]){
+                                $rrq = "$rq";
+                              }
+                            }
+                            $raw = explode("&&","&".$data[2][$rrq])[1];
+                            parse_str($raw, $out);
+                            for($tq=0;$tq<count($r["code"]);$tq++){
+                              if($out[$r["code"][$tq]]){
+                                $data_post =  str_replace($out[$r["code"][$tq]], $r[$r["code"][$tq]], $raw);
+                              }
+                            }
+                            $r1 = base_run(host.$data[1][$rrq]."/", $data_post);
                         } elseif(mode == "ofer"){
                           $data = http_build_query([
                             "action" => "getShortlink",
@@ -902,6 +917,8 @@ function data_post($t, $type = 0, $cap = 0){
     $resp = "g-recaptcha-response";
   } elseif($type == "hcaptcha"){
     $resp = "h-recaptcha-response";
+  } elseif(preg_match('#[a-zA-Z0-9]#is',$type)){
+    $resp = $type;
   }
   return [
     "null" => str_replace("&=0","",http_build_query([
