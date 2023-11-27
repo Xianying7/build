@@ -198,7 +198,7 @@ function text_line($input){
   $n = "\n";
   $a = str_split(" ".$input.n); 
   foreach ($a as $b => $c){
-    if(strlen($input) >= 80){
+    if(strlen($input) >= 55){
       if($b >= strlen($input) / 2){
         if($c == " "){
           print $n;
@@ -623,92 +623,95 @@ function captchaai($method,$sitekey,$pageurl,$rr = 0){
 
 
 function multibot($method,$sitekey,$pageurl,$rr = 0){
-    if($method == 'invisible_recaptchav2'){
-      $method = 'recaptchav2';
-    }
-    if(!$sitekey){
-      print m."sitekey not found";
-      sleep(2);
-      r();
-      return "";
-    }
-    
-    refresh: 
-    print p;
-    $host = "api.multibot.in";
-    $name_api = "apikey_multibot";
-    $apikey = save($name_api);
-    $recaptchav2 = http_build_query([
-        "key" => $apikey,
-        "method" => "userrecaptcha",
-        "googlekey" => $sitekey,
-        "pageurl" => $pageurl
+  if($method == 'invisible_recaptchav2'){
+    $method = 'recaptchav2';
+  }
+  if(!$sitekey){
+    print m."sitekey not found";
+    sleep(2);
+    r();
+    return "";
+  }
+  refresh: 
+  print p;
+  $host = "api.multibot.in";
+  $name_api = "apikey_multibot";
+  $apikey = save($name_api);
+  $recaptchav2 = http_build_query([
+    "key" => $apikey,
+    "method" => "userrecaptcha",
+    "googlekey" => $sitekey,
+    "pageurl" => $pageurl
     ]);
-    
     $hcaptcha = http_build_query([
-        "key" => $apikey,
-        "method" => "hcaptcha",
-        "sitekey" => $sitekey,
-        "pageurl" => $pageurl
-    ]);
-    $type=[
+      "key" => $apikey,
+      "method" => "hcaptcha",
+      "sitekey" => $sitekey,
+      "pageurl" => $pageurl
+      ]);
+      $type=[
         "recaptchav2" => $recaptchav2,
         "hcaptcha" => $hcaptcha
-    ];
-    $ua = [
-        "host: ".$host,
-        "content-type: application/json/x-www-form-urlencoded"
-    ];
-    $s = 0;
-    while(true){
-        $s++;
-        $r = curl("http://".$host."/in.php?".$type[$method],$ua)[1];
-        if($r == "ERROR_USER_BALANCE_ZERO"){
-            unlink($name_api);
-            goto refresh;
-        } elseif($r == "ERROR_WRONG_USER_KEY"){
-            if($s == 3){
+        ];
+        $ua = [
+          "host: ".$host,
+          "content-type: application/json/x-www-form-urlencoded"
+          ];
+          $s = 0;
+          while(true){
+            $s++;
+            $r = curl("http://".$host."/in.php?".$type[$method],$ua)[1];
+            if($r == "ERROR_USER_BALANCE_ZERO"){
+              unlink($name_api);
+              goto refresh;
+            } elseif($r == "ERROR_WRONG_USER_KEY"){
+              if($s == 3){
                 unlink($name_api);
                 goto refresh;
+              }
             }
-        }
-        $id = explode('|',$r)[1];
-        if(!$id){
-          if($s == 3){
-            return "";
-          }
-          print "Get ID Captcha";
-          r();
-          continue;
-        }
-        sleep(5);
-        while(true){
-            $r1 = curl("http://".$host."/res.php?".http_build_query([
+            $id = explode('|',$r)[1];
+            if(!$id){
+              if($s == 3){
+                return "";
+              }
+              print "Get ID Captcha";
+              r();
+              continue;
+            }
+            sleep(5);
+            $x = 0;
+            while(true){
+              $x++;
+              if($x == 40){
+                return "";
+              }
+              $r1 = curl("http://".$host."/res.php?".http_build_query([
                 "key" => $apikey,
                 "action" => "get",
                 "id" => $id
-            ]),$ua)[1];
-            if($r1 == "CAPCHA_NOT_READY"){
-                print str_replace("_"," ",$r1);
-                sleep(5);
-                r();
-                continue;
-            } elseif(strlen($r1) >= 50){
-                return explode('|', $r1)[1];
-            } else {
-                print str_replace("_"," ",$r1);
-                r();
-                goto refresh;
+                ]),$ua)[1];
+                if($r1 == "CAPCHA_NOT_READY"){
+                  print str_replace("_"," ",$r1);
+                  sleep(5);
+                  r();
+                  continue;
+                } elseif(strlen($r1) >= 50){
+                  return explode('|', $r1)[1];
+                } else {
+                  print str_replace("_"," ",$r1);
+                  r();
+                  goto refresh;
+                }
             }
-        }
-    }
+          }
 }
 
 function solvemedia($sitekey,$pageurl){
   $r = get_e("https://api-secure.solvemedia.com/papi/challenge.ajax");
   preg_match_all("#(magic|chalapi|chalstamp|lang|size|theme|type)(:'|:)(.*?)(,|',)#is",trimed($r),$array);
   $c = array_combine($array[1], $array[3]);
-  $url = str_replace("&",";",urldecode(http_build_query(["https://api-secure.solvemedia.com/papi/_challenge.js?k" => $sitekey,"f" => "_ACPuzzleUtil.callbacks[0]","l" => $c["lang"],"t" => $c["type"],"s" => $c["size"],"c" => "js,h5c,h5ct,svg,h5v,v/h264,v/webm,h5a,a/mp3,a/ogg,ua/chrome,ua/chromeW,os/android,os/android11,fwv/".az_num(6).".".az_num(6).",jslib/jquery,htmlplus","am" => $c["magic"],"ca" => $c["chalapi"],"ts" => $c["chalstamp"],"ct" => time()+rand(80,100),"th" => $c["theme"],"r" => "0.".rand(1111111111111111,rand(100,200)."9999999999999")])));
+  $url = str_replace("&",";",urldecode(http_build_query(["https://api-secure.solvemedia.com/papi/_challenge.js?k" => $sitekey,";f" => "_ACPuzzleUtil.callbacks[0]","l" => $c["lang"],"t" => $c["type"],"s" => $c["size"],"c" => "js,h5c,h5ct,svg,h5v,v/h264,v/webm,h5a,a/mp3,a/ogg,ua/chrome,ua/chromeW,os/android,os/android11,fwv/".az_num(6).".".az_num(6).",jslib/jquery,htmlplus","am" => $c["magic"],"ca" => $c["chalapi"],"ts" => $c["chalstamp"],"ct" => time()+rand(80,100),"th" => $c["theme"],"r" => "0.".rand(1111111111111111,rand(100,200)."9999999999999")])));
   $header[] = 'Host: api-secure.solvemedia.com';
   $header[] = 'sec-ch-ua: "Chromium";v="W", " Not;A Brand";v="99"';
   $header[] = 'sec-ch-ua-mobile: ?1';
