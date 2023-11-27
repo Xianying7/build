@@ -1158,6 +1158,7 @@ function config(){
   $config[] = "FAHO";
   $config[] = "ClockAds";
   $config[] = "Bitss";
+  $config[] = "LinkHives";
   $config[] = "Adbitfly";
   $config[] = "ShtFly";
   #$config[] = "shortyearn";
