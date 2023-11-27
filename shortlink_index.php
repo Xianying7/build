@@ -21,23 +21,18 @@ function build($url=0){
   } else {
     $inc = "/flyinc.";
   }
-  if(preg_match("#(urlhives.com)#is",$url)){
-    $inc = "/";
-  }
-        
-    $r = parse_url($url);
-    return [
-        "client_id" => az_num(8)."-".az_num(4)."-".az_num(4)."-".az_num(4)."-".az_num(16),
-        "links" => "https://".$r["host"].$r["path"],
-        "inc" => "https://".$r["host"].$inc.$r["path"],
-        "go" => [
-            "https://".$r["host"]."/links/go",
-            "https://".$r["host"]."/go".$r["path"],
-            "https://".$r["host"]."/".explode("/",$r["path"])[1]."/links/go",
-            "https://go/".$r["host"].$r["path"],
-            "https://".$r["host"]."/xreallcygo".$r["path"]
-        ]
-    ];
+  $r = parse_url($url);
+  return [
+    "client_id" => az_num(8)."-".az_num(4)."-".az_num(4)."-".az_num(4)."-".az_num(16),
+    "links" => "https://".$r["host"].$r["path"],
+    "inc" => "https://".$r["host"].$inc.$r["path"],
+    "go" => [
+      "https://".$r["host"]."/links/go",
+      "https://".$r["host"]."/go".$r["path"],
+      "https://".$r["host"]."/".explode("/",$r["path"])[1]."/links/go",
+      "https://go/".$r["host"].$r["path"],
+      "https://".$r["host"]."/xreallcygo".$r["path"]
+      ]];
 }
 
 function visit_short($r, $site_url = 0, $data_token = 0){
@@ -257,8 +252,8 @@ function bypass_shortlinks($url){
       $url = "https://ser7.crazyblog.in".explode("p=",$url)[1];
       $host = parse_url($url)["host"];
     }
-    if(preg_match("#(myhealths.icu|clk.st|urlsfly.me|wefly.me|shortsfly.me|linksfly.me)#is",$host)){
-      $url = str_replace("myhealths.icu","urlhives.com",$url);
+    if(preg_match("#(cryptoflare.cc|myhealths.icu|clk.st|urlsfly.me|wefly.me|shortsfly.me|linksfly.me)#is",$host)){
+      
       $run = build($url);
       $r = base_short($url);
       $link = $r["url"];
@@ -270,7 +265,12 @@ function bypass_shortlinks($url){
       if(preg_match("#(clk.st)#is",$host)){
         $referer = $link;
       }
-      $r1 = base_short($run["inc"],0,0,$referer,1)["url"];#die(print_r($r1));
+      if(preg_match("#(cryptoflare.cc|myhealths.icu)#is",$host)){
+      $url = str_replace("cryptoflare.cc","linkhives.com",str_replace("myhealths.icu","urlhives.com",$url));
+      $run = str_replace(["clkclk./","flyinc./"],"",build($url));
+      $referer = "https://mcrypto.club/";
+      }
+      $r1 = base_short($run["inc"],0,0,$referer,1)["url"];
       if(preg_match("#(".$host.")#is",$r1)){
         return "refresh";
       }
