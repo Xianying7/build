@@ -242,6 +242,23 @@ function countdown($countdown){
         }
     }
 }
+
+function diff_time($fr, $time){
+  date_default_timezone_set('asia/jakarta');
+  $start = strtotime($time);
+  $stop = strtotime(date("H:i"));
+  $diff = $stop - $start;
+  if(explode("-",$diff)[1]){
+    $dif = explode("-",$diff)[1];
+  } else {
+    $dif = $diff;
+  }
+  if($fr * 60 >= $dif){
+    return 1;
+  }
+}
+
+
 function L($t){
     r();
     $col = [b,c,h,k,m,p,u];
