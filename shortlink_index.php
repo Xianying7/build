@@ -300,7 +300,7 @@ function bypass_shortlinks($url){
         } elseif(preg_match("#(sheralinks.com)#is",$host)){
           $referer = "https://blogyindia.com/";
         } elseif(preg_match("#(linksfly.link)#is",$host)){
-          $referer = "https://webseriesreel.in/";
+          $referer = "https://hosting.remixone.in/";
         } elseif(preg_match("#(link.adlink.click)#is",$host)){
           $referer = "https://www.diudemy.com/";
         } elseif(preg_match("#(url.beycoin.xyz)#is",$host)){
@@ -373,52 +373,52 @@ function bypass_shortlinks($url){
         }
         
         if(explode('"',$t[2][3])[0] == "2"){
-          $data = data_post($t)["five"];#die(urldecode($data));
+          $data = data_post($t, "five");#die(urldecode($data));
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         }
         if(explode('"',$t[2][3])[0] == "3"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         }
         
         if(explode('"',$t[2][3])[0] == "4"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         }
         if(explode('"',$t[2][3])[0] == "5"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         }
         
         if(explode('"',$t[2][3])[0] == "6"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         }
         if(explode('"',$t[2][3])[0] == "7"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         }
         
         if(explode('"',$t[2][3])[0] == "8"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         }
         if(explode('"',$t[2][3])[0] == "9"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
@@ -427,7 +427,8 @@ function bypass_shortlinks($url){
         if($t[1][2] == "f_n"){
           $method = "recaptchav2";
           $cap = multibot($method,$r[$method],$run["links"]);
-          $data = data_post($t,$method, $cap)["four"];
+          $rsp = array("g-recaptcha-response" => $cap);
+          $data = data_post($t, "four", $rsp);
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
@@ -436,7 +437,8 @@ function bypass_shortlinks($url){
         if($t[1][2] == "ref"){
           $method = "recaptchav2";
           $cap = multibot($method,$r[$method],$run["links"]);
-          $data = data_post($t,$method, $cap)["five"];
+          $rsp = array("g-recaptcha-response" => $cap);
+         $data = data_post($t, "five", $rsp);
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
@@ -445,19 +447,21 @@ function bypass_shortlinks($url){
         if(explode('"',$t[1][2])[4] == "f_n"){
           $method = "recaptchav2";
           $cap = multibot($method,$r[$method],$run["links"]);
-          $data = data_post($t,$method, $cap)["four2"];
+          $rsp = array("g-recaptcha-response" => $cap);
+          $data = data_post($t, "four2", $rsp);
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
-        }
+        }#die(print_r($r));
         if(explode('"',$t[2][2])[0] == "captcha"){
-        /*  $data = data_post($t)["five"];
+        /*  $data = data_post($t, "five");
           $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];*/
         $method = "recaptchav2";
         $cap = multibot($method,$r[$method],$run["links"]);
-        $data = data_post($t, $method ,$cap)["five"];
+        $rsp = array("g-recaptcha-response" => $cap);
+        $data = data_post($t, "five", $rsp);
         $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
          $cookie[] = $r["cookie"];
          $t = $r["token_csrf"];
@@ -470,7 +474,7 @@ function bypass_shortlinks($url){
             );
         }
         if(explode('"',$t[1][2])[0] == "ad_form_data"){
-          $data = data_post($t)["four"];
+          $data = data_post($t, "four");
           L($coundown);
           $r1 = base_short(str_replace("jameeltips.us","jameeltips.us/blog",str_replace("techyuth.xyz","techyuth.xyz/blog",$run["go"][0])),1,$data,0,$cloud,join('',$cookie))["json"];
           if($r1->status == "success"){
@@ -486,13 +490,13 @@ function bypass_shortlinks($url){
       $r = base_short($run["links"]);
       $t = $r["token_csrf"];
       $cookie[] = $r["cookie"];
-      $data = data_post($t)["three"];
+      $data = data_post($t, "three");
         $r1 = base_short($run["links"],"",$data,0,join('',$cookie));
         if($r1["timer"] or $r1["timer"] == 0){
           L($coundown);
           $t = $r1["token_csrf"];
           $cookie[] = $r1["cookie"];
-          $data = data_post($t)["two"];
+          $data = data_post($t, "two");
             $r2 = base_short($run["go"][0],1,$data,0,0,join('',$cookie))["json"];
             if($r2->status == "success"){
               print h.$r2->status;
@@ -515,7 +519,7 @@ function bypass_shortlinks($url){
         $t = $r["token_csrf"];
         if(explode('"',$t[1][2])[0] == "ad_form_data"){
           L($coundown);
-          $data = data_post($t)["four"];
+          $data = data_post($t, "four");
           $r1 = base_short($run["go"][0],1,$data,$url,0,join('',$cookie))["json"];
           if($r1->status == "success"){
             h.$r1->status;
@@ -541,37 +545,37 @@ function bypass_shortlinks($url){
       $cookie[] = $r1["cookie"];
       $t = $r1["token_csrf"];
       if($t[2][2] == "continue"){
-        $data = data_post($t)["five"];
+        $data = data_post($t, "five");
         $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
         $cookie[] = $r1["cookie"];
         $t = $r1["token_csrf"];
         if($t[2][2] == "continue"){
-          $data = data_post($t)["five"];
+          $data = data_post($t, "five");
           $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
           $cookie[] = $r1["cookie"];
           $t = $r1["token_csrf"];
           if($t[2][2] == "continue"){
-            $data = data_post($t)["five"];
+            $data = data_post($t, "five");
             $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
             $cookie[] = $r1["cookie"];
             $t = $r1["token_csrf"];
             if($t[2][2] == "continue"){
-              $data = data_post($t)["five"];
+              $data = data_post($t, "five");
               $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
               $cookie[] = $r1["cookie"];
               $t = $r1["token_csrf"];
               if($t[2][2] == "continue"){
-                $data = data_post($t)["five"];
+                $data = data_post($t, "five");
                 $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
                 $cookie[] = $r1["cookie"];
                 $t = $r1["token_csrf"];
                 if($t[2][2] == "continue"){
-                  $data = data_post($t)["five"];
+                  $data = data_post($t, "five");
                   $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
                   $cookie[] = $r1["cookie"];
                   $t = $r1["token_csrf"];
                   if($t[2][2] == "continue"){
-                    $data = data_post($t)["five"];
+                    $data = data_post($t, "five");
                     $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
                     $cookie[] = $r1["cookie"];
                     $t = $r1["token_csrf"];
@@ -587,14 +591,15 @@ function bypass_shortlinks($url){
           if($t[2][2] == "captcha"){
             $method = "recaptchav2";
             $cap = multibot($method,$r1[$method],$url);
-            $data = data_post($t, $method ,$cap)["five"];
+            $rsp = array("g-recaptcha-response" => $cap);
+            $data = data_post($t, "five", $rsp);
             $r1 = base_short($url,0,$data,$url,0,join('',$cookie));
             $cookie[] = $r1["cookie"];
             $t = $r1["token_csrf"];
           }
           if($t[1][2] == "ad_form_data"){
             L($coundown);
-            $data = data_post($t)["four"];
+            $data = data_post($t, "four");
             $r2 = base_short(build($url)["go"][2],1,$data,$url,0,join('',$cookie))["json"];
           }
           if($r2->status == "success"){
@@ -640,19 +645,20 @@ function bypass_shortlinks($url){
       $r = base_short($url,0,0,$url,0,join('',$cookie));
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
-      $data = data_post($t)["five2"];
-      $r = base_short($url,0,$data,$url,0,join('',$cookie));
-      $cookie[] = $r["cookie"];//die(print_r($r));
-      $t = $r["token_csrf"];
-      $method = "invisible_recaptchav2";
-      $cap = multibot($method,$r[$method],$url);
-      $data = data_post($t, $method, $cap)["five"];
+      $data = data_post($t, "five2");
       $r = base_short($url,0,$data,$url,0,join('',$cookie));
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
+      $method = "invisible_recaptchav2";
+      $cap = multibot($method,$r[$method],$url);
+      $rsp = array("g-recaptcha-response" => $cap);
+      $data = data_post($t, "five", $rsp);
+      $r = base_short($url,0,$data,$url,0,join('',$cookie));
+      $cookie[] = $r["cookie"];
+      $t = $r["token_csrf"];#die(print_r($r));
       if(explode('"',$t[1][2])[0] == "ad_form_data"){
         L($coundown);
-        $data = data_post($t)["four"];
+        $data = data_post($t, "four");
         $r1 = base_short(build($url)["go"][0],1,$data,0,0,join('',$cookie))["json"];
         if($r1->status == "success"){
           h.$r1->status;
@@ -669,19 +675,20 @@ function bypass_shortlinks($url){
         $r = base_short($url,0,0,0,0,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
-        $data = data_post($t)["null"];
+        $data = data_post($t, "null");
         $r = base_short($url,0,$data,0,0,join('',$cookie));//die(print_r($r));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         $method = "recaptchav2";
         $cap = multibot($method,$r[$method],$url);
-        $data = data_post($t, $method ,$cap)["null"];
+        $rsp = array("g-recaptcha-response" => $cap);
+        $data = data_post($t, "null", $rsp);
         $r = base_short($url,0,$data,0,0,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         if(explode('"',$t[1][1])[0] == "data"){
           L($coundown);
-          $data = data_post($t)["two"];
+          $data = data_post($t, "two");
           $r1 = base_short(build($url)["go"][1],1,$data,0,0,join('',$cookie));
           if($r1["url"]){
             print h."success";
@@ -699,7 +706,8 @@ function bypass_shortlinks($url){
       if($t[1][2] == "f_n"){
         $method = "invisible_recaptchav2";
         $cap = multibot($method,$r[$method],$run["links"]);
-        $data = data_post($t,$method, $cap)["four"];
+        $rsp = array("g-recaptcha-response" => $cap);
+        $data = data_post($t, "four", $rsp);
         $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
@@ -707,7 +715,8 @@ function bypass_shortlinks($url){
       if($t[1][2] == "ref"){
         $method = "invisible_recaptchav2";
         $cap = multibot($method,$r[$method],$run["links"]);
-        $data = data_post($t,$method, $cap)["five"];
+        $rsp = array("g-recaptcha-response" => $cap);
+        $data = data_post($t, "five", $rsp);
         $r = base_short($run["links"],0,$data,$run["links"],0,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
@@ -715,19 +724,19 @@ function bypass_shortlinks($url){
       $link = $r["url1"][0];
       if(preg_match("#(http)#is",$link)){
         if(explode('"',$t[1][4])[0] == "user_faucet"){
-          $data = data_post($t)["four"];
+          $data = data_post($t, "four");
           $r = base_short($link,1,$data,0,0,join('',$cookie));
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
         } else {
-          $data = data_post($t)["three"];
+          $data = data_post($t, "three");
           $r = base_short($link,1,$data,0,0,join('',$cookie));
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
         }
         if($t[1][1] == "ad_form_data"){
           L($coundown+10);
-          $data = data_post($t)["six"];
+          $data = data_post($t, "six");
           $r1 = base_short(str_replace("fc-lc.xyz","fc.lc",str_replace("oii.io/links/go","oii.io/links/go1",build($url)["go"][0])),1,$data,$link,0,join('',$cookie))["json"];
           if(preg_match("#(https)#is",$r1->url)){
             h."success";
@@ -743,7 +752,7 @@ function bypass_shortlinks($url){
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
       $url = $r["url1"][0];
-      $data = data_post($t)["null"];
+      $data = data_post($t, "null");
       $r = base_short($url, 0, $data, $run["links"], 0, join('',$cookie));
       $cookie[] = $r["cookie"];
       $sitekey = $r["data"]["rcap"];
@@ -770,7 +779,7 @@ function bypass_shortlinks($url){
         $t = $r["token_csrf"];
         if(explode('"',$t[1][2])[0] == "ad_form_data"){
           L($coundown);
-          $data = data_post($t)["four"];
+          $data = data_post($t, "four");
           $r1 = base_short($run["go"][0],1,$data,0,0,join('',$cookie))["json"];
           if($r1->status == "success"){
             h.$r1->status;
@@ -791,14 +800,15 @@ function bypass_shortlinks($url){
       if($t[1][0] == "token"){
         $method = "hcaptcha";
         $cap = multibot($method,$r[$method],$url1);
-        $data = data_post($t,$method, $cap)["six"];
+        $rsp = array("h-recaptcha-response" => $cap);
+        $data = data_post($t, "six", $rsp);
         $r = base_short($url1,0,$data,0,0,join('',$cookie));
       }
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
       if($t[1][1] == "ad_form_data"){
         L($coundown);
-        $data = data_post($t)["two"];
+        $data = data_post($t, "two");
         $r1 = base_short(build($url)["go"][0],1,$data,0,0,join('',$cookie))["json"];
         if($r1->status == "success"){
         h.$r1->status;
@@ -866,7 +876,7 @@ function bypass_shortlinks($url){
             $cookie[] = $r["cookie"];
             $t = $r["token_csrf"];
             if(explode('"',$t[1][2])[0] == "ad_form_data"){
-              $data = data_post($t)["four"];
+              $data = data_post($t, "four");
               L($coundown);
               $r1 = base_short(build($final)["go"][0],1,$data,0,0,join('',$cookie))["json"];
               if($r1->status == "success"){
@@ -913,83 +923,87 @@ function bypass_shortlinks($url){
 
 
 
-function data_post($t, $type = 0, $cap = 0){
-  if($type == 'invisible_recaptchav2'){
-      $type = 'recaptchav2';
-    }
-  if($type == "recaptchav2"){
-    $resp = "g-recaptcha-response";
-  } elseif($type == "hcaptcha"){
-    $resp = "h-recaptcha-response";
-  } elseif(preg_match('#[a-zA-Z0-9]#is',$type)){
-    $resp = $type;
-  }
-  return [
-    "null" => str_replace("&=0","",http_build_query([
+function data_post($t, $type, $array = 0){
+  if($type ==  "null"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0]
+      );
+  } elseif($type ==  "one"){
+    $data = array(
       explode('"',$t[1][0])[0] => $t[2][0],
-      $resp => $cap
-      ])),
-      "one" => str_replace("&=0&","&",http_build_query([
-        explode('"',$t[1][0])[0] => $t[2][0],
-        explode('"',$t[1][1])[0] => $t[2][1]
-        ])),
-        "two" => http_build_query([
-          explode('"',$t[1][0])[0] => $t[2][0],
-          explode('"',$t[1][1])[0] => $t[2][1],
-          explode('"',$t[1][2])[0] => $t[2][2]
-          ]),
-          "three" => http_build_query([
-            explode('"',$t[1][0])[0] => $t[2][0],
-            explode('"',$t[1][1])[0] => $t[2][1],
-            explode('"',$t[1][2])[0] => $t[2][2],
-            explode('"',$t[1][3])[0] => $t[2][3]
-            ]),
-            "four" => str_replace("&0=0","",str_replace("&=0&","&",http_build_query([
-              explode('"',$t[1][0])[0] => $t[2][0],
-              explode('"',$t[1][1])[0] => $t[2][1],
-              explode('"',$t[1][2])[0] => $t[2][2],
-              $resp => $cap,
-              explode('"',$t[1][3])[0] => $t[2][3],
-              explode('"',$t[1][4])[0] => $t[2][4]
-              ]))),
-              "four2" => str_replace("&0=0","",str_replace("&=0&","&",http_build_query([
-                explode('"',$t[1][0])[0] => $t[2][0],
-                explode('"',$t[1][1])[0] => $t[2][1],
-                explode('"',$t[1][2])[0] => "",
-                explode('"',$t[1][2])[4] => $t[2][2],
-                $resp => $cap,
-                explode('"',$t[1][3])[0] => $t[2][3],
-                explode('"',$t[1][4])[0] => $t[2][4]
-                ]))),
-                "five" => str_replace("&0=0","",str_replace("&=0&","&",http_build_query([
-                  explode('"',$t[1][0])[0] => $t[2][0],
-                  explode('"',$t[1][1])[0] => $t[2][1],
-                  explode('"',$t[1][2])[0] => $t[2][2],
-                  explode('"',$t[1][3])[0] => $t[2][3],
-                  $resp => $cap,
-                  explode('"',$t[1][4])[0] => $t[2][4],
-                  explode('"',$t[1][5])[0] => $t[2][5]
-                  ]))),
-                  "five2" => str_replace("&0=0","",str_replace("&=0&","&",http_build_query([
-                    explode('"',$t[1][0])[0] => $t[2][0],
-                    explode('"',$t[1][1])[0] => $t[2][1],
-                    explode('"',$t[1][2])[0] => "",
-                    explode('"',$t[1][2])[4] => $t[2][2],    
-                    explode('"',$t[1][3])[0] => $t[2][3],
-                    explode('"',$t[1][4])[0] => $t[2][4],
-                    explode('"',$t[1][5])[0] => $t[2][5]
-                    ]))),
-                    "six" => str_replace("&0=0","",str_replace("&=0&","&",str_replace("deleted","",http_build_query([
-                      explode('"',$t[1][0])[0] => $t[2][0],
-                      explode('"',$t[1][1])[0] => $t[2][1],
-                      explode('"',$t[1][2])[0] => $t[2][2],
-                      explode('"',$t[1][3])[0] => $t[2][3],
-                      explode('"',$t[1][4])[0] => $t[2][4],
-                      explode('"',$t[1][5])[0] => $t[2][5],
-                      explode('"',$t[1][6])[0] => $t[2][6],
-                      $resp => $cap
-                      ]))))];
+      explode('"',$t[1][1])[0] => $t[2][1]
+      );
+  } elseif($type ==  "two"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => $t[2][2]
+      );
+  } elseif($type ==  "three"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => $t[2][2],
+      explode('"',$t[1][3])[0] => $t[2][3]
+      );
+  } elseif($type ==  "four"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => $t[2][2],
+      explode('"',$t[1][3])[0] => $t[2][3],
+      explode('"',$t[1][4])[0] => $t[2][4]
+      );
+  } elseif($type ==  "four2"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => "",
+      explode('"',$t[1][2])[4] => $t[2][2],
+      explode('"',$t[1][3])[0] => $t[2][3],
+      explode('"',$t[1][4])[0] => $t[2][4]
+      );
+  } elseif($type ==  "five"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => $t[2][2],
+      explode('"',$t[1][3])[0] => $t[2][3],
+      explode('"',$t[1][4])[0] => $t[2][4],
+      explode('"',$t[1][5])[0] => $t[2][5]
+      );
+  } elseif($type ==  "five2"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => "",
+      explode('"',$t[1][2])[4] => $t[2][2],    
+      explode('"',$t[1][3])[0] => $t[2][3],
+      explode('"',$t[1][4])[0] => $t[2][4],
+      explode('"',$t[1][5])[0] => $t[2][5]
+      );
+  } elseif($type ==  "six"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => $t[2][2],
+      explode('"',$t[1][3])[0] => $t[2][3],
+      explode('"',$t[1][4])[0] => $t[2][4],
+      explode('"',$t[1][5])[0] => $t[2][5],
+      explode('"',$t[1][6])[0] => $t[2][6],
+      );
+  }
+  if($array){
+    $build = http_build_query(array_merge($data, $array));
+  } else {
+    $build = http_build_query($data);
+  }
+  return str_replace("deleted", "",$build);
 }
+
+
+
+
 
 
 function config(){
