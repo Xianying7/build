@@ -46,7 +46,7 @@ function visit_short($r, $site_url = 0, $data_token = 0){
     $exp = 0;
     for($i=0;$i<count($config);$i++){
         for($s=0;$s<count($list);$s++){
-            $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",strtolower($list[$s])))[0];
+            $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",trimed(strtolower($list[$s]))))[0];
                 if(strtolower($config[$i]) == $open){
                     for($p=0;$p<count($control);$p++){
                         if(strtolower(str_replace(n,"",$control[$p])) == host.$open or strtolower(str_replace(n,"",$control[$p])) == $open or explode("•",$r["left"][$s])[0] == explode("•",$r["left"][$s])[1] or explode("/",trim(explode("<",$r["left"][$s])[0]))[0] == 0 or explode("/",trim(explode("<",$r["left"][$s])[0]))[0][0] == "-"){
@@ -116,18 +116,24 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                             }
                             $r1 = base_run(host.$data[1][$rrq]."/", $data_post);
                         } elseif(mode == "ofer"){
-                          $data = http_build_query([
+                          /*$data = http_build_query([
                             "action" => "getShortlink",
                             "sid" => "Murcaluse",
                             "key" => "6l54uj4b6lmjljh1mvwgyqj0aovufc",
                             "data" => $r["visit"][$s],
                             "token" => $data_token
-                            ]);
-                            $r1 = base_run($site_url, $data, 1);
+                            ]);*/
+                          $data = http_build_query(array_merge([
+                            "action" => "getShortlink",
+                            //"sid" => "1196255",
+                            //"key" => "qbgxxjznt1xfm07irbrybnhiwqr2sh",
+                            "data" => $r["visit"][$s],
+                            //"token" => $data_token
+                            ], $data_token));#die($data);
+                            $r1 = base_offer($site_url, $data, 1);
                             $data = http_build_query(["action" => "redirect"]);
                             L(10);
-                            $r1 = base_run($r1["json"]->link, $data, 1);
-                            $r1["url"] = $r1["json"]->link;
+                            $r1 = base_offer($r1["json"]->link, $data, 1);
                         } else {
                             die(m."mode bypass not found".n);
                         }
@@ -204,6 +210,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
     #preg_match('#skip_button" href="(.*?)"#is',$r[1],$url5);
     preg_match('#</noscript><title>(.*?)<#is',$r[1],$url5);
     preg_match('#url=(.*?)"#is',$r[1],$url6);
+    preg_match('#var url="(.*?)"#is',$r[1],$url7);
     preg_match_all('#hidden" name="(.*?)" value="(.*?)"#is',$r[1],$token_csrf);
     preg_match_all('#(t|") name="(.*?)" type="hidden" value="(.*?)"#is',$r[1],$token_csrf2);
     preg_match('#(id="second">|varcountdownValue=|PleaseWait|class="timer"value="|class="timer">)([0-9]{1}|[0-9]{2})(;|"|<|s)#is',str_replace([n," "],"",$r[1]),$timer);
@@ -230,6 +237,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
         "url4" => $url4[2],
         "url5" => $url5[1],
         "url6" => $url6[1],
+        "url7" => $url7[1],
         "code_data_ajax" => $code_data_ajax[2],
         "sessionId" => $sessionId[2],
         "json_ajax" => json_decode($json_ajax[2])
@@ -668,7 +676,7 @@ function bypass_shortlinks($url){
         }
       }
     } elseif(preg_match("#(cuty.io)#is",$host)){
-      $r = base_short($url); 
+      $r = base_short($url); #die(print_r($r));
       $cookie[] = $r["cookie"];
       $url = $r["url"];
       if($r["url"]){
@@ -676,7 +684,7 @@ function bypass_shortlinks($url){
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         $data = data_post($t, "null");
-        $r = base_short($url,0,$data,0,0,join('',$cookie));//die(print_r($r));
+        $r = base_short($url,0,$data,0,0,join('',$cookie));
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         $method = "recaptchav2";
@@ -753,10 +761,13 @@ function bypass_shortlinks($url){
       $t = $r["token_csrf"];
       $url = $r["url1"][0];
       $data = data_post($t, "null");
-      $r = base_short($url, 0, $data, $run["links"], 0, join('',$cookie));
+      $r = base_short($url, 1, $data, $run["links"], 0, join('',$cookie));
       $cookie[] = $r["cookie"];
       $sitekey = $r["data"]["rcap"];
-      $r = base_short("https://ads2.filescreed.buzz/");
+      $cookie[] = $r["cookie"];
+      $r = base_short("https://kiktu.com/wp-admin/admin-ajax.php", 1, "action=generate2", "https://kiktu.com/", 0, join('',$cookie));
+      $cookie[] = $r["cookie"];
+      $r = base_short($r["url7"]);
       $cap = multibot("recaptchav2",$sitekey,"https://kiktu.com/");
       $data = http_build_query([
         "wgurl" => $t[2][0],
@@ -765,7 +776,7 @@ function bypass_shortlinks($url){
         "wgcsrf" => $r["res"],
         "wgcaptcharesponse" => $cap
         ]);
-        $r = base_short("https://kiktu.com/recaptcha", 1, $data, "https://kiktu.com/", 0, join('',$cookie));
+        $r = base_short("https://kiktu.com/recaptcha", 0, $data, "https://kiktu.com/", 1, join('',$cookie));
         $cookie[] = $r["cookie"];
         $newcsrf = $r["data"]["newcsrf"];
         $slug = $r["data"]["slug"];
@@ -774,7 +785,7 @@ function bypass_shortlinks($url){
         $data = json_encode(["ver" => $r["json"]->ipNumeric]);
         $verify = base_short("https://kiktu.com/verify", 1, $data, 0, 0, join('',$cookie));
         $cookie[] = $verify["cookie"];
-        $r = base_short($run["links"]."?".http_build_query(["data" => $slug,"secret" => $verify["json"]->response,"wgcsrf" => $newcsrf]), 0 ,0 ,"https://kiktu.com/", 0, $ip_n.join('',$cookie));
+        $r = base_short($run["links"]."?".http_build_query(["data" => $slug,"secret" => $verify["json"]->response,"wgcsrf" => $newcsrf]), 0 ,0 ,"https://kiktu.com/", 0, $ip_n.join('',$cookie)); 
         $cookie[] = $r["cookie"];
         $t = $r["token_csrf"];
         if(explode('"',$t[1][2])[0] == "ad_form_data"){
