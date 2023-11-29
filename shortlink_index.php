@@ -1122,6 +1122,7 @@ function config(){
   $config[] = "fc.lc";
   $config[] = "Bestlink";
   $config[] = "1shorten.com";
+  $config[] = "CCurl";
   $config[] = "ccurl.net";
   $config[] = "adbull";
   $config[] = "adbull.net";
@@ -1172,6 +1173,7 @@ function config(){
   $config[] = "LinkHives";
   $config[] = "Adbitfly";
   $config[] = "ShtFly";
+  $config[] = "clik.pw";
   #$config[] = "shortyearn";
   #$config[] = "shortyearn.com";
   $config[] = "doshrink";
