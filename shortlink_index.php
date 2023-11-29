@@ -180,6 +180,7 @@ function h_short($xml = 0, $referer = 0, $agent =0){
       $headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
     }
     $headers[] = 'Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7';
+    $headers[] = 'CF-Connecting-IP: 127.0.0.1, 68.180.194.242';
     if($agent){
     #$agent = ' (compatible; Google-Youtube-Links)';
     $agent = ' (compatible; Googlebot/2.1; +https://www.google.com/bot.html)';
