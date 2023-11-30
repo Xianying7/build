@@ -306,7 +306,7 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       if(!parse_url($url)["scheme"]){
         print m."url tidak valid";
         r();
-        $url = "https://google.com/"
+        $url = "https://google.com/";
         //return "";
       }
       $default[CURLOPT_URL] = $url;
