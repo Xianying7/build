@@ -279,7 +279,7 @@ function bypass_shortlinks($url){
       $run = str_replace(["clkclk./","flyinc./"],"",build($url));
       $referer = "https://mcrypto.club/";
       }
-      $r1 = base_short($run["inc"],0,0,$referer,1)["url"];print_r($r1);
+      $r1 = base_short($run["inc"],0,0,$referer,1)["url"];#print_r($r1);
       if(preg_match("#(".$host.")#is",$r1)){
         return "refresh";
       }
@@ -339,7 +339,7 @@ function bypass_shortlinks($url){
         } elseif(preg_match("#(go.viewfr.com)#is",$host)){
           $referer = "https://cryptfaucet.com/";
         } elseif(preg_match("#(cashlinko.com)#is",$host)){
-          $referer = "https://forextrader.site/";
+          $referer = "https://techyuth.xyz/";
         } elseif(preg_match("#(linkjust.com)#is",$host)){
           $referer = "https://forexrw7.com/";
         } elseif(preg_match("#(dz4link.com)#is",$host)){
