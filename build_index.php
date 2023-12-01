@@ -352,7 +352,7 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       } else {
         print m.movePage()[$info["http_code"]];
         r();
-        print curl_error($ch);
+        print explode("port",curl_error($ch))[0];
         r();
         continue;
       }
