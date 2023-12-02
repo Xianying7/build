@@ -266,19 +266,22 @@ function bypass_shortlinks($url){
       $run = build($url);
       $r = base_short($url); #print_r($r);
       $link = $r["url"];
-      if(preg_match("#(limit)#is",$link)){
+     /* if(preg_match("#(limit)#is",$link)){
         $referer = "wss://advertisingexcel.com";
       } else {
         $referer = $link;
-      }
+      }*/
       if(preg_match("#(clk.st)#is",$host)){
         $referer = $link;
-      }
-      if(preg_match("#(cryptoflare.cc|myhealths.icu)#is",$host)){
+      } elseif(preg_match("#(cryptoflare.cc|myhealths.icu)#is",$host)){
       $url = str_replace("cryptoflare.cc","linkhives.com",str_replace("myhealths.icu","urlhives.com",$url));
       $run = str_replace(["clkclk./","flyinc./"],"",build($url));
       $referer = "https://mcrypto.club/";
+      } else {
+        $referer = "wss://advertisingexcel.com";
       }
+      
+      
       $r1 = base_short($run["inc"],0,0,$referer,1)["url"];#print_r($r1);
       if(preg_match("#(".$host.")#is",$r1)){
         return "refresh";
@@ -662,6 +665,9 @@ function bypass_shortlinks($url){
       $r = base_short($url);
       $cookie[] = $r["cookie"];
       $url = $r["url"];
+      if(!parse_url($url)["scheme"]){
+        return "refresh";
+      }
       $r = base_short($url,0,0,$url,0,join('',$cookie));
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
@@ -772,6 +778,9 @@ function bypass_shortlinks($url){
       $cookie[] = $r["cookie"];
       $t = $r["token_csrf"];
       $url = $r["url1"][0];
+      if(!parse_url($url)["scheme"]){
+        return "refresh";
+      }
       $data = data_post($t, "null");
       $r = base_short($url, 1, $data, $run["links"], 0, join('',$cookie));
       $cookie[] = $r["cookie"];
@@ -779,6 +788,9 @@ function bypass_shortlinks($url){
       $cookie[] = $r["cookie"];
       $r = base_short("https://kiktu.com/wp-admin/admin-ajax.php", 1, "action=generate2", "https://kiktu.com/", 0, join('',$cookie));
       $cookie[] = $r["cookie"];
+      if(!parse_url($r["url7"])["scheme"]){
+        return "refresh";
+      }
       $r = base_short($r["url7"]);
       $cap = multibot("recaptchav2",$sitekey,"https://kiktu.com/");
       $data = http_build_query([
@@ -850,7 +862,7 @@ function bypass_shortlinks($url){
         $r = base_short($re.$url);//die(print_r($r));
         $cookie[] = $r["cookie"];
         $url1 = $r["url1"][0];
-        if(!$url1){
+        if(!parse_url($url1)["scheme"]){
           unset($cookie);
           continue;
         }
@@ -870,8 +882,7 @@ function bypass_shortlinks($url){
           $r = base_short($url1,1,$data,$url1,0,join('',$cookie));
           $cookie[] = $r["cookie"];
           $url2 = $r["url"];
-          if(!$url2){
-            #break;
+          if(!parse_url($url2)["scheme"]){
             unset($cookie);
             continue;
           }
@@ -882,7 +893,7 @@ function bypass_shortlinks($url){
             $r = base_short($url2,1,$data,$url2,0,join('',$cookie));
             $cookie[] = $r["cookie"];
             $url3 = $r["url"];
-            if(!$url3){
+            if(!parse_url($url3)["scheme"]){
               unset($cookie);
               continue;
             }
