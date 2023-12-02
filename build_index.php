@@ -341,7 +341,13 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       $response = substr($output,curl_getinfo($ch,CURLINFO_HEADER_SIZE));
       $info = curl_getinfo($ch);
       curl_close($ch);
-      if($info["primary_ip"]){
+      if(!$info["primary_ip"]){
+        print m.movePage()[$info["http_code"]];
+        r();
+        print explode("port",curl_error($ch))[0];
+        r();
+        continue;
+      } else {
         foreach(explode("\r\n",substr($output,0,strpos($output,"\r\n\r\n"))) as $i => $line){
           if($i == 0){
             $headers['http_code'] = $line;
@@ -349,12 +355,6 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
             list($key, $value ) = explode(': ',$line);
             $header_array[$key] = $value;}
         }
-      } else {
-        print m.movePage()[$info["http_code"]];
-        r();
-        print explode("port",curl_error($ch))[0];
-        r();
-        continue;
       }
       print p.movePage()[$info["http_code"]];
       r();
