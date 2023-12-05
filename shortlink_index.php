@@ -58,6 +58,9 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                             $r1 = base_run(host.$r["visit"][$s],http_build_query([$r["token"][1][$s] => $r["token"][2][$s]]));
                         } elseif(mode == "icon"){
                             $cap = icon_bits();
+                            if(!$cap){
+                              return "refresh";
+                            }
                             $data2 = http_build_query([
                                 "a" => "getShortlink",
                                 "data" => preg_replace("/[^0-9]/","",$r["visit"][$s]),
