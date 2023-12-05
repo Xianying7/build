@@ -791,6 +791,9 @@ function icon_bits(){
       return "";
     }
     $hash = $r["json"];
+    if(!$hash[1]){
+      return "";
+    }
     for ($x = 0; $x < count($hash); $x++){
       $r1 = base_run(host."system/libs/captcha/request.php?cid=0&hash=".$hash[$x]);
       if($r1["status"] >= 201){
