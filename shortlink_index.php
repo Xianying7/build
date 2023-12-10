@@ -8,7 +8,7 @@
 
 #https://shortyearn.com/CBkp4ocd2d7
 #die(print_r(bypass_shortlinks("https://rsshort.com/93Be")));
-##print_r(bypass_shortlinks("https://oii.io/QXDN2ip"));
+#print_r(bypass_shortlinks("https://clks.pro/QxNRt1"));
 #print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
 #print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
@@ -16,7 +16,7 @@
 #print_r(bypass_shortlinks("https://go.shorti.io/CBqgokmfh18"));
 
 function build($url=0){
-  if(preg_match("#(clk.st)#is",$url)){
+  if(preg_match("#(clk.st|clks.pro)#is",$url)){
     $inc = "/clkclk.";
   } else {
     $inc = "/flyinc.";
@@ -320,9 +320,9 @@ function bypass_shortlinks($url){
       if(preg_match("#(clk.st)#is",$host)){
         $referer = $link;
       } elseif(preg_match("#(cryptoflare.cc|myhealths.icu)#is",$host)){
-      $url = str_replace("cryptoflare.cc","linkhives.com",str_replace("myhealths.icu","urlhives.com",$url));
-      $run = str_replace(["clkclk./","flyinc./"],"",build($url));
-      $referer = "https://mcrypto.club/";
+        $url = str_replace("cryptoflare.cc","linkhives.com",str_replace("myhealths.icu","urlhives.com",$url));
+        $run = str_replace(["clkclk./","flyinc./"],"",build($url));
+        $referer = "https://mcrypto.club/";
       } else {
         $referer = "wss://advertisingexcel.com";
       }
@@ -1023,6 +1023,20 @@ function bypass_shortlinks($url){
       die(print_r($node));
       
         
+      } elseif(preg_match("#(clks.pro)#is",$host)){
+        $run = build($url);#die(print_r($run["inc"]));
+        $r = base_short($run["inc"],0,0,"https://mdn.lol/"); 
+        if($r["url"]){
+          L(90);
+          print h."success";
+          r();
+          parse_str(explode("?",$r["url"])[1], $get);
+          if($get["get"]){
+            return base64_decode($get["get"]);
+          } else {
+            return $r["url"];
+          }
+        }
       } else {
         return "refresh";
       }
@@ -1279,6 +1293,9 @@ function config(){
   $config[] = "doshrink.com";
   $config[] = "linkjust.com";
   $config[] = "Linkjust";
+  $config[] = "clks";
+  $config[] = "clkspro";
+  $config[] = "clks.pro";
   $config[] = "Lollty";
   $config[] = "Lollty.com";
   $config[] = "Cryptosh.pro";
