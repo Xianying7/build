@@ -3,8 +3,7 @@
 #https://techyuth.xyz/blog/QuL8x
 #ini adalah data beta test shortlinks error no komplen
 #eval(str_replace("<?php","",file_get_contents("build_index.php")));
-
-
+#$h = ["Proxy-Authorization: Basic dG9ycnVzOndyZWNFZkpvdG5vcXVh"];print_r(curl("https://ifconfig.me/ip", $h,0,0,0,0));exit;
 
 #https://shortyearn.com/CBkp4ocd2d7
 #die(print_r(bypass_shortlinks("https://rsshort.com/93Be")));
@@ -201,8 +200,8 @@ function h_short($xml = 0, $referer = 0, $agent =0){
 }
 
 
-function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0){
-    $r = curl($url,h_short($xml,$referer,$agent),$data,false,false,$alternativ_cookie);
+function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0,$proxy=0){
+    $r = curl($url,h_short($xml,$referer,$agent),$data,false,false,$alternativ_cookie,$proxy);
     preg_match('#(reCAPTCHA_site_key":"|data-sitekey=")(.*?)(")#is',$r[1],$recaptchav2);
     preg_match('#(invisible_reCAPTCHA_site_key":")(.*?)(")#is',$r[1],$invisible_recaptchav2);
     preg_match('#(hcaptcha_checkbox_site_key":"|h-captcha" data-sitekey=")(.*?)(")#is',$r[1],$hcaptcha);
@@ -1025,9 +1024,9 @@ function bypass_shortlinks($url){
         
       } elseif(preg_match("#(clks.pro)#is",$host)){
         $run = build($url);#die(print_r($run["inc"]));
-        $r = base_short($run["inc"],0,0,"https://mdn.lol/"); 
+        $r = base_short($run["inc"],0,0,"wss://mdn.lol/");die(print_r($r));
         if($r["url"]){
-          L(90);
+          #L(90);
           print h."success";
           r();
           parse_str(explode("?",$r["url"])[1], $get);
