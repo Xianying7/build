@@ -1024,7 +1024,7 @@ function bypass_shortlinks($url){
         
       } elseif(preg_match("#(clks.pro)#is",$host)){
         $run = build($url);#die(print_r($run["inc"]));
-        $r = base_short($run["inc"],0,0,"wss://mdn.lol/");die(print_r($r));
+        $r = base_short($run["inc"],0,0,"wss://mdn.lol/");#die(print_r($r));
         if($r["url"]){
           #L(90);
           print h."success";
