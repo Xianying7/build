@@ -433,7 +433,7 @@ function bypass_shortlinks($url){
         $run = build($url);#die(print_r($run));
         $r = base_short($run["links"],0,0,$referer,$cloud,0,$proxy);
         $cookie[] = $r["cookie"];
-        $t = $r["token_csrf"];die(print_r($r));
+        $t = $r["token_csrf"];#die(print_r($r));
         
         if(preg_match("#(verify/[?]/)#is",$r["url"])){
           $verify = str_replace("http:","https:",$r["url"]);
