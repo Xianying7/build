@@ -1,5 +1,5 @@
 <?php
-
+  
 
 
 
@@ -301,7 +301,7 @@ function ket_line($a,$aa,$b=0,$bb=0,$c=0,$cc=0){
     print n;
 }
 
-function curl($url, $header = false, $post = false,  $followlocation = false, $cookiejar = false, $alternativ_cookie = false){
+function curl($url, $header = false, $post = false,  $followlocation = false, $cookiejar = false, $alternativ_cookie = false, $proxy = false){
     while(true){
       if(!parse_url($url)["scheme"]){
         print m."url tidak valid";
@@ -319,6 +319,7 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       $default[CURLOPT_SSL_VERIFYHOST] = 0;
       $default[CURLOPT_CONNECTTIMEOUT] = 40;
       $default[CURLOPT_TIMEOUT] = 20;
+     # $default[CURLOPT_REFERER] = "";
       if($header){
         $default[CURLOPT_HTTPHEADER] = $header;
       }
@@ -332,6 +333,9 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
       }
       if($alternativ_cookie){
         $default[CURLOPT_COOKIE] = $alternativ_cookie;
+      }
+      if($proxy){
+        $default[CURLOPT_PROXY] = "http://69b6f26dd75343ce9a1256dc9f2b4dbc64c24669c29:customHeaders=false&setCookies=https%3A%2F%2Fmdn.lol%2F%3B@proxy.scrape.do:8080";
       }
       $options = $default;
       $ch = curl_init();
@@ -649,15 +653,22 @@ function multibot($method,$sitekey,$pageurl,$rr = 0){
       "sitekey" => $sitekey,
       "pageurl" => $pageurl
       ]);
+    $rscaptcha = http_build_query([
+      "key" => $apikey,
+      "method" => "rscaptcha",
+      "body" => $sitekey,
+      "json" => 1
+      ]);
       $type=[
         "recaptchav2" => $recaptchav2,
-        "hcaptcha" => $hcaptcha
+        "hcaptcha" => $hcaptcha,
+        "rscaptcha" => $rscaptcha
         ];
         $ua = [
           "host: ".$host,
           "content-type: application/json/x-www-form-urlencoded"
           ];
-          $s = 0;
+          $s = 0;#die(print($type[$method]));
           while(true){
             $s++;
             $r = curl("http://".$host."/in.php?".$type[$method],$ua)[1];
@@ -1102,7 +1113,7 @@ function icon_answer(){
   }
 }
 
-function analysis_icon($img){
+function tanalysis_icon($img){
   #$img = file_get_contents("coba4.png");
   if(300 >= strlen($img)){
     print m."image not found!";
