@@ -1,18 +1,34 @@
 <?php
+
+/*
+$a = json_decode('{"data":{"clicksAvailable":"95371974","avarageDrops":"168.8292","ranFunc":"_50GtSjyHXW","timeLength":10,"visitBtnName":"_iTNGogngZ8","validateBtnName":"_validate"},"memo":{"id":"9qpL2yozF8xeBD595QEq","name":"member.task.sitefriends.visit-website","path":"member/task/sitefriends","method":"GET","children":[],"lazyLoaded":true,"errors":[],"locale":"en"},"checksum":"e3f5fa99e736c6ce297d9ebf7fdb9970bf0f92e6a179b02555130e3dda69acd9"}');
+
+$b = json_decode('{"_token":"94jMRYBwshA3xAffa0ULnzuFXHPdmXQNELHyIdw7","components":[{"snapshot":"{\"data\":{\"clicksAvailable\":\"95371974\",\"avarageDrops\":\"168.8292\",\"ranFunc\":\"_50GtSjyHXW\",\"timeLength\":10,\"visitBtnName\":\"_iTNGogngZ8\",\"validateBtnName\":\"_validate\"},\"memo\":{\"id\":\"9qpL2yozF8xeBD595QEq\",\"name\":\"member.task.sitefriends.visit-website\",\"path\":\"member\\/task\\/sitefriends\",\"method\":\"GET\",\"children\":[],\"lazyLoaded\":false,\"errors\":[],\"locale\":\"en\"},\"checksum\":\"8841f3246085b5ad31d6f53c2a731dfb6ef8be1492519ade51832d43bb20e2af\"}","updates":{},"calls":[{"path":"","method":"__dispatch","params":["validate-visit",{"visitResponse":"XoeCQwWzaWhTtXF","adsId":29}]}]}]}');
+print_r($a);
+print "\n\n";
+print_r($b);
+exit;
+*/
+#print html_entity_decode('<div wire:snapshot="{&quot;data&quot;:{&quot;adsData&quot;:[null,{&quot;class&quot;:&quot;App\Models\WebAds&quot;,&quot;key&quot;:12,&quot;s&quot;:&quot;mdl&quot;}]},&quot;memo&quot;:{&quot;id&quot;:&quot;aj6qXjVFGCVvdn283X8m&quot;,&quot;name&quot;:&quot;components.ads&quot;,&quot;path&quot;:&quot;member/dashboard&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;lazyLoaded&quot;:true,&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;0ddeba9214f916c6ca368874184332ce6318e9badd044dc8f575046b0af5de12&quot;}" wire:effects="[]" wire:id="aj6qXjVFGCVvdn283X8m">');exit;
 #https://blog.mphealth.online/?p=25
 #https://techyuth.xyz/blog/QuL8x
 #ini adalah data beta test shortlinks error no komplen
 #eval(str_replace("<?php","",file_get_contents("build_index.php")));
+#die(print_r(executeNode(file_get_contents("response_body.html"))));
 #$h = ["Proxy-Authorization: Basic dG9ycnVzOndyZWNFZkpvdG5vcXVh"];print_r(curl("https://ifconfig.me/ip", $h,0,0,0,0));exit;
 
 #https://shortyearn.com/CBkp4ocd2d7
-#die(print_r(bypass_shortlinks("https://rsshort.com/93Be")));
+#die(print_r(bypass_shortlinks("https://rsshort.com/nQeqd")));
 #print_r(bypass_shortlinks("https://clks.pro/QxNRt1"));
 #print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
 #print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
 #print_r(bypass_shortlinks("https://clks.pro/onfbBNh7OOdd0JS"));
 #print_r(bypass_shortlinks("https://go.shorti.io/CBqgokmfh18"));
+/*$icon = base64_encode(file_get_contents("xxx.png"));
+print multibot("rscaptcha",$icon,"https://www.fabianwennink.nl");
+exit;
+*/
 
 function build($url=0){
   if(preg_match("#(clk.st|clks.pro)#is",$url)){
@@ -42,6 +58,9 @@ function visit_short($r, $site_url = 0, $data_token = 0){
     }
     $config = arr_rand(config());
     $list = $r["name"];
+    if(!$list[0]){
+      return "refresh";
+    }
     $exp = 0;
     for($i=0;$i<count($config);$i++){
         for($s=0;$s<count($list);$s++){
@@ -100,6 +119,11 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                             if($r1["url1"]){
                               $r1["url"] = $r1["url1"];
                             }
+                        } elseif(mode == "site_url"){
+                            if($data_token){
+                              $data_token = $data_token.$r["visit"][$s];
+                            }
+                            $r1 = base_run($site_url, $data_token);
                         } elseif(mode == "path"){
                             $r1 = base_run(host.$r["visit"][$s]);
                         } elseif(mode == "firefaucet"){
@@ -172,11 +196,17 @@ function visit_short($r, $site_url = 0, $data_token = 0){
 }
 
 
-function h_short($xml = 0, $referer = 0, $agent =0){
+function h_short($xml = 0, $referer = 0, $agent =0, $boundary = 0){
     if($xml){
       $headers[] = 'Accept: */*';
     } else {
       $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v = b3;q=0.9';
+    }
+    if($boundary){
+      $headers[] = "Host: rsinsuranceinfo.com";
+      $headers[] = "origin: https://rsinsuranceinfo.com";
+      $headers[] = "x-iconcaptcha-token:".$boundary[0];
+      $headers[] = "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$boundary[1];
     }
     if($xml){
       $headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
@@ -200,8 +230,8 @@ function h_short($xml = 0, $referer = 0, $agent =0){
 }
 
 
-function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0,$proxy=0){
-    $r = curl($url,h_short($xml,$referer,$agent),$data,false,false,$alternativ_cookie,$proxy);
+function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0,$boundary=0){
+    $r = curl($url,h_short($xml,$referer,$agent,$boundary),$data,false,false,$alternativ_cookie);
     preg_match('#(reCAPTCHA_site_key":"|data-sitekey=")(.*?)(")#is',$r[1],$recaptchav2);
     preg_match('#(invisible_reCAPTCHA_site_key":")(.*?)(")#is',$r[1],$invisible_recaptchav2);
     preg_match('#(hcaptcha_checkbox_site_key":"|h-captcha" data-sitekey=")(.*?)(")#is',$r[1],$hcaptcha);
@@ -222,6 +252,7 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
     preg_match('#(var Wtpsw = )(.*?)(;)#is',$r[1],$json_ajax);//die(print_r($r[0]));
     parse_str(str_replace(";",",&",set_cookie($r[0][2])), $out);
     return [
+        "status" => $r[0][1]["http_code"],
         "cookie" => set_cookie($r[0][2]),
         "data" => str_replace(",","",$out),
         "res" => $r[1],
@@ -247,18 +278,26 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
     ];
 }
 
-function executeNode($r){
+function executeNode($r, $stripslashes = 0){
     preg_match_all('#<script>(.*?)</script>#is', $r,$out);
     for($i=0;$i<count($out[1]);$i++){
-      if(strpos($out[1][$i], 'var _') == ""){
+      if(strpos(ltrim($out[1][$i]), 'var _') == ""){
         continue;
-        } elseif(strpos($out[1][$i], 'var _') == 0){
-          $res[] = node_js(str_replace('eval', 'console.log', $out[1][$i]));
+        } elseif(strpos(ltrim($out[1][$i]), 'var _') == 0){
+          $res[] = node_js(str_replace('eval', 'console.log', ltrim($out[1][$i])));
         }
     }
     if($res[0]){
-      $x =  stripslashes(str_replace($out[0],$res, $r));
+      $html = html_entity_decode(str_replace($out[0],$res, $r));
+      if($xxxxx){
+        $x =  stripslashes($html);
+      } else {
+        $x = $html;
+      }
       preg_match_all('#hidden" name="(.*?)" value="(.*?)"#is',$x,$token);
+      preg_match_all('#<div wire:snapshot="(.*?)" wire:#is',$x,$snapshot);
+      preg_match('#userToken":"(.*?)"#is',$x,$user_token);
+      preg_match('#data-csrf="(.*?)"#is',$x,$csrf);
       preg_match('#p (\d+/\d+)#is',$x,$step);
       if($step[1]){
         if(explode("/",$step[1])[0] == explode("/",$step[1])[1]){
@@ -267,15 +306,19 @@ function executeNode($r){
       }
       if($token[1][1]){
         $fix = [
+          array_values(array_unique($token[0])),
           array_values(array_unique($token[1])),
           array_values(array_unique($token[2]))
           ];
       }
       return [
-        #"res" => $x,
+        "res" => $x,
         "token_csrf" => $fix,
         "step" => $step[1],
-        "final_step" => $final
+        "final_step" => $final,
+        "snapshot" => $snapshot[1],
+        "user_token" => $user_token[1],
+        "csrf" => $csrf[1]
         ];
     }
 }
@@ -337,10 +380,10 @@ function bypass_shortlinks($url){
         r();
         return $r1;
       }
-    } elseif(preg_match("#(link1s.com|link1s.net|insfly.pw|earnify.pro|links.earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|go.shorti.io|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com|shrinkme.info|shortplus.xyz|atglinks.com|link.short2url.in|link.revly.click|go.tinygo.co|go.wez.info|go.viewfr.com|cashlinko.com|linkjust.com|dz4link.com|panylink.com|panyflay.me|panyshort.link|droplink.co|oscut.space|kyshort.xyz|go.revcut.net|go.urlcut.pro|go.faho.us|go.eazyurl.xyz|clockads.in|go.shtfly.com|go.bitss.sbs|dailytime.store|go.foxylinks.site|m.pkr.pw|linkjust.com|adbitfly.com|adshort.co|lollty.com|10short.com|short2money.com|shrinkme.org|sox.link)#is",$host)){
+    } elseif(preg_match("#(link1s.com|link1s.net|insfly.pw|earnify.pro|links.earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|go.shorti.io|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com|shrinkme.info|shortplus.xyz|atglinks.com|link.short2url.in|link.revly.click|go.tinygo.co|go.wez.info|go.viewfr.com|cashlinko.com|linkjust.com|dz4link.com|panylink.com|panyflay.me|panyshort.link|droplink.co|oscut.space|oscut.fun|kyshort.xyz|go.revcut.net|go.urlcut.pro|go.faho.us|go.eazyurl.xyz|clockads.in|go.shtfly.com|go.bitss.sbs|dailytime.store|go.foxylinks.site|m.pkr.pw|linkjust.com|adbitfly.com|adshort.co|lollty.com|10short.com|short2money.com|shrinkme.org|sox.link)#is",$host)){
         if(preg_match("#(link1s.com)#is",$host)){
           $referer = "https://google.com/";
-        } elseif(preg_match("#(insfly.pw|oscut.space|kyshort.xyz|clockads.in)#is",$host)){
+        } elseif(preg_match("#(insfly.pw|oscut.space|oscut.fun|kyshort.xyz|clockads.in)#is",$host)){
           $referer = "https://clk.wiki/";
         } elseif(preg_match("#(shrinke.us|shrinkme.info|shrinkme.org)#is",$host)){
           $referer = "https://themezon.net/";
@@ -997,20 +1040,31 @@ function bypass_shortlinks($url){
           }
       }
     } elseif(preg_match("#(rsshort.com)#is",$host)){
+      $ss = 50;
+
+  #unset($cookie);
       $run = build($url);
       $r = base_short($run["links"]);
       $cookie[] = $r["cookie"];
+      
+      
+      
+      
       
       $link = $r["url"];
       if(!$link){
         return "refresh";
       }
+      while(true){
       $r = base_short($link,0,0,$url,0,join('',$cookie));
       $cookie[] = $r["cookie"];
       $link1 = $r["url"];
       if(!$link1){
         return "refresh";
       }
+#      die(print_r($r));
+      print $rs = "https://".parse_url($link1)["host"]."/";sleep(5);
+      
       $r = base_short($link1,0,0,$link,0,join('',$cookie));
       $cookie[] = $r["cookie"];
       $link2 = $r["url"];
@@ -1023,24 +1077,117 @@ function bypass_shortlinks($url){
       if(!$link3){
         return "refresh";
       }
+
+#die(print_r($rs));
       $r = base_short($link3,0,0,$link2,0,join('',$cookie));
       $cookie[] = $r["cookie"];
-      $node = executeNode($r["res"]);
-      die(print_r($node));
-      
-        
+      $node = executeNode($r["res"]);die(print_r($node));
+      if(!$node["token_csrf"][1][1]){
+        continue;
+      }
+    #  die(print_r($r));
+      #$rs = $r["url1"][0];
+    #  L(16);
+#while($ss<= 400){#$ss++;
+
+#$xxx = $ss; print $xxx.n;
+print $rs.n;
+#L(20);
+$ss += 50;
+asu:
+$xxx = rand(200,250);
+$yyy = rand(33,35);
+$rsp = array("ic-hf-se" => $xxx.",".$yyy.",320","ic-hf-id" => 1,"ic-hf-hp" => "");
+$data_post = data_post($node["token_csrf"], "two", $rsp);
+parse_str($data_post, $ic);
+/*#die(print_r($ic));
+$eol = "\n";
+$boundary = "------WebKitFormBoundary";
+$content = 'Content-Disposition: form-data; name="payload"';
+  $code = az_num(16);
+  $data = '';
+  $data .= $boundary.$code.$eol;
+  $data .= $content.$eol.$eol;
+  $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "light", "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
+  $data .= $boundary.$code.'--';
+  
+#die($data);
+$r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),[$ic["_iconcaptcha-token"],$code]);
+$cookie[] = $r["cookie"];
+#die(print_r($r));
+
+$r = base_short($rs."iconcaptchar/captcharequest?payload=".base64_encode(json_encode(["i" => 1, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])),0,0,$rs,0,join('',$cookie));
+$cookie[] = $r["cookie"];
+
+#die(print_r($r));
+
+if(!$r["res"]){
+ print "ok".n;
+ continue;
+}
+die(analysis_icon($r["res"]));
+
+*/
+$eol = "\n";
+$boundary = "------WebKitFormBoundary";
+$content = 'Content-Disposition: form-data; name="payload"';
+  $code = az_num(16);
+  $data = '';
+  $data .= $boundary.$code.$eol;
+  $data .= $content.$eol.$eol;
+  $data .= base64_encode(json_encode(["i" => 1, "x" => $xxx, "y" => $yyy, "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
+  $data .= $boundary.$code.'--';
+  
+#die($data);
+$r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),[$ic["_iconcaptcha-token"],$code]);
+
+print_r($data);
+if($r["status"] == 400){
+ print "ok".n;#die(print_r($r));
+ continue;
+}
+if($r["status"] >= 201){
+ print "ok".n;
+ continue;
+}
+$cookie[] = $r["cookie"];
+die(print_r($r));
+
+#L(15);
+$r = base_short($rs,0,$data_post,$rs,0,join('',$cookie));
+
+
+if($r["status"] >= 201){
+ print "ok".n;#die(print_r($r));
+ continue;
+}
+$cookie[] = $r["cookie"];
+$link4 = $r["url"];
+die(print_r($r));
+if(!$link4){
+  continue;
+}
+#die(print_r($r));
+
+$r = base_short($link4,0,0,0,0,join('',$cookie));
+     $cookie[] = $r["cookie"];
+     
+     $node = executeNode($r["res"]);
+#die(file_put_contents("bitmun.html",$r["res"]));
+die(print_r($r));
+}
       } elseif(preg_match("#(clks.pro)#is",$host)){
         $run = build($url);#die(print_r($run));
-        $r = base_short($run["inc"],0,0,"https://mdn.lol/",0,0);#die(print_r($r));
+        $r = base_short($run["inc"],0,0,"https://mdn.lol/",0,0);#print_r($r);
+        if(preg_match("#(-cut|final)#is",$r["url"])){
+          print "limit";
+          return "refresh";
+        }
         if($r["url"]){
           L(90);
           print h."success";
           r();
           parse_str(explode("?",$r["url"])[1], $get);
-          if(preg_match("#(-cut|final)#is",$r["url"])){
-            print "limit";
-            return "refresh";
-          }
           if($get["get"]){
             return base64_decode($get["get"]);
           } else {
@@ -1316,4 +1463,169 @@ function config(){
   $config[] = "cashurl.win";
   $config[] = "shortplus.xyz";
   return $config;
+}
+
+function analysis_icon($img){
+#coba2.png
+# file_put_contents("coba".rand(11,999).".png",$img);
+  #$img = file_get_contents("coba9.png");
+  if(300 >= strlen($img)){
+    print m."image not found!";
+    r();
+    return "";
+  }
+  $isx = [
+      [0, 54, 108, 162, 214, 267],
+    [0, 67, 140, 202, 262],
+    //[0, 54, 108, 162, 214, 267]    
+    ];
+    for($o=0;$o<count($isx);$o++){
+      for($z=0;$z<count($isx[$o]);$z++){
+        ob_start();
+        $image = imagecreatefromstring($img);
+        $pixel = min(imagesx($image), imagesy($image));
+        $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $pixel, 'height' => $pixel]);
+       #imagefilter($image, IMG_FILTER_EDGEDETECT);
+       imagefilter($image, IMG_FILTER_NEGATE);
+       imagepng($image);
+       imagedestroy($image);
+        
+        
+       
+      # exit;
+        
+        $data = ob_get_contents();
+        ob_end_clean();
+
+
+ $file[] = strlen(trimed($data));
+ }
+
+       /* $bo = array_count_values($file);
+        print_r($bo);
+        #die(print_r($bo));
+        for($e=0;$e<count($bo);$e++){
+          $valid[] = $bo[$file[1]];
+        }
+          if(count($valid) >= 4){
+            unset($dark);
+            unset($valid);
+            unset($file_size);
+            unset($file);
+            continue;
+          }*/
+          
+ #die(print_r($file));
+ print_r($file);
+$nn = array_count_values($file);
+print_r($nn);
+print count($isx[$o])."\n";
+if(count($isx[$o]) == 6){
+if(count($nn) >= 4){
+unset($file);
+unset($nn);
+continue;}
+} /*elseif(count($isx[$o]) == 5){
+if(count($nn) == 5){
+unset($file);
+unset($nn);
+continue;}
+}*/
+#die(print_r($nn));
+if(count($nn) >= 4){
+print "dark\n";
+for($d=0;$d<count($file);$d++){
+for($f=0;$f<count($file);$f++){
+for($b=0;$b<count($file)*2;$b++){
+if(
+
+$file[$d]+$b >= $file[$f]
+#$file[$f] >= $file[$d]+$b
+){
+
+$dark[$d] = str_replace($file[$d], $file[$f] + $b,$file[$d]);
+}
+}
+
+}
+}
+
+$file_size = $dark;
+
+} else {
+$file_size = $file;
+}
+
+
+print count($isx[$o])."\n";
+print_r($file_size);
+#die(print_r($file));
+
+        $bo = array_count_values($file_size);
+        #die(print_r($bo));
+        for($e=0;$e<count($bo);$e++){
+          $valid[] = $bo[$file_size[1]];
+        }
+          if(count($valid) >= 4){
+            unset($dark);
+            unset($valid);
+            unset($file_size);
+            unset($file);
+            continue;
+          }
+      
+                      $array = array_count_values($file_size);
+            for($i=0;$i<count($file_size);$i++){
+              if(!$file_size[$i]){
+                break;
+              }
+              $code[] = $array[$file_size[$i]];
+            }
+            for($i=0;$i<count($file_size);$i++){
+              if($code[$i] == 1){
+                $proses  = "$i";  
+                break;
+              }
+            }
+            if($proses == null){
+              for($i=0;$i<count($file_size);$i++){
+                if($code[$i] == 2){
+                  $proses  = "$i";
+                  break;
+                }
+              }
+            }
+      
+          if(count($isx[$o]) == 5){
+            $key = [
+              rand(20, 40),
+              rand(80,95),
+              rand(160,180),
+              rand(220, 240),
+              rand(260, 300)
+              ];
+          } elseif(count($isx[$o]) == 6){
+            $key = [
+              rand(30, 40),
+              rand(80, 90),
+              rand(130, 140),
+              rand(190, 200),
+              rand(230, 240),
+              rand(290, 300)
+              ];
+          }
+          $y = rand(20,rand(25,30));
+          $microtime = ["ts" => round(time() * 1000)];
+          $load = ["i", "x", "y", "w", "a"];
+          $results = $key[$proses];
+          $pay = [1, $results, $y, 320, 2];
+          if($results){
+            $answer = array_combine($load,$pay);
+            $answer_enc = json_encode(array_merge($answer,$microtime));
+            return [
+              "token" => base64_encode($answer_enc),
+              "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]
+              ])];
+          }
+    }
 }
