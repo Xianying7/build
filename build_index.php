@@ -58,7 +58,13 @@ function az_num($amount = false){
   }
 }
 
-
+function new_cookie($cookie_old, $cookie_new){
+    $array = array('&' => '%26', '+' => '%2B', ';' => '&');
+    parse_str(strtr($cookie_old, $array), $old);
+    parse_str(strtr($cookie_new, $array), $new);
+    $array_merge = array_merge($old, $new);
+    return http_build_query($array_merge, '', ';', PHP_QUERY_RFC3986);
+}
 
 
 function multiexplode($delimiters,$string){
