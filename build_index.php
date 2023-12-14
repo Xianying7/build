@@ -82,15 +82,17 @@ function arr_rand($my_array = array()) {
   return array_merge($copy);
 }
 
+
 function set_cookie($result){
-preg_match_all('/^Set-Cookie:\s*([^;\r\n]*)/mi', $result, $matches);
-$cookies = array();
-foreach($matches[1] as $item){
+  preg_match_all('/^Set-Cookie:\s*([^;\r\n]*)/mi', $result, $matches);
+  $cookies = array();
+  foreach($matches[1] as $item){
     parse_str($item, $cookie);
     $cookies = array_merge($cookies, $cookie);
+  }
+  return urldecode(http_build_query($cookies, '', ';', PHP_QUERY_RFC3986)).";";
 }
-return str_replace(["0[","]"],"",str_replace("&0[",";",urldecode(http_build_query([$cookies])))).";";
-}
+
 
 function movePage(){
         return [
