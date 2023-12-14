@@ -1283,7 +1283,6 @@ function data_post($t, $type, $array = 0){
 
 
 
-
 function config(){
   $config[] = "Linksfly";
   $config[] = "URLHives";
@@ -1332,6 +1331,7 @@ function config(){
   $config[] = "linksly-co";
   $config[] = "linksly.co";
   $config[] = "Linksly";
+  $config[] = "Lsly";
   $config[] = "Shortest";
   $config[] = "Hatelink";
   $config[] = "Mitly";
@@ -1344,6 +1344,7 @@ function config(){
   $config[] = "Cut-Urls";
   $config[] = "Exe";
   $config[] = "exe-io";
+  $config[] = "exeio";
   $config[] = "Exe.io";
   $config[] = "CPLink";
   $config[] = "Mtraffics";
@@ -1362,6 +1363,7 @@ function config(){
   $config[] = "Usalink";
   $config[] = "usalink-io";
   $config[] = "usalink.io";
+  $config[] = "Shrinkme.io";
   $config[] = "shrinkme-io";
   $config[] = "ShrinkmeLink";
   $config[] = "shrinkme.link";
@@ -1406,6 +1408,8 @@ function config(){
   $config[] = "Clicksfly";
   $config[] = "Genlink";
   $config[] = "ctr";
+  $config[] = "ctrsh";
+  $config[] = "ctr.sh";
   $config[] = "ouo";
   $config[] = "revly";
   $config[] = "easycut";
@@ -1437,6 +1441,7 @@ function config(){
   $config[] = "EazyUrl";
   $config[] = "FAHO";
   $config[] = "ClockAds";
+  $config[] = "Clockads.in";
   $config[] = "Bitss";
   $config[] = "LinkHives";
   $config[] = "Adbitfly";
