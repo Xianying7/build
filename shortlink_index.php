@@ -1,21 +1,5 @@
 <?php
 
-/*
-$a = json_decode('{"data":{"clicksAvailable":"95371974","avarageDrops":"168.8292","ranFunc":"_50GtSjyHXW","timeLength":10,"visitBtnName":"_iTNGogngZ8","validateBtnName":"_validate"},"memo":{"id":"9qpL2yozF8xeBD595QEq","name":"member.task.sitefriends.visit-website","path":"member/task/sitefriends","method":"GET","children":[],"lazyLoaded":true,"errors":[],"locale":"en"},"checksum":"e3f5fa99e736c6ce297d9ebf7fdb9970bf0f92e6a179b02555130e3dda69acd9"}');
-
-$b = json_decode('{"_token":"94jMRYBwshA3xAffa0ULnzuFXHPdmXQNELHyIdw7","components":[{"snapshot":"{\"data\":{\"clicksAvailable\":\"95371974\",\"avarageDrops\":\"168.8292\",\"ranFunc\":\"_50GtSjyHXW\",\"timeLength\":10,\"visitBtnName\":\"_iTNGogngZ8\",\"validateBtnName\":\"_validate\"},\"memo\":{\"id\":\"9qpL2yozF8xeBD595QEq\",\"name\":\"member.task.sitefriends.visit-website\",\"path\":\"member\\/task\\/sitefriends\",\"method\":\"GET\",\"children\":[],\"lazyLoaded\":false,\"errors\":[],\"locale\":\"en\"},\"checksum\":\"8841f3246085b5ad31d6f53c2a731dfb6ef8be1492519ade51832d43bb20e2af\"}","updates":{},"calls":[{"path":"","method":"__dispatch","params":["validate-visit",{"visitResponse":"XoeCQwWzaWhTtXF","adsId":29}]}]}]}');
-print_r($a);
-print "\n\n";
-print_r($b);
-exit;
-*/
-#print html_entity_decode('<div wire:snapshot="{&quot;data&quot;:{&quot;adsData&quot;:[null,{&quot;class&quot;:&quot;App\Models\WebAds&quot;,&quot;key&quot;:12,&quot;s&quot;:&quot;mdl&quot;}]},&quot;memo&quot;:{&quot;id&quot;:&quot;aj6qXjVFGCVvdn283X8m&quot;,&quot;name&quot;:&quot;components.ads&quot;,&quot;path&quot;:&quot;member/dashboard&quot;,&quot;method&quot;:&quot;GET&quot;,&quot;children&quot;:[],&quot;lazyLoaded&quot;:true,&quot;errors&quot;:[],&quot;locale&quot;:&quot;en&quot;},&quot;checksum&quot;:&quot;0ddeba9214f916c6ca368874184332ce6318e9badd044dc8f575046b0af5de12&quot;}" wire:effects="[]" wire:id="aj6qXjVFGCVvdn283X8m">');exit;
-#https://blog.mphealth.online/?p=25
-#https://techyuth.xyz/blog/QuL8x
-#ini adalah data beta test shortlinks error no komplen
-#eval(str_replace("<?php","",file_get_contents("build_index.php")));
-#die(print_r(executeNode(file_get_contents("response_body.html"))));
-#$h = ["Proxy-Authorization: Basic dG9ycnVzOndyZWNFZkpvdG5vcXVh"];print_r(curl("https://ifconfig.me/ip", $h,0,0,0,0));exit;
 
 #https://shortyearn.com/CBkp4ocd2d7
 #die(print_r(bypass_shortlinks("https://rsshort.com/nQeqd")));
@@ -380,10 +364,10 @@ function bypass_shortlinks($url){
         r();
         return $r1;
       }
-    } elseif(preg_match("#(link1s.com|link1s.net|insfly.pw|earnify.pro|links.earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|go.shorti.io|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com|shrinkme.info|shortplus.xyz|atglinks.com|link.short2url.in|link.revly.click|go.tinygo.co|go.wez.info|go.viewfr.com|cashlinko.com|linkjust.com|dz4link.com|panylink.com|panyflay.me|panyshort.link|droplink.co|oscut.space|oscut.fun|kyshort.xyz|go.revcut.net|go.urlcut.pro|go.faho.us|go.eazyurl.xyz|clockads.in|go.shtfly.com|go.bitss.sbs|dailytime.store|go.foxylinks.site|m.pkr.pw|linkjust.com|adbitfly.com|adshort.co|lollty.com|10short.com|short2money.com|shrinkme.org|sox.link)#is",$host)){
+    } elseif(preg_match("#(link1s.com|link1s.net|insfly.pw|earnify.pro|links.earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|go.shorti.io|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com|shrinkme.info|shortplus.xyz|atglinks.com|link.short2url.in|link.revly.click|go.tinygo.co|go.wez.info|go.viewfr.com|cashlinko.com|linkjust.com|dz4link.com|panylink.com|panyflay.me|panyshort.link|droplink.co|oscut.space|oscut.fun|kyshort.xyz|go.revcut.net|go.urlcut.pro|go.faho.us|go.eazyurl.xyz|clockads.in|go.shtfly.com|go.bitss.sbs|dailytime.store|go.foxylinks.site|m.pkr.pw|linkjust.com|adbitfly.com|adshort.co|lollty.com|10short.com|short2money.com|shrinkme.org|teralinks.in|urlpay.in|linksly.pw)#is",$host)){
         if(preg_match("#(link1s.com)#is",$host)){
           $referer = "https://google.com/";
-        } elseif(preg_match("#(insfly.pw|oscut.space|oscut.fun|kyshort.xyz|clockads.in)#is",$host)){
+        } elseif(preg_match("#(insfly.pw|oscut.space|oscut.fun|kyshort.xyz|clockads.in|linksly.pw)#is",$host)){
           $referer = "https://clk.wiki/";
         } elseif(preg_match("#(shrinke.us|shrinkme.info|shrinkme.org)#is",$host)){
           $referer = "https://themezon.net/";
@@ -459,6 +443,10 @@ function bypass_shortlinks($url){
           $referer = "https://10short.info/";
         } elseif(preg_match("#(sox.link)#is",$host)){
           $referer = "https://coincroco.com/";
+        } elseif(preg_match("#(teralinks.in)#is",$host)){
+          $referer = "https://daddy.webseriesreel.in/";
+        } elseif(preg_match("#(urlpay.in)#is",$host)){
+          $referer = "https://daddy.helpowi.com/";
         } else {
           $referer = 0;
         }
@@ -472,7 +460,7 @@ function bypass_shortlinks($url){
         } else {
           $proxy = 0;
         }
-        $url = str_replace("short2money.com","forextrader.site/NewLink",str_replace("lollty.com","forextrader.site/SkipLink",str_replace("adbitfly.com/short","adbitfly.com",str_replace("m.pkr.pw","jameeltips.us/blog",str_replace("go.foxylinks.site","link.foxylinks.site",str_replace("go.bitss.sbs","bitss.sbs",str_replace("go.shtfly.com","shtfly.com",str_replace("go.eazyurl.xyz","eazyurl.xyz",str_replace("go.faho.us","faho.us",str_replace("go.urlcut.pro","urlcut.pro",str_replace("go.revcut.net","revcut.net",str_replace("kyshort.xyz/go","kyshort.xyz",str_replace("go.viewfr.com","thanks.viewfr.com",str_replace("go.wez.info","thanks.wez.info",str_replace("go.tinygo.co","thanks.tinygo.co",str_replace("links.earnify.pro","earnify.pro",str_replace("link.revly.click","en.revly.click",str_replace("link.short2url.in","techyuth.xyz/blog",str_replace("short.dash-free.com","dash-free.com",str_replace("link.vielink.top","short.vielink.top",str_replace("usalink.io","link.theconomy.me",str_replace("url.beycoin.xyz/short","url.beycoin.xyz",str_replace("link.adlink.click","blog.adlink.click",str_replace("linksfly.link","go.linksfly.link",str_replace(["go.shorti.io","shorti.io"],"blog.financeandinsurance.xyz",str_replace("link.shrinkme.link","blog.shrinkme.link",str_replace("go.hatelink.me","g0.hatelink.me",str_replace("linksly.co","go.linksly.co",str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace(["shrinkme.org","shrinkme.info"],"en.shrinke.me",str_replace("shrinke.us","en.shrinke.me",$url))))))))))))))))))))))))))))))))))))));
+        $url = str_replace("urlpay.in","go.urlpay.in",str_replace("teralinks.in","go.teralinks.in",str_replace("short2money.com","forextrader.site/NewLink",str_replace("lollty.com","forextrader.site/SkipLink",str_replace("adbitfly.com/short","adbitfly.com",str_replace("m.pkr.pw","jameeltips.us/blog",str_replace("go.foxylinks.site","link.foxylinks.site",str_replace("go.bitss.sbs","bitss.sbs",str_replace("go.shtfly.com","shtfly.com",str_replace("go.eazyurl.xyz","eazyurl.xyz",str_replace("go.faho.us","faho.us",str_replace("go.urlcut.pro","urlcut.pro",str_replace("go.revcut.net","revcut.net",str_replace("kyshort.xyz/go","kyshort.xyz",str_replace("go.viewfr.com","thanks.viewfr.com",str_replace("go.wez.info","thanks.wez.info",str_replace("go.tinygo.co","thanks.tinygo.co",str_replace("links.earnify.pro","earnify.pro",str_replace("link.revly.click","en.revly.click",str_replace("link.short2url.in","techyuth.xyz/blog",str_replace("short.dash-free.com","dash-free.com",str_replace("link.vielink.top","short.vielink.top",str_replace("usalink.io","link.theconomy.me",str_replace("url.beycoin.xyz/short","url.beycoin.xyz",str_replace("link.adlink.click","blog.adlink.click",str_replace("linksfly.link","go.linksfly.link",str_replace(["go.shorti.io","shorti.io"],"blog.financeandinsurance.xyz",str_replace("link.shrinkme.link","blog.shrinkme.link",str_replace("go.hatelink.me","g0.hatelink.me",str_replace("linksly.co","go.linksly.co",str_replace("link.usalink.io","link.theconomy.me",str_replace("go.megafly.in","get.megafly.in",str_replace("go.megaurl.in","get.megaurl.in",str_replace("go.mtraffics.com","get.mtraffics.com",str_replace("go.illink.net","illink.net",str_replace("go.owllink.net","owllink.net",str_replace("go.birdurls.com","birdurls.com",str_replace("nx.chainfo.xyz","go.bitcosite.com",str_replace(["shrinkme.org","shrinkme.info"],"en.shrinke.me",str_replace("shrinke.us","en.shrinke.me",$url))))))))))))))))))))))))))))))))))))))));
         $run = build($url);#die(print_r($run));
         $r = base_short($run["links"],0,0,$referer,$cloud,0,$proxy);
         $cookie[] = $r["cookie"];
@@ -1467,6 +1455,10 @@ function config(){
   $config[] = "10Short.com";
   $config[] = "cashurl.win";
   $config[] = "shortplus.xyz";
+  $config[] = "urlpay";
+  $config[] = "urlpay.in";
+  $config[] = "teralinks";
+  $config[] = "teralinks.in";
   return $config;
 }
 
