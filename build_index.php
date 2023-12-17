@@ -1302,3 +1302,168 @@ const b = "\033[1;34m",
       n = "\n";
 
 
+
+function analysis_icon($img){
+#coba2.png
+# file_put_contents("coba".rand(11,999).".png",$img);
+  #$img = file_get_contents("coba9.png");
+  if(300 >= strlen($img)){
+    print m."image not found!";
+    r();
+    return "";
+  }
+  $isx = [
+      [0, 54, 108, 162, 214, 267],
+    [0, 67, 140, 202, 262],
+    //[0, 54, 108, 162, 214, 267]    
+    ];
+    for($o=0;$o<count($isx);$o++){
+      for($z=0;$z<count($isx[$o]);$z++){
+        ob_start();
+        $image = imagecreatefromstring($img);
+        $pixel = min(imagesx($image), imagesy($image));
+        $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $pixel, 'height' => $pixel]);
+       #imagefilter($image, IMG_FILTER_EDGEDETECT);
+       imagefilter($image, IMG_FILTER_NEGATE);
+       imagepng($image);
+       imagedestroy($image);
+        
+        
+       
+      # exit;
+        
+        $data = ob_get_contents();
+        ob_end_clean();
+
+
+ $file[] = strlen(trimed($data));
+ }
+
+       /* $bo = array_count_values($file);
+        print_r($bo);
+        #die(print_r($bo));
+        for($e=0;$e<count($bo);$e++){
+          $valid[] = $bo[$file[1]];
+        }
+          if(count($valid) >= 4){
+            unset($dark);
+            unset($valid);
+            unset($file_size);
+            unset($file);
+            continue;
+          }*/
+          
+ #die(print_r($file));
+ print_r($file);
+$nn = array_count_values($file);
+print_r($nn);
+print count($isx[$o])."\n";
+if(count($isx[$o]) == 6){
+if(count($nn) >= 4){
+unset($file);
+unset($nn);
+continue;}
+} /*elseif(count($isx[$o]) == 5){
+if(count($nn) == 5){
+unset($file);
+unset($nn);
+continue;}
+}*/
+#die(print_r($nn));
+if(count($nn) >= 4){
+print "dark\n";
+for($d=0;$d<count($file);$d++){
+for($f=0;$f<count($file);$f++){
+for($b=0;$b<count($file)*2;$b++){
+if(
+
+$file[$d]+$b >= $file[$f]
+#$file[$f] >= $file[$d]+$b
+){
+
+$dark[$d] = str_replace($file[$d], $file[$f] + $b,$file[$d]);
+}
+}
+
+}
+}
+
+$file_size = $dark;
+
+} else {
+$file_size = $file;
+}
+
+
+print count($isx[$o])."\n";
+print_r($file_size);
+#die(print_r($file));
+
+        $bo = array_count_values($file_size);
+        #die(print_r($bo));
+        for($e=0;$e<count($bo);$e++){
+          $valid[] = $bo[$file_size[1]];
+        }
+          if(count($valid) >= 4){
+            unset($dark);
+            unset($valid);
+            unset($file_size);
+            unset($file);
+            continue;
+          }
+      
+                      $array = array_count_values($file_size);
+            for($i=0;$i<count($file_size);$i++){
+              if(!$file_size[$i]){
+                break;
+              }
+              $code[] = $array[$file_size[$i]];
+            }
+            for($i=0;$i<count($file_size);$i++){
+              if($code[$i] == 1){
+                $proses  = "$i";  
+                break;
+              }
+            }
+            if($proses == null){
+              for($i=0;$i<count($file_size);$i++){
+                if($code[$i] == 2){
+                  $proses  = "$i";
+                  break;
+                }
+              }
+            }
+      
+          if(count($isx[$o]) == 5){
+            $key = [
+              rand(20, 40),
+              rand(80,95),
+              rand(160,180),
+              rand(220, 240),
+              rand(260, 300)
+              ];
+          } elseif(count($isx[$o]) == 6){
+            $key = [
+              rand(30, 40),
+              rand(80, 90),
+              rand(130, 140),
+              rand(190, 200),
+              rand(230, 240),
+              rand(290, 300)
+              ];
+          }
+          $y = rand(20,rand(25,30));
+          $microtime = ["ts" => round(time() * 1000)];
+          $load = ["i", "x", "y", "w", "a"];
+          $results = $key[$proses];
+          $pay = [1, $results, $y, 320, 2];
+          if($results){
+            $answer = array_combine($load,$pay);
+            $answer_enc = json_encode(array_merge($answer,$microtime));
+            return [
+              "token" => base64_encode($answer_enc),
+              "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]
+              ])];
+          }
+    }
+}
