@@ -1,10 +1,11 @@
 <?php
 
 
+#eval(str_replace('<?php',"",file_get_contents(("build_index.php"))));
 #https://shortyearn.com/CBkp4ocd2d7
-#die(print_r(bypass_shortlinks("https://rsshort.com/nQeqd")));
+#die(print_r(bypass_shortlinks("https://rsshort.com/GR8D9za0pyL")));
 #print_r(bypass_shortlinks("https://clks.pro/QxNRt1"));
-#print_r(bypass_shortlinks("https://exe.io/XPvcfO6"));
+#print_r(bypass_shortlinks("https://earnow.online/L5u0D6HU"));
 #print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
 #print_r(bypass_shortlinks("https://clks.pro/onfbBNh7OOdd0JS"));
@@ -215,7 +216,11 @@ function h_short($xml = 0, $referer = 0, $agent =0, $boundary = 0){
 
 
 function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0,$boundary=0){
+    asu:
     $r = curl($url,h_short($xml,$referer,$agent,$boundary),$data,false,false,$alternativ_cookie);
+    if($r[0][1]["http_code"] == "0"){
+      goto asu;
+    }
     preg_match('#(reCAPTCHA_site_key":"|data-sitekey=")(.*?)(")#is',$r[1],$recaptchav2);
     preg_match('#(invisible_reCAPTCHA_site_key":")(.*?)(")#is',$r[1],$invisible_recaptchav2);
     preg_match('#(hcaptcha_checkbox_site_key":"|h-captcha" data-sitekey=")(.*?)(")#is',$r[1],$hcaptcha);
@@ -234,11 +239,10 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
     preg_match_all('#(dirrectSiteCode = |ai_data_id=|ai_ajax_url=)"(.*?)(")#is',$r[1],$code_data_ajax);
     preg_match('#(sessionId: ")(.*?)(")#is',$r[1],$sessionId);
     preg_match('#(var Wtpsw = )(.*?)(;)#is',$r[1],$json_ajax);//die(print_r($r[0]));
-    parse_str(str_replace(";",",&",set_cookie($r[0][2])), $out);
     return [
         "status" => $r[0][1]["http_code"],
         "cookie" => set_cookie($r[0][2]),
-        "data" => str_replace(",","",$out),
+        "data" => set_cookie($r[0][2], 1),
         "res" => $r[1],
         "hcaptcha" => $hcaptcha[2],
         "recaptchav2" => $recaptchav2[2],
@@ -273,7 +277,7 @@ function executeNode($r, $stripslashes = 0){
     }
     if($res[0]){
       $html = html_entity_decode(str_replace($out[0],$res, $r));
-      if($xxxxx){
+      if($stripslashes){
         $x =  stripslashes($html);
       } else {
         $x = $html;
@@ -1027,68 +1031,177 @@ function bypass_shortlinks($url){
             return $r1["url"];
           }
       }
-    } elseif(preg_match("#(rsshort.com)#is",$host)){
-      $ss = 50;
-
-  #unset($cookie);
+    } elseif(preg_match("#(earnow.online)#is",$host)){
+      while(true){
       $run = build($url);
-      $r = base_short($run["links"]);
+      $r = base_short($url);
+      unset($cookie);
+      $link = $r["url"];
+      if(!parse_url($link)["scheme"]){
+        unset($cookie);
+        continue;
+      }
+      $cookie[] = $r["cookie"];
+      $r = base_short($link, 0, 0, $url, 0, join('',$cookie));
+
+      $link = $r["url"];
+      if(!parse_url($link)["scheme"]){
+        unset($cookie);
+        continue;
+      }
       $cookie[] = $r["cookie"];
       
+      $r = base_short($link, 0, 0, $link, 0, join('',$cookie));
+      $link = str_replace("http:","https:",$r["url5"]);
+      if(!parse_url($link)["scheme"]){
+        unset($cookie);
+        continue;
+      }
+      $cookie[] = $r["cookie"];
+     
+      $r = base_short($link, 0, 0, $link, 0, join('',$cookie));
+      $link = $r["url"];
+     if(!parse_url($link)["scheme"]){
+        unset($cookie);
+        continue;
+      }
+     
+      $cookie[] = $r["cookie"];
+
+      $r = base_short($link, 0, 0, $link, 0, join('',$cookie));
+      
+      $cookie[] = $r["cookie"];
+      $t = $r["token_csrf"];
+      $method = "recaptchav2";
+      $cap = multibot($method,$r[$method],$link);
+      if(!$cap){
+        unset($cookie);
+        continue;
+      }
+      $rsp = array("g-recaptcha-response" => $cap);
+      $data = data_post($t, "null", $rsp);
+      $r = base_short($link, 0, $data, $link, 0, join('',$cookie));
+      
+      $cookie[] = $r["cookie"];
+      $t = $r["token_csrf"];
+      L(25);
+      $data = data_post($t, "null");
+      $r = base_short($link, 0, $data, $link, 0, join('',$cookie));
+      
+      $cookie[] = $r["cookie"];
+      $t = $r["token_csrf"];
+      L(25);
+      $url = $link;
+      $data = data_post($t, "null");
+      $r = base_short($link, 1, $data, 0, 0, join('',$cookie));
+      $link = $r["url"];
+     #die(print_r($r));
+      if(preg_match("#key#is",$link)){
+        $cookie[] = $r["cookie"];
+        $t = $r["token_csrf"];
+        break;
+      }
       
       
       
+      }
+      
+      
+      
+      
+      while(true){
+      $r = base_short($link, 0, 0, $url, 0, join('',$cookie));
+      $link = $r["url"];
+      if(!parse_url($link)["scheme"]){
+        continue;
+      }
+      $cookie1[] = $r["cookie"];
+      $r = base_short($link, 0, 0, $link, 0, join('',$cookie1));
+      
+      $link = str_replace("http:","https:",$r["url5"]);
+      if(!parse_url($link)["scheme"]){
+        unset($cookie1);
+        continue;
+      }
+      $cookie1[] = $r["cookie"];
+     
+      $r = base_short($link, 0, 0, $link, 0, join('',$cookie1));
       
       $link = $r["url"];
-      if(!$link){
-        return "refresh";
+     if(!parse_url($link)["scheme"]){
+        unset($cookie1);
+        continue;
       }
-      while(true){
-      $r = base_short($link,0,0,$url,0,join('',$cookie));
+     
+      $cookie1[] = $r["cookie"];
+      $data = data_post($t, "null");
+      $r = base_short($link, 0, $link, $link, 0, join('',$cookie1));
+      $cookie1[] = $r["cookie"];
+
+
+$method = "recaptchav2";
+      $cap = multibot($method,$r[$method],$link);
+      if(!$cap){
+        unset($cookie);
+        continue;
+      }
+      $rsp = array("g-recaptcha-response" => $cap);
+      $data = data_post($t, "null", $rsp);
+      $r = base_short($link, 0, $data, $link, 0, join('',$cookie));
+
+      
+      die(print_r($r));
+      }
+      
+      
       $cookie[] = $r["cookie"];
-      $link1 = $r["url"];
+      $t = $r["token_csrf2"];
+      $method = "recaptchav3";
+      if($r[$method]){
+        $cap = recaptchav3($r[$method],$run["links"]);
+        $data = http_build_query([
+          explode('"',$t[2][0])[0] => $t[3][0],
+          explode('"',$t[2][1])[0] => $cap,
+          "v-token" => "bx"
+          ]);
+          L($coundown);
+          $r1 = base_short($run["go"][4],0,$data,$run["links"],0,join('',$cookie));
+          if($r1["url"]){
+            print h."success";
+            r();
+            unset($cookie);
+            return $r1["url"];
+          }
+      }
+    } elseif(preg_match("#(rsshort.comj)#is",$host)){
+      while(true){
+        unset($cookie);
+        $r = base_short("http://api.scraperapi.com?api_key=eeee127eba439d223669706a2cf4f12a&keep_headers=true&url=".$url);
+        
+        $link = $r["url2"][0];
+        if(!$link){
+          return "refresh";
+        }
+        $cookie[] = $r["cookie"];
+
+      asu:
+      $r = base_short($link,0,0,$link,0,join('',$cookie));
+      $link1 = $r["url1"][0];
       if(!$link1){
         return "refresh";
       }
-#      die(print_r($r));
-      print $rs = "https://".parse_url($link1)["host"]."/";sleep(5);
-      
-      $r = base_short($link1,0,0,$link,0,join('',$cookie));
       $cookie[] = $r["cookie"];
-      $link2 = $r["url"];
-      if(!$link2){
-        return "refresh";
-      }
-      $r = base_short($link2,0,0,$link1,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $link3 = $r["url2"][0];
-      if(!$link3){
-        return "refresh";
-      }
+      $node = executeNode($r["res"],1);
+      $rs = "https://".parse_url($link1)["host"]."/";
+#die(print_r($r));
 
-#die(print_r($rs));
-      $r = base_short($link3,0,0,$link2,0,join('',$cookie));
-      $cookie[] = $r["cookie"];
-      $node = executeNode($r["res"]);die(print_r($node));
-      if(!$node["token_csrf"][1][1]){
-        continue;
-      }
-    #  die(print_r($r));
-      #$rs = $r["url1"][0];
-    #  L(16);
-#while($ss<= 400){#$ss++;
 
-#$xxx = $ss; print $xxx.n;
-print $rs.n;
-#L(20);
-$ss += 50;
-asu:
 $xxx = rand(200,250);
 $yyy = rand(33,35);
 $rsp = array("ic-hf-se" => $xxx.",".$yyy.",320","ic-hf-id" => 1,"ic-hf-hp" => "");
 $data_post = data_post($node["token_csrf"], "two", $rsp);
 parse_str($data_post, $ic);
-/*#die(print_r($ic));
+#die(print_r($ic));
 $eol = "\n";
 $boundary = "------WebKitFormBoundary";
 $content = 'Content-Disposition: form-data; name="payload"';
@@ -1101,21 +1214,20 @@ $content = 'Content-Disposition: form-data; name="payload"';
   
 #die($data);
 $r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),[$ic["_iconcaptcha-token"],$code]);
-$cookie[] = $r["cookie"];
+if($r["status"] >= 400){
+ continue;
+}
+#$cookie[] = $r["cookie"];
 #die(print_r($r));
 
 $r = base_short($rs."iconcaptchar/captcharequest?payload=".base64_encode(json_encode(["i" => 1, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])),0,0,$rs,0,join('',$cookie));
-$cookie[] = $r["cookie"];
+if($r["status"] >= 400 or !$r["res"]){
+ goto asu;
+}
+#$cookie[] = $r["cookie"];
 
 #die(print_r($r));
 
-if(!$r["res"]){
- print "ok".n;
- continue;
-}
-die(analysis_icon($r["res"]));
-
-*/
 $eol = "\n";
 $boundary = "------WebKitFormBoundary";
 $content = 'Content-Disposition: form-data; name="payload"';
@@ -1125,45 +1237,73 @@ $content = 'Content-Disposition: form-data; name="payload"';
   $data .= $content.$eol.$eol;
   $data .= base64_encode(json_encode(["i" => 1, "x" => $xxx, "y" => $yyy, "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
   $data .= $boundary.$code.'--';
-  
-#die($data);
 $r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),[$ic["_iconcaptcha-token"],$code]);
+if($r["status"] >= 400){
+ goto asu;
+}
 
-print_r($data);
-if($r["status"] == 400){
- print "ok".n;#die(print_r($r));
- continue;
-}
-if($r["status"] >= 201){
- print "ok".n;
- continue;
-}
-$cookie[] = $r["cookie"];
-die(print_r($r));
+#$cookie[] = $r["cookie"];
+
 
 #L(15);
-$r = base_short($rs,0,$data_post,$rs,0,join('',$cookie));
-
-
-if($r["status"] >= 201){
- print "ok".n;#die(print_r($r));
- continue;
-}
-$cookie[] = $r["cookie"];
-$link4 = $r["url"];
-die(print_r($r));
-if(!$link4){
+$r = base_short($link,0,$data_post,$rs,0,join('',$cookie));
+$url = $r["url"];
+if(!$url){
   continue;
 }
-#die(print_r($r));
+$cookie[] = $r["cookie"];
+break;
+}
 
-$r = base_short($link4,0,0,0,0,join('',$cookie));
+
+$r = base_short($url,0,0,0,0,join('',$cookie));
      $cookie[] = $r["cookie"];
+    
+     $node = executeNode($r["res"],1);
+     #die(print_r($node)); 
+     $data = data_post($node["token_csrf"], "one");
+     #L(20);
+     $r = base_short($url,0,$data,$url,0,join('',$cookie));
      
-     $node = executeNode($r["res"]);
+
+$link = $r["url"];
+$cookie[] = $r["cookie"];
+
+$r = base_short($link,0,0,0,0,join('',$cookie));
+     $node = executeNode($r["res"],1);
+     $data = data_post($node["token_csrf"], "one");
+     $r = base_short($link,0,$data,$link,0,join('',$cookie));
+     /*
+     
+$link = $r["url"];
+if(!$link){
+  continue;
+}
+$cookie[] = $r["cookie"];
+*/
+
+/*
+$r = base_short($link,0,0,0,0,join('',$cookie));
+      $link1 = $r["url1"][0];
+      if(!$link1){
+        return "refresh";
+      }
+      $cookie[] = $r["cookie"];
+      $node = executeNode($r["res"],1);
+      $rs = "https://".parse_url($link)["host"]."/";
+     */
+
+     
+     #die(print_r($node)); 
+     
 #die(file_put_contents("bitmun.html",$r["res"]));
 die(print_r($r));
-}
+
+
+
+
+
+
       } elseif(preg_match("#(clks.pro)#is",$host)){
         $run = build($url);#die(print_r($run));
         $r = base_short($run["inc"],0,0,"https://mdn.lol/",0,0);#print_r($r);
@@ -1414,11 +1554,14 @@ function config(){
   $config[] = "panyshort.link";
   $config[] = "Cashlinko";
   $config[] = "viewfr-com";
+  $config[] = "viewfr.com";
   $config[] = "viewfr";
   $config[] = "TinyGo-co";
   $config[] = "TinyGo";
   $config[] = "Tiny.go";
+  $config[] = "Tiny.co";
   $config[] = "wez-info";
+  $config[] = "wez.info";
   $config[] = "wez";
   $config[] = "DropLink";
   $config[] = "Oscut";
