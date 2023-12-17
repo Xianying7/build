@@ -87,16 +87,15 @@ function arr_rand($my_array = array()) {
 
 function set_cookie($result, $array = 0){
   preg_match_all('/^Set-Cookie:\s*([^;\r\n]*)/mi', $result, $matches);
-  #$cookies = array();
+  $cookies = array();
   foreach($matches[1] as $item){
     parse_str($item, $cookie);
+    $cookies = array_merge($cookies, $cookie);
   }
   if($array){
-    return $cookie;
+    return $cookies;
   }
-  if($cookie){
-    return urldecode(http_build_query($cookie, '', ';', PHP_QUERY_RFC3986)).";";
-  }
+  return urldecode(http_build_query($cookies, '', ';', PHP_QUERY_RFC3986)).";";
 }
 
 
