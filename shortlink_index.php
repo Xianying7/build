@@ -3,7 +3,7 @@
 
 #eval(str_replace('<?php',"",file_get_contents(("build_index.php"))));
 #https://shortyearn.com/CBkp4ocd2d7
-#die(print_r(bypass_shortlinks("https://rsshort.com/GR8D9za0pyL")));
+#die(print_r(bypass_shortlinks("https://rsshort.com/GR8peyj1KNn")));
 #print_r(bypass_shortlinks("https://clks.pro/QxNRt1"));
 #print_r(bypass_shortlinks("https://earnow.online/L5u0D6HU"));
 #print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
@@ -191,10 +191,7 @@ function h_short($xml = 0, $referer = 0, $agent =0, $boundary = 0){
       $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v = b3;q=0.9';
     }
     if($boundary){
-      $headers[] = "Host: rsinsuranceinfo.com";
-      $headers[] = "origin: https://rsinsuranceinfo.com";
-      $headers[] = "x-iconcaptcha-token:".$boundary[0];
-      $headers[] = "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$boundary[1];
+      $headers[] = "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$boundary;
     }
     if($xml){
       $headers[] = 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8';
@@ -219,10 +216,10 @@ function h_short($xml = 0, $referer = 0, $agent =0, $boundary = 0){
 
 
 function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0,$boundary=0){
-    asu:
+    start:
     $r = curl($url,h_short($xml,$referer,$agent,$boundary),$data,false,false,$alternativ_cookie);
     if($r[0][1]["http_code"] == "0"){
-      goto asu;
+      goto start;
     }
     preg_match('#(reCAPTCHA_site_key":"|data-sitekey=")(.*?)(")#is',$r[1],$recaptchav2);
     preg_match('#(invisible_reCAPTCHA_site_key":")(.*?)(")#is',$r[1],$invisible_recaptchav2);
@@ -1176,138 +1173,76 @@ $method = "recaptchav2";
             return $r1["url"];
           }
       }
-    } elseif(preg_match("#(rsshort.comj)#is",$host)){
+    } elseif(preg_match("#(rsshort.com)#is",$host)){
+      $r = base_short("http://api.scraperapi.com?api_key=eeee127eba439d223669706a2cf4f12a&keep_headers=true&url=".$url);
+      $link = $r["url2"][0];
+      if(!$link){
+        return "refresh";
+      }
+      $cookie[] = $r["cookie"];
       while(true){
-        unset($cookie);
-        $r = base_short("http://api.scraperapi.com?api_key=eeee127eba439d223669706a2cf4f12a&keep_headers=true&url=".$url);
-        
-        $link = $r["url2"][0];
-        if(!$link){
+        $r = base_short($link,0,0,$link,0,join('',$cookie));
+        if($r["url"]){
+          print h."success";
+          r();
+          return $r["url"];
+        }
+        $link1 = $r["url1"][0];
+        if(!$link1){
           return "refresh";
         }
         $cookie[] = $r["cookie"];
-
-      asu:
-      $r = base_short($link,0,0,$link,0,join('',$cookie));
-      $link1 = $r["url1"][0];
-      if(!$link1){
-        return "refresh";
+        $cookie[] = array_reverse($cookie);
+        $node = executeNode($r["res"],1);
+        $rs = "https://".parse_url($link1)["host"]."/";
+        if($node["token_csrf"][1][1] == "_iconcaptcha-token"){
+          $xxx = rand(200,250);
+          $yyy = rand(33,35);
+          $rsp = array("ic-hf-se" => $xxx.",".$yyy.",320","ic-hf-id" => 1,"ic-hf-hp" => "");
+          $data_post = data_post($node["token_csrf"], "two", $rsp);
+          parse_str($data_post, $ic);
+          $eol = "\n";
+          $boundary = "------WebKitFormBoundary";
+          $content = 'Content-Disposition: form-data; name="payload"';
+          $code = az_num(16);
+          $data = '';
+          $data .= $boundary.$code.$eol;
+          $data .= $content.$eol.$eol;
+          $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "light", "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
+          $data .= $boundary.$code.'--';
+          $r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),$code);
+          if($r["status"] >= 400){
+            continue;
+          }
+          $r = base_short($rs."iconcaptchar/captcharequest?payload=".base64_encode(json_encode(["i" => 1, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])),0,0,$rs,0,join('',$cookie));
+          if($r["status"] >= 400 or !$r["res"]){
+            continue;
+          }
+          $eol = "\n";
+          $boundary = "------WebKitFormBoundary";
+          $content = 'Content-Disposition: form-data; name="payload"';
+          $code = az_num(16);
+          $data = '';
+          $data .= $boundary.$code.$eol;
+          $data .= $content.$eol.$eol;
+          $data .= base64_encode(json_encode(["i" => 1, "x" => $xxx, "y" => $yyy, "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
+          $data .= $boundary.$code.'--';
+          $r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),$code);
+          if($r["status"] >= 400){
+            continue;
+          }
+        } else {
+          $data_post = $data_post = data_post($node["token_csrf"], "one");
+        }
+        $r = base_short($link,0,$data_post,$rs,0,join('',$cookie));
+        $url = $r["url"];
+        if(!$url){
+          continue;
+        }
+        $cookie[] = $r["cookie"];
+        continue;
       }
-      $cookie[] = $r["cookie"];
-      $node = executeNode($r["res"],1);
-      $rs = "https://".parse_url($link1)["host"]."/";
-#die(print_r($r));
-
-
-$xxx = rand(200,250);
-$yyy = rand(33,35);
-$rsp = array("ic-hf-se" => $xxx.",".$yyy.",320","ic-hf-id" => 1,"ic-hf-hp" => "");
-$data_post = data_post($node["token_csrf"], "two", $rsp);
-parse_str($data_post, $ic);
-#die(print_r($ic));
-$eol = "\n";
-$boundary = "------WebKitFormBoundary";
-$content = 'Content-Disposition: form-data; name="payload"';
-  $code = az_num(16);
-  $data = '';
-  $data .= $boundary.$code.$eol;
-  $data .= $content.$eol.$eol;
-  $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "light", "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
-  $data .= $boundary.$code.'--';
-  
-#die($data);
-$r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),[$ic["_iconcaptcha-token"],$code]);
-if($r["status"] >= 400){
- continue;
-}
-#$cookie[] = $r["cookie"];
-#die(print_r($r));
-
-$r = base_short($rs."iconcaptchar/captcharequest?payload=".base64_encode(json_encode(["i" => 1, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])),0,0,$rs,0,join('',$cookie));
-if($r["status"] >= 400 or !$r["res"]){
- goto asu;
-}
-#$cookie[] = $r["cookie"];
-
-#die(print_r($r));
-
-$eol = "\n";
-$boundary = "------WebKitFormBoundary";
-$content = 'Content-Disposition: form-data; name="payload"';
-  $code = az_num(16);
-  $data = '';
-  $data .= $boundary.$code.$eol;
-  $data .= $content.$eol.$eol;
-  $data .= base64_encode(json_encode(["i" => 1, "x" => $xxx, "y" => $yyy, "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
-  $data .= $boundary.$code.'--';
-$r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),[$ic["_iconcaptcha-token"],$code]);
-if($r["status"] >= 400){
- goto asu;
-}
-
-#$cookie[] = $r["cookie"];
-
-
-#L(15);
-$r = base_short($link,0,$data_post,$rs,0,join('',$cookie));
-$url = $r["url"];
-if(!$url){
-  continue;
-}
-$cookie[] = $r["cookie"];
-break;
-}
-
-
-$r = base_short($url,0,0,0,0,join('',$cookie));
-     $cookie[] = $r["cookie"];
-    
-     $node = executeNode($r["res"],1);
-     #die(print_r($node)); 
-     $data = data_post($node["token_csrf"], "one");
-     #L(20);
-     $r = base_short($url,0,$data,$url,0,join('',$cookie));
-     
-
-$link = $r["url"];
-$cookie[] = $r["cookie"];
-
-$r = base_short($link,0,0,0,0,join('',$cookie));
-     $node = executeNode($r["res"],1);
-     $data = data_post($node["token_csrf"], "one");
-     $r = base_short($link,0,$data,$link,0,join('',$cookie));
-     /*
-     
-$link = $r["url"];
-if(!$link){
-  continue;
-}
-$cookie[] = $r["cookie"];
-*/
-
-/*
-$r = base_short($link,0,0,0,0,join('',$cookie));
-      $link1 = $r["url1"][0];
-      if(!$link1){
-        return "refresh";
-      }
-      $cookie[] = $r["cookie"];
-      $node = executeNode($r["res"],1);
-      $rs = "https://".parse_url($link)["host"]."/";
-     */
-
-     
-     #die(print_r($node)); 
-     
-#die(file_put_contents("bitmun.html",$r["res"]));
-die(print_r($r));
-
-
-
-
-
-
-      } elseif(preg_match("#(clks.pro)#is",$host)){
+    } elseif(preg_match("#(clks.pro)#is",$host)){
         $run = build($url);#die(print_r($run));
         $r = base_short($run["inc"],0,0,"https://mdn.lol/",0,0);#print_r($r);
         if(preg_match("#(-cut|final)#is",$r["url"])){
@@ -1603,172 +1538,10 @@ function config(){
   $config[] = "shortplus.xyz";
   $config[] = "urlpay";
   $config[] = "urlpay.in";
+  $config[] = "rss";
+  $config[] = "rsshort";
+  $config[] = "rsshort.com";
   $config[] = "teralinks";
   $config[] = "teralinks.in";
   return $config;
-}
-
-function analysis_icon($img){
-#coba2.png
-# file_put_contents("coba".rand(11,999).".png",$img);
-  #$img = file_get_contents("coba9.png");
-  if(300 >= strlen($img)){
-    print m."image not found!";
-    r();
-    return "";
-  }
-  $isx = [
-      [0, 54, 108, 162, 214, 267],
-    [0, 67, 140, 202, 262],
-    //[0, 54, 108, 162, 214, 267]    
-    ];
-    for($o=0;$o<count($isx);$o++){
-      for($z=0;$z<count($isx[$o]);$z++){
-        ob_start();
-        $image = imagecreatefromstring($img);
-        $pixel = min(imagesx($image), imagesy($image));
-        $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $pixel, 'height' => $pixel]);
-       #imagefilter($image, IMG_FILTER_EDGEDETECT);
-       imagefilter($image, IMG_FILTER_NEGATE);
-       imagepng($image);
-       imagedestroy($image);
-        
-        
-       
-      # exit;
-        
-        $data = ob_get_contents();
-        ob_end_clean();
-
-
- $file[] = strlen(trimed($data));
- }
-
-       /* $bo = array_count_values($file);
-        print_r($bo);
-        #die(print_r($bo));
-        for($e=0;$e<count($bo);$e++){
-          $valid[] = $bo[$file[1]];
-        }
-          if(count($valid) >= 4){
-            unset($dark);
-            unset($valid);
-            unset($file_size);
-            unset($file);
-            continue;
-          }*/
-          
- #die(print_r($file));
- print_r($file);
-$nn = array_count_values($file);
-print_r($nn);
-print count($isx[$o])."\n";
-if(count($isx[$o]) == 6){
-if(count($nn) >= 4){
-unset($file);
-unset($nn);
-continue;}
-} /*elseif(count($isx[$o]) == 5){
-if(count($nn) == 5){
-unset($file);
-unset($nn);
-continue;}
-}*/
-#die(print_r($nn));
-if(count($nn) >= 4){
-print "dark\n";
-for($d=0;$d<count($file);$d++){
-for($f=0;$f<count($file);$f++){
-for($b=0;$b<count($file)*2;$b++){
-if(
-
-$file[$d]+$b >= $file[$f]
-#$file[$f] >= $file[$d]+$b
-){
-
-$dark[$d] = str_replace($file[$d], $file[$f] + $b,$file[$d]);
-}
-}
-
-}
-}
-
-$file_size = $dark;
-
-} else {
-$file_size = $file;
-}
-
-
-print count($isx[$o])."\n";
-print_r($file_size);
-#die(print_r($file));
-
-        $bo = array_count_values($file_size);
-        #die(print_r($bo));
-        for($e=0;$e<count($bo);$e++){
-          $valid[] = $bo[$file_size[1]];
-        }
-          if(count($valid) >= 4){
-            unset($dark);
-            unset($valid);
-            unset($file_size);
-            unset($file);
-            continue;
-          }
-      
-                      $array = array_count_values($file_size);
-            for($i=0;$i<count($file_size);$i++){
-              if(!$file_size[$i]){
-                break;
-              }
-              $code[] = $array[$file_size[$i]];
-            }
-            for($i=0;$i<count($file_size);$i++){
-              if($code[$i] == 1){
-                $proses  = "$i";  
-                break;
-              }
-            }
-            if($proses == null){
-              for($i=0;$i<count($file_size);$i++){
-                if($code[$i] == 2){
-                  $proses  = "$i";
-                  break;
-                }
-              }
-            }
-      
-          if(count($isx[$o]) == 5){
-            $key = [
-              rand(20, 40),
-              rand(80,95),
-              rand(160,180),
-              rand(220, 240),
-              rand(260, 300)
-              ];
-          } elseif(count($isx[$o]) == 6){
-            $key = [
-              rand(30, 40),
-              rand(80, 90),
-              rand(130, 140),
-              rand(190, 200),
-              rand(230, 240),
-              rand(290, 300)
-              ];
-          }
-          $y = rand(20,rand(25,30));
-          $microtime = ["ts" => round(time() * 1000)];
-          $load = ["i", "x", "y", "w", "a"];
-          $results = $key[$proses];
-          $pay = [1, $results, $y, 320, 2];
-          if($results){
-            $answer = array_combine($load,$pay);
-            $answer_enc = json_encode(array_merge($answer,$microtime));
-            return [
-              "token" => base64_encode($answer_enc),
-              "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]
-              ])];
-          }
-    }
 }
