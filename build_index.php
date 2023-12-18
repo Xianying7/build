@@ -98,6 +98,66 @@ function set_cookie($result, $array = 0){
   return urldecode(http_build_query($cookies, '', ';', PHP_QUERY_RFC3986)).";";
 }
 
+function scrape_chek(){
+    $raw = curl("https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt")[1];
+    $list = arr_rand(explode("\n",$raw));
+    for($i=0;$i<count($list);$i++){
+      $proxy=  explode(':', $list[$i]);
+      $host = $proxy[0]; 
+      $port = $proxy[1]; 
+      $TimeoutInSeconds = 1;
+      $valid = false;
+      if($fp = @fsockopen($host,$port,$errCode,$errStr,$TimeoutInSeconds)){
+      $valid = true;
+      } 
+      if($valid == true){
+        return $list[$i];
+      }
+    }
+}
+
+function scrape_list(){
+    $file = "proxyscrape_premium_http_proxies.txt";
+    if(!file_get_contents($file)){
+      die(m."file ".$file." tidak ada".n);
+    }
+    return trimed(arr_rand(file($file))[0]);
+}
+
+function scrape_valid(){
+    re:
+    $key_scrape = save("key_scrape");
+    $h = ["user-agent: Mozilla/5.0"];
+    $url = "https://api.proxyscrape.com/v2/account/datacenter_shared/whitelist?sessionid=".$key_scrape."&userid=".$key_scrape."&type=";
+    $my_ip = curl("https://api.proxyscrape.com/ip.php",$h)[1];
+    while(true){
+      $ip = curl($url."get",$h)[2];
+      if(!$ip or $ip->status == "invalid"){
+        unlink("key_scrape");
+        goto re;
+      }
+      $list = explode(n, curl("https://api.proxyscrape.com/v2/account/datacenter_shared/proxy-list?sessionid=".$key_scrape."&userid=".$key_scrape."&type=displayproxies&protocol=http",$h)[1]);
+      if(!$list[2]){
+        continue;
+      }
+      $proxy = trimed(arr_rand(array_filter($list))[0]);#die($proxy);
+      if(!$ip->whitelisted[0]){
+        $req = curl($url."add&ip[]=".$my_ip,$h)[2];
+        if($req->status == "ok"){
+          return $proxy;
+        }
+      }
+      if($my_ip == $ip->whitelisted[0]){
+        return $proxy;
+      }
+      if($my_ip !== $ip->whitelisted[0]){
+        $req = curl($url."remove&ip[]=".$ip->whitelisted[0],$h)[2];
+        if($req->status == "ok"){
+          return $proxy;
+        }
+      }
+    }
+}
 
 function movePage(){
         return [
@@ -348,7 +408,9 @@ function curl($url, $header = false, $post = false,  $followlocation = false, $c
         $default[CURLOPT_COOKIE] = $alternativ_cookie;
       }
       if($proxy){
-        $default[CURLOPT_PROXY] = "http://69b6f26dd75343ce9a1256dc9f2b4dbc64c24669c29:customHeaders=false&setCookies=https%3A%2F%2Fmdn.lol%2F%3B@proxy.scrape.do:8080";
+        //$default[CURLOPT_HTTPPROXYTUNNEL] = 1;
+        $default[CURLOPT_PROXY] = $proxy;
+       // $default[CURLOPT_PROXYUSERPWD] = "kotakxrrld:iy5sr3as5hz1";
       }
       $options = $default;
       $ch = curl_init();
