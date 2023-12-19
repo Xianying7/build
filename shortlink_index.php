@@ -628,6 +628,9 @@ function bypass_shortlinks($url){
       $referer[] = "https://mobi2c.com/";
       $referer[] = "https://te-it.com/";
       $referer[] = "https://world2our.com/";
+      $referer[] = "https://hightrip.net/";
+      $referer[] = "https://healthy4pepole.com/";
+      $referer[] = "https://to-travel.net/";
       for($x=0;$x<count($referer);$x++){
         $r = base_short($url,0,0,$referer[$x],0,join('',$cookie));
         $cookie[] = $r["cookie"];
