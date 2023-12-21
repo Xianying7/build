@@ -1334,7 +1334,7 @@ $method = "recaptchav2";
       $cookie[] = $r["cookie"];
       $link = explode("https:",parse_url($r["url"])["path"])[1];
       if($link){
-        $r1 = base_short($r["url"],0,0,$url,0,join('',$cookie));die(print_r($r1));
+        $r1 = base_short($r["url"],0,0,$url,0,join('',$cookie));
         if($r1["url"]){
           base_short($r1["url"],0,0,$url,0,join('',$cookie));
           print h."success";
