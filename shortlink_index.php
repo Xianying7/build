@@ -6,7 +6,7 @@
 #eval(str_replace('<?php',"",file_get_contents(("build_index.php"))));
 #die(scrape());
 #https://shortyearn.com/CBkp4ocd2d7
-#die(print_r(bypass_shortlinks("https://rsshort.com/bHwr0v6")));
+#die(print_r(bypass_shortlinks("https://1bit.space/api/urldecode/==QfiMESqRGM0lEbiojIuV2avRnIsIicBR3dkVTT4IUdElkUap3QjNENrVmM3Q0Q5ZnYnp0cp5GOVZEaTBTUUtESjZUMtEjO0QjMvwFdld2Lc5Wa35CdlNWdhZWZylmZvw1LcpzcwRHdoJiOiwmc1Jye")));
 #print_r(bypass_shortlinks("https://clks.pro/QxNRt1"));
 #print_r(bypass_shortlinks("https://earnow.online/L5u0D6HU"));
 #print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
@@ -564,10 +564,6 @@ function bypass_shortlinks($url){
           $t = $r["token_csrf"];
         }#die(print_r($r));
         if(explode('"',$t[2][2])[0] == "captcha"){
-        /*  $data = data_post($t, "five");
-          $r = base_short($run["links"],0,$data,$run["links"],$cloud,join('',$cookie));
-        $cookie[] = $r["cookie"];
-        $t = $r["token_csrf"];*/
         $method = "recaptchav2";
         $cap = multibot($method,$r[$method],$run["links"]);
         $rsp = array("g-recaptcha-response" => $cap);
@@ -1185,6 +1181,7 @@ $method = "recaptchav2";
       $api = save("scraperapi");
       #$scrape = scrape_valid();
       $r = base_short("http://api.scraperapi.com?api_key=".$api."&keep_headers=true&url=".$url);
+      #$r = base_short("http://api.scraperapi.com?api_key=ee314dd4233d4adff2f7460f04670b89&keep_headers=true&url=".$url);
       #$r = base_short($url,0,0,$url,0,0,0,$scrape);
       #die(print_r($r));
       $link = $r["url2"][0];
@@ -1331,7 +1328,23 @@ $method = "recaptchav2";
       
 
  
-      die(print_r($node));
+      #die(print_r($node));
+    } elseif(preg_match("#(mgnet.xyz|1bit.space)#is",$host)){
+      $r = base_short($url);
+      $cookie[] = $r["cookie"];
+      $link = explode("https:",parse_url($r["url"])["path"])[1];
+      if($link){
+        $r1 = base_short($r["url"],0,0,$url,0,join('',$cookie));die(print_r($r1));
+        if($r1["url"]){
+          base_short($r1["url"],0,0,$url,0,join('',$cookie));
+          print h."success";
+          r();
+          L(90);
+          return "https:".$link;
+        }
+      } else {
+        return "refresh";
+      }
     } else {
       return "refresh";
     }
@@ -1544,6 +1557,7 @@ function config(){
   $config[] = "ex-foary";
   $config[] = "ex-foary.com";
   $config[] = "Clicksfly";
+  $config[] = "Clicksfly.com";
   $config[] = "Genlink";
   $config[] = "ctr";
   $config[] = "ctrsh";
@@ -1610,6 +1624,10 @@ function config(){
   $config[] = "shortplus.xyz";
   $config[] = "urlpay";
   $config[] = "urlpay.in";
+  $config[] = "1bitSpace";
+  $config[] = "1bit.Space";
+  $config[] = "Mgnet";
+  $config[] = "Mgnet.xyz";
   $config[] = "rss";
   $config[] = "rsshort";
   $config[] = "rsshort.com";
