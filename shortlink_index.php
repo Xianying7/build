@@ -7,7 +7,8 @@
 #die(scrape());
 #https://shortyearn.com/CBkp4ocd2d7
 #die(print_r(bypass_shortlinks("https://1bit.space/api/urldecode/==QfiMESqRGM0lEbiojIuV2avRnIsIicBR3dkVTT4IUdElkUap3QjNENrVmM3Q0Q5ZnYnp0cp5GOVZEaTBTUUtESjZUMtEjO0QjMvwFdld2Lc5Wa35CdlNWdhZWZylmZvw1LcpzcwRHdoJiOiwmc1Jye")));
-#print_r(bypass_shortlinks("https://clks.pro/QxNRt1"));
+#$node = exe(file_get_contents("asu.html"));die(print_r($node));
+#print_r(bypass_shortlinks("https://rsshort.com/VDLJxwM"));
 #print_r(bypass_shortlinks("https://earnow.online/L5u0D6HU"));
 #print_r(bypass_shortlinks("https://go.illink.net/CBlwbocwnke"));
 //print_r(bypass_shortlinks("https://linx.cc/Y7vZY2M"));
@@ -291,6 +292,7 @@ function executeNode($r, $stripslashes = 0){
       preg_match('#data-csrf="(.*?)"#is',$x,$csrf);
       preg_match("#location.replace[(]'(.*?)'#is",$x,$url);
       preg_match('#p (\d+/\d+)#is',$x,$step);
+      preg_match("#countDown = (\d+)#is",$x,$tmr);
       if($step[1]){
         if(explode("/",$step[1])[0] == explode("/",$step[1])[1]){
         $final = 1;
@@ -311,7 +313,8 @@ function executeNode($r, $stripslashes = 0){
         "final_step" => $final,
         "snapshot" => $snapshot[1],
         "user_token" => $user_token[1],
-        "csrf" => $csrf[1]
+        "csrf" => $csrf[1],
+        "timer" => $tmr[1]
         ];
     }
 }
@@ -620,6 +623,7 @@ function bypass_shortlinks($url){
       $run = build($url);
       $r = base_short($url);
       $cookie[] = $r["cookie"];
+      $referer[] = "https://trip.businessnews-nigeria.com/";
       $referer[] = "https://forexit.online/";
       $referer[] = "https://mobi2c.com/";
       $referer[] = "https://te-it.com/";
@@ -1181,8 +1185,6 @@ $method = "recaptchav2";
       $api = save("scraperapi");
       #$scrape = scrape_valid();
       $r = base_short("http://api.scraperapi.com?api_key=".$api."&keep_headers=true&url=".$url);
-      #$r = base_short("http://api.scraperapi.com?api_key=ee314dd4233d4adff2f7460f04670b89&keep_headers=true&url=".$url);
-      #$r = base_short($url,0,0,$url,0,0,0,$scrape);
       #die(print_r($r));
       $link = $r["url2"][0];
       if(!$link){
@@ -1190,7 +1192,7 @@ $method = "recaptchav2";
       }
       $cookie[] = $r["cookie"];
       while(true){
-        $r = base_short($link,0,0,$link,0,join('',$cookie));
+        $r = base_short($link,0,0,$link,0,join('',$cookie));//die(print_r($r));
         if($r["url"]){
           print h."success";
           r();
@@ -1202,7 +1204,7 @@ $method = "recaptchav2";
         }
         $cookie[] = $r["cookie"];
         $cookie[] = array_reverse($cookie);
-        $node = executeNode($r["res"],1);
+        $node = executeNode($r["res"],1);#die(print_r($node));
         $rs = "https://".parse_url($link1)["host"]."/";
         if($node["token_csrf"][1][1] == "_iconcaptcha-token"){
           $xxx = rand(200,250);
