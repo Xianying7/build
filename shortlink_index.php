@@ -99,7 +99,17 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                                     $r["token_csrf"][1][1] => $r["token_csrf"][2][1]
                                 ]);
                             }
-                            $r1 = base_run($r["visit"][$s],$data);
+                            if($site_url == 1){
+                              $r1 = base_run(str_replace("go","cancel",$r["visit"][$s]),$data);
+                              if(preg_match("#".host."#is",$r1["url1"])){
+                                preg_match_all('#location: (.*)#i', $r1["r"], $res);
+                                if($res[1][1]){
+                                  $r1["url1"] = trimed($res[1][1]);
+                                }
+                              }
+                            } else {
+                              $r1 = base_run($r["visit"][$s],$data);
+                            }
                             if($r1["url1"]){
                                 $r1["url"] = $r1["url1"];
                             }
