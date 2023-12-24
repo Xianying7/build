@@ -1483,6 +1483,7 @@ function config(){
   $config[] = "adlink.click";
   $config[] = "LinksFly.link";
   $config[] = "LinksFlylink";
+  $config[] = "LFly";
   #$config[] = "Chaininfo";
   $config[] = "Clkst";
   $config[] = "Clk.st";
