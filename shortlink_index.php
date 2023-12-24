@@ -1641,6 +1641,7 @@ function config(){
   $config[] = "1bit.Space";
   $config[] = "Mgnet";
   $config[] = "Mgnet.xyz";
+  $config[] = "reshort";
   $config[] = "rss";
   $config[] = "rsshort";
   $config[] = "rsshort.com";
