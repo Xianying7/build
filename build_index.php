@@ -133,6 +133,9 @@ function scrape_valid(){
     while(true){
       $ip = curl($url."get",$h)[2];
       if(!$ip or $ip->status == "invalid"){
+        print m."key tidak berguna lagi silakan ganti";
+        sleep(2);
+        r();
         #unlink("key_scrape");
         goto re;
       }
@@ -153,7 +156,7 @@ function scrape_valid(){
       if($my_ip !== $ip->whitelisted[0]){
         $req = curl($url."remove&ip[]=".$ip->whitelisted[0],$h)[2];
         if($req->status == "ok"){
-          return $proxy;
+          continue;
         }
       }
     }
@@ -711,6 +714,9 @@ function multi_atb($r){
           $main = $main_img[1][$k];
           break;
         }
+      }
+      if(!$main){
+        return "";
       }
       $code = az_num(16);
       $boundary = "------WebKitFormBoundary".$code;
