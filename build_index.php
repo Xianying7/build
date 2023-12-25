@@ -133,7 +133,7 @@ function scrape_valid(){
     while(true){
       $ip = curl($url."get",$h)[2];
       if(!$ip or $ip->status == "invalid"){
-        unlink("key_scrape");
+        #unlink("key_scrape");
         goto re;
       }
       $list = explode(n, curl("https://api.proxyscrape.com/v2/account/datacenter_shared/proxy-list?sessionid=".$key_scrape."&userid=".$key_scrape."&type=displayproxies&protocol=http",$h)[1]);
@@ -701,6 +701,74 @@ function captchaai($method,$sitekey,$pageurl,$rr = 0){
 }
 
 
+function multi_atb($r){
+    $apikey = save("apikey_multibot");
+    preg_match_all('# <img src="(.*?)"#is',$r,$main_img);
+    preg_match_all('#rel=\\\"(.*?)\\\"><img src=\\\"(.*?)\\\"#is',$r,$rell_img);
+    if($rell_img[1]){
+      for($k=0;$k<count($main_img[1]);$k++){
+        if(preg_match("#data:image#is",$main_img[1][$k])){
+          $main = $main_img[1][$k];
+          break;
+        }
+      }
+      $code = az_num(16);
+      $boundary = "------WebKitFormBoundary".$code;
+      $content = "Content-Disposition: form-data; name=";
+      $data = '';
+      for($i=0;$i<count($rell_img[1]);$i++){
+        $data .= $boundary.n;
+        $data .= $content.'"'.$rell_img[1][$i].'"'.n.n;
+        $data .= $rell_img[2][$i].n;
+      }
+      $data .= $boundary.n;
+      $data .= $content.'"main"'.n.n;
+      $data .= $main.n;
+      $data .= $boundary.n;
+      $data .= $content.'"method"'.n.n;
+      $data .= "antibot".n;
+      $data .= $boundary.n;
+      $data .= $content.'"key"'.n.n;
+      $data .= $apikey.n;
+      $data .= $boundary.n;
+      $data .= $content.'"json"'.n.n;
+      $data .= "1".n;
+      $data .= $boundary."--";
+    }
+    $h = [
+      "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary".$code
+    ];
+    $o = 0;
+    while($o <= 20){
+      $o++;
+      if($o == 15){
+        return "";
+      }
+      $js = curl("https://multibot.in/in.php", $h, $data)[2];
+      if($js->status == 1){
+        $id = $js->request;
+        break;
+      }
+    }
+    $x = 0;
+    while($x <= 20){
+      $x++;
+      if($x == 15){
+        return "";
+      }
+      sleep(5);
+      $js = curl("https://multibot.in/res.php?action=get&id=".$id."&key=".$apikey."&json=1",["Accept: */*"])[2];
+      if($js->request == "WRONG_RESULT"){
+        return "";
+      }
+      if($js->status == 1){
+        return " ".str_replace(","," ",$js->request);
+      }
+      print $js->request;
+      r();
+    }
+}
+
 function multibot($method,$sitekey,$pageurl,$rr = 0){
   if($method == 'invisible_recaptchav2'){
     $method = 'recaptchav2';
@@ -728,16 +796,9 @@ function multibot($method,$sitekey,$pageurl,$rr = 0){
       "sitekey" => $sitekey,
       "pageurl" => $pageurl
       ]);
-    $rscaptcha = http_build_query([
-      "key" => $apikey,
-      "method" => "rscaptcha",
-      "body" => $sitekey,
-      "json" => 1
-      ]);
       $type=[
         "recaptchav2" => $recaptchav2,
-        "hcaptcha" => $hcaptcha,
-        "rscaptcha" => $rscaptcha
+        "hcaptcha" => $hcaptcha
         ];
         $ua = [
           "host: ".$host,
