@@ -93,11 +93,19 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                                 goto run;
                             }
                         } elseif(mode == "vie_free"){
+                          if(preg_match("#pre_verify#is",$r["visit"][$s])){
+                           $left = $r["left"][$s];
+                           $r = base_run($r["visit"][$s]);
+                           $cap = multi_atb($r["res"]);
+                           if(!$cap){
+                             return "refresh";
+                           }
+                           $rsp = array("antibotlinks" => $cap);
+                           $r["visit"][$s] = $r["visit"][0];
+                           $r["left"][$s]  = $left;
+                          }
                             if($r["token_csrf"][1][0]){
-                                $data = http_build_query([
-                                    explode('"',$r["token_csrf"][1][0])[0] => $r["token_csrf"][2][0],
-                                    $r["token_csrf"][1][1] => $r["token_csrf"][2][1]
-                                ]);
+                                $data = data_post($r["token_csrf"], "one", $rsp);
                             }
                             if($site_url == 1){
                               $r1 = base_run(str_replace("go","cancel",$r["visit"][$s]),$data);
@@ -109,6 +117,10 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                               }
                             } else {
                               $r1 = base_run($r["visit"][$s],$data);
+                            }
+                            if(preg_match("#".host."#is",$r1["url1"])){
+                              $r1["url"] = "";
+                              goto run;
                             }
                             if($r1["url1"]){
                                 $r1["url"] = $r1["url1"];
@@ -1623,8 +1635,8 @@ function config(){
   $config[] = "clik.pw";
   #$config[] = "shortyearn";
   #$config[] = "shortyearn.com";
-  $config[] = "doshrink";
-  $config[] = "doshrink.com";
+  //$config[] = "doshrink";
+  //$config[] = "doshrink.com";
   $config[] = "linkjust.com";
   $config[] = "Linkjust";
   $config[] = "clks";
