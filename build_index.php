@@ -121,7 +121,7 @@ function scrape_list(){
     if(!file_get_contents($file)){
       die(m."file ".$file." tidak ada".n);
     }
-    return trimed(arr_rand(file($file))[0]);
+    return trimed(array_values(arr_rand(file($file)))[0]);
 }
 
 function scrape_valid(){
