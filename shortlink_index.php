@@ -52,160 +52,150 @@ function visit_short($r, $site_url = 0, $data_token = 0){
     }
     $exp = 0;
     for($i=0;$i<count($config);$i++){
-        for($s=0;$s<count($list);$s++){
-            $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",trimed(strtolower($list[$s]))))[0];
-                if(strtolower($config[$i]) == $open){
-                    for($p=0;$p<count($control);$p++){
-                        if(strtolower(str_replace(n,"",$control[$p])) == host.$open or strtolower(str_replace(n,"",$control[$p])) == $open or explode("•",$r["left"][$s])[0] == explode("•",$r["left"][$s])[1] or explode("/",trim(explode("<",$r["left"][$s])[0]))[0] == 0 or explode("/",trim(explode("<",$r["left"][$s])[0]))[0][0] == "-"){
-                            goto up;
-                        }
-                    }
-                    if(preg_replace("/[^0-9]/","",$r["visit"][$s])){
-                        if(mode == "af"){
-                            $r1 = base_run(host.$r["visit"][$s],http_build_query([$r["token"][1][$s] => $r["token"][2][$s]]));
-                        } elseif(mode == "icon"){
-                            $cap = icon_bits();
-                            if(!$cap){
-                              return "refresh";
-                            }
-                            $data2 = http_build_query([
-                                "a" => "getShortlink",
-                                "data" => preg_replace("/[^0-9]/","",$r["visit"][$s]),
-                                "token" => $r["token"],
-                                "captcha-idhf" => 0,
-                                "captcha-hf" => $cap
-                            ]);
-                            $res = base_run(host."system/ajax.php",$data2)["json"];
-                            if($res->shortlink){
-                                $r1["url"] = $res->shortlink;
-                                goto run;
-                            }
-                        } elseif(mode == "no_icon"){
-                            $data = http_build_query([
-                                "a" => "getShortlink",
-                                "data" => preg_replace("/[^0-9]/",
-                                "",$r["visit"][$s]),
-                                "token" => $r["token"]
-                            ]);
-                            $res = base_run(host."system/ajax.php",$data)["json"];
-                            if($res->shortlink){
-                                $r1["url"] = $res->shortlink;
-                                goto run;
-                            }
-                        } elseif(mode == "vie_free"){
-                          if(preg_match("#pre_verify#is",$r["visit"][$s])){
-                           $left = $r["left"][$s];
-                           $r = base_run($r["visit"][$s]);
-                           $cap = multi_atb($r["res"]);
-                           if(!$cap){
-                             return "refresh";
-                           }
-                           $rsp = array("antibotlinks" => $cap);
-                           $r["visit"][$s] = $r["visit"][0];
-                           $r["left"][$s]  = $left;
-                          }
-                            if($r["token_csrf"][1][0]){
-                                $data = data_post($r["token_csrf"], "one", $rsp);
-                            }
-                            if($site_url == 1){
-                              $r1 = base_run(str_replace("go","cancel",$r["visit"][$s]),$data);
-                              if(preg_match("#".host."#is",$r1["url1"])){
-                                preg_match_all('#location: (.*)#i', $r1["r"], $res);
-                                if($res[1][1]){
-                                  $r1["url1"] = trimed($res[1][1]);
-                                }
-                              }
-                            } else {
-                              $r1 = base_run($r["visit"][$s],$data);
-                            }
-                            if(preg_match("#".host."#is",$r1["url1"])){
-                              $r1["url"] = "";
-                              goto run;
-                            }
-                            if($r1["url1"]){
-                                $r1["url"] = $r1["url1"];
-                            }
-                        } elseif(mode == "only_site"){
-                            $r1 = base_run($site_url.$r["visit"][$s]);
-                            if($r1["url1"]){
-                              $r1["url"] = $r1["url1"];
-                            }
-                        } elseif(mode == "site_url"){
-                            if($data_token){
-                              $data_token = $data_token.$r["visit"][$s];
-                            }
-                            $r1 = base_run($site_url, $data_token);
-                        } elseif(mode == "path"){
-                            $r1 = base_run(host.$r["visit"][$s]);
-                        } elseif(mode == "firefaucet"){
-                           $data = $r[$list[$s]];
-                            for($rq=0;$rq<count($data[1]);$rq++){
-                              if($data[0][$rq]){
-                                $rrq = "$rq";
-                              }
-                            }
-                            $raw = explode("&&","&".$data[2][$rrq])[1];
-                            parse_str($raw, $out);
-                            for($tq=0;$tq<count($r["code"]);$tq++){
-                              if($out[$r["code"][$tq]]){
-                                $data_post =  str_replace($out[$r["code"][$tq]], $r[$r["code"][$tq]], $raw);
-                              }
-                            }
-                            $r1 = base_run(host.$data[1][$rrq]."/", $data_post);
-                        } elseif(mode == "ofer"){
-                          /*$data = http_build_query([
-                            "action" => "getShortlink",
-                            "sid" => "Murcaluse",
-                            "key" => "6l54uj4b6lmjljh1mvwgyqj0aovufc",
-                            "data" => $r["visit"][$s],
-                            "token" => $data_token
-                            ]);*/
-                          $data = http_build_query(array_merge([
-                            "action" => "getShortlink",
-                            //"sid" => "1196255",
-                            //"key" => "qbgxxjznt1xfm07irbrybnhiwqr2sh",
-                            "data" => $r["visit"][$s],
-                            //"token" => $data_token
-                            ], $data_token));#die($data);
-                            $r1 = base_offer($site_url, $data, 1);
-                            $data = http_build_query(["action" => "redirect"]);
-                            if(!$r1["json"]->link){
-                              return "refresh";
-                            }
-                            L(10);
-                            $r1 = base_offer($r1["json"]->link, $data, 1);
-                        } else {
-                            die(m."mode bypass not found".n);
-                        }
-                        run:
-                        if(!parse_url($r1["url"])["scheme"]){
-                      /*    #if(preg_match("#refresh#is", $res->message)){
-                              if(!file_get_contents($file_name)){
-                                file_put_contents($file_name, host.$list[$s]);
-                              } else {
-                                file_put_contents($file_name, get_e($file_name).n.host.$list[$s]);
-                              }
-                           # }*/
-                            print m."Failed to generate this link ".p.$list[$s];
-                            r();
-                            return "refresh";
-                        }
-                        ket_line("",$list[$s],"left",trim(explode("<",$r["left"][$s])[0]));
-                        ket("",k.$r1["url"]).line();
-                        refresh:
-                        $exp++;
-                        if($exp == 2){
-                            goto up;
-                        }
-                        $r2 = bypass_shortlinks($r1["url"]);
-                        if(!$r2){
-                            goto refresh;
-                        }
-                        return $r2;
-                    }
-                }
+      for($s=0;$s<count($list);$s++){
+        $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",trimed(strtolower($list[$s]))))[0];
+        if(strtolower($config[$i]) == $open){
+          for($p=0;$p<count($control);$p++){
+            if(strtolower(str_replace(n,"",$control[$p])) == host.$open or strtolower(str_replace(n,"",$control[$p])) == $open or explode("•",$r["left"][$s])[0] == explode("•",$r["left"][$s])[1] or explode("/",trim(explode("<",$r["left"][$s])[0]))[0] == 0 or explode("/",trim(explode("<",$r["left"][$s])[0]))[0][0] == "-"){
+              goto up;
             }
-        up:
+          }
+          if(preg_replace("/[^0-9]/","",$r["visit"][$s])){
+            if(mode == "af"){
+              $r1 = base_run(host.$r["visit"][$s],http_build_query([$r["token"][1][$s] => $r["token"][2][$s]]));
+            } elseif(mode == "icon"){
+              $cap = icon_bits();
+              if(!$cap){
+                return "refresh";
+              }
+              $data2 = http_build_query([
+                "a" => "getShortlink",
+                "data" => preg_replace("/[^0-9]/","",$r["visit"][$s]),
+                "token" => $r["token"],
+                "captcha-idhf" => 0,
+                "captcha-hf" => $cap
+                ]);
+                $res = base_run(host."system/ajax.php",$data2)["json"];
+                if($res->shortlink){
+                  $r1["url"] = $res->shortlink;
+                  goto run;
+                }
+            } elseif(mode == "no_icon"){
+              $data = http_build_query([
+                "a" => "getShortlink",
+                "data" => preg_replace("/[^0-9]/",
+                "",$r["visit"][$s]),
+                "token" => $r["token"]
+                ]);
+                $res = base_run(host."system/ajax.php",$data)["json"];
+                if($res->shortlink){
+                  $r1["url"] = $res->shortlink;
+                  goto run;
+                }
+            } elseif(mode == "vie_free"){
+              if(preg_match("#pre_verify#is",$r["visit"][$s])){
+                $left = $r["left"][$s];
+                $r = base_run($r["visit"][$s]);
+                $cap = multi_atb($r["res"]);
+                if(!$cap){
+                  return "refresh";
+                }
+                $rsp = array("antibotlinks" => $cap);
+                $r["visit"][$s] = $r["visit"][0];
+                $r["left"][$s]  = $left;
+              }
+              if($r["token_csrf"][1][0]){
+                $data = data_post($r["token_csrf"], "one", $rsp);
+              }
+              if($site_url == 1){
+                $r1 = base_run(str_replace("go","cancel",$r["visit"][$s]),$data);
+                if(preg_match("#".host."#is",$r1["url1"])){
+                  preg_match_all('#location: (.*)#i', $r1["r"], $res);
+                  if($res[1][1]){
+                    $r1["url1"] = trimed($res[1][1]);
+                  }
+                }
+              } else {
+                $r1 = base_run($r["visit"][$s],$data);
+              }
+              if($r1["url1"]){
+                $r1["url"] = $r1["url1"];
+              }
+              
+            } elseif(mode == "only_site"){
+              $r1 = base_run($site_url.$r["visit"][$s]);
+              if($r1["url1"]){
+                $r1["url"] = $r1["url1"];
+              }
+            } elseif(mode == "site_url"){
+              if($data_token){
+                $data_token = $data_token.$r["visit"][$s];
+              }
+              $r1 = base_run($site_url, $data_token);
+            } elseif(mode == "path"){
+              $r1 = base_run(host.$r["visit"][$s]);
+            } elseif(mode == "firefaucet"){
+              $data = $r[$list[$s]];
+              for($rq=0;$rq<count($data[1]);$rq++){
+                if($data[0][$rq]){
+                  $rrq = "$rq";
+                }
+              }
+              $raw = explode("&&","&".$data[2][$rrq])[1];
+              parse_str($raw, $out);
+              for($tq=0;$tq<count($r["code"]);$tq++){
+                if($out[$r["code"][$tq]]){
+                  $data_post =  str_replace($out[$r["code"][$tq]], $r[$r["code"][$tq]], $raw);
+                }
+              }
+              $r1 = base_run(host.$data[1][$rrq]."/", $data_post);
+            } elseif(mode == "ofer"){
+              $data = http_build_query(array_merge([
+                "action" => "getShortlink",
+                "data" => $r["visit"][$s],
+                ], $data_token));#die($data);
+                $r1 = base_offer($site_url, $data, 1);
+                $data = http_build_query(["action" => "redirect"]);
+                if(!$r1["json"]->link){
+                  return "refresh";
+                }
+                L(10);
+                $r1 = base_offer($r1["json"]->link, $data, 1);
+            } else {
+              die(m."mode bypass not found".n);
+            }
+            if($r1["failed"]){
+              if(!file_get_contents($file_name)){
+                file_put_contents($file_name, host.$list[$s]);
+              } else {
+                file_put_contents($file_name, get_e($file_name).n.host.$list[$s]);
+              }
+              print m.$r1["failed"]." ".p.$list[$s];
+              r();
+              return "refresh";
+            }
+            run:
+            if(!parse_url($r1["url"])["scheme"]){
+              print m."Failed to generate this link ".p.$list[$s];
+              r();
+              return "refresh";
+            }
+            ket_line("",$list[$s],"left",trim(explode("<",$r["left"][$s])[0]));
+            ket("",k.$r1["url"]).line();
+            refresh:
+            $exp++;
+            if($exp == 2){
+              goto up;
+            }
+            $r2 = bypass_shortlinks($r1["url"]);
+            if(!$r2){
+              goto refresh;
+            }
+            return $r2;
+          }
+        }
+      }
+      up:
     }
 }
 
@@ -474,7 +464,7 @@ function bypass_shortlinks($url){
         } elseif(preg_match("#(short2money.com)#is",$host)){
           $referer = "https://lollty.pro/";
         } elseif(preg_match("#(10short.com)#is",$host)){
-          $referer = "https://10short.info/";
+          $referer = "https://10short.pro/";
         } elseif(preg_match("#(sox.link)#is",$host)){
           $referer = "https://coincroco.com/";
         } elseif(preg_match("#(teralinks.in)#is",$host)){
@@ -1371,6 +1361,39 @@ $method = "recaptchav2";
       } else {
         return "refresh";
       }
+    } elseif(preg_match("#(adrinolinks.com)#is",$host)){
+      $path = str_replace("/","",parse_url($url)["path"]);
+      $r = base_short($url,0,$data,$url);
+      $url = $r["url"];
+      $parse = parse_url($url);
+      if($parse["query"] !== "link=".$path){
+        return "refresh";
+      }
+      
+      $cookie[] = $r["cookie"];
+      $host = "https://".$parse["host"];
+      $r = base_short($url,0,0,$host,0,join('',$cookie));
+      $cookie[] = $r["cookie"];
+      $data = "newwpsafelink4=".$path;
+      $r = base_short($host,0,$data,$host,0,join('',$cookie));
+      $hash = $r["url1"];
+      for($i = 0;$i<=count($hash);$i++){
+        if(preg_match("#(open.php)#is",$hash[$i])){
+          $code = $hash[$i];
+          break;
+        }
+      }
+      if(!$code){
+        return "refresh";
+      }
+      $cookie[] = $r["cookie"];
+      $r = base_short($host.$code,0,0,$host,0,join('',$cookie));
+      if($r["url"]){
+        L(20);
+        print h."success";
+        r();
+        return $r["url"];
+      }
     } else {
       return "refresh";
     }
@@ -1462,6 +1485,7 @@ function data_post($t, $type, $array = 0){
 
 function config(){
   $config[] = "Linksfly";
+  $config[] = "linksfly2";
   $config[] = "URLHives";
   $config[] = "Linkfly";
   $config[] = "Linksfly.me";
@@ -1545,6 +1569,7 @@ function config(){
   $config[] = "usalink.io";
   $config[] = "Shrinkme.io";
   $config[] = "shrinkme-io";
+  $config[] = "shrinkmel";
   $config[] = "ShrinkmeLink";
   $config[] = "shrinkme.link";
   $config[] = "Beycoin";
@@ -1665,6 +1690,8 @@ function config(){
   $config[] = "Paylinks.cloud";
   $config[] = "Shortsme";
   $config[] = "Shortsme.in";
+  $config[] = "adrinolinks";
+  $config[] = "adrinolinks.com";
   $config[] = "teralinks";
   $config[] = "teralinks.in";
   return $config;
