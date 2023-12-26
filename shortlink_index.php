@@ -75,10 +75,10 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                 "captcha-idhf" => 0,
                 "captcha-hf" => $cap
                 ]);
-                $res = base_run(host."system/ajax.php",$data2)["json"];
-                if($res->shortlink){
-                  $r1["url"] = $res->shortlink;
-                  goto run;
+                $r1 = base_run(host."system/ajax.php",$data2);
+                if($r1["json"]->shortlink){
+                  $r1["url"] = $r1["json"]->shortlink;
+                  #goto run;
                 }
             } elseif(mode == "no_icon"){
               $data = http_build_query([
