@@ -1,6 +1,159 @@
 <?php
   
 
+function count_key($iconPath, $count) {
+  for ($o = 0; $o < count($iconPath); $o++) {
+    $image = imagecreatefromstring($iconPath[$o]);
+    $width = imagesx($image);
+    $height = imagesy($image);
+    $pixel_count = 0;
+
+    for ($x = 0; $x < $width; $x++) {
+      for ($y = 0; $y < $height; $y++) {
+        $color = imagecolorat($image, $x, $y);
+
+        if ($color == 0) {
+          $pixel_count++;
+        }
+      }
+    }
+
+    imagedestroy($image);
+    $array_pixel_count[] = $pixel_count;
+    unset($pixel_count);
+  }
+
+  $values_count = array_count_values($array_pixel_count);
+
+  if ($count == count($values_count)) {
+    return "";
+  }
+
+  for ($i = 0; $i < count($array_pixel_count); $i++) {
+    if (!$array_pixel_count[$i] || 10 >= $array_pixel_count[$i]) {
+      return "";
+    }
+  }
+
+  for ($i = 0; $i < count($array_pixel_count); $i++) {
+    if (!$array_pixel_count[$i]) {
+      break;
+    }
+
+    $key[] = $values_count[$array_pixel_count[$i]];
+  }
+
+  for ($i = 0; $i < count($array_pixel_count); $i++) {
+    if ($key[$i] == 1) {
+      $valid[] = $key[$i];
+    }
+  }
+
+  if ($valid) {
+    if (count($valid) >= 2) {
+      return "";
+    }
+  }
+
+  for ($i = 0; $i < count($array_pixel_count); $i++) {
+    if ($key[$i] == 1) {
+      $key_array = "$i";
+      break;
+    }
+  }
+
+  if (!$key_array) {
+    for ($l = 0; $l < count($array_pixel_count); $l++) {
+      if ($key[$l] == 2) {
+        $key_array = "$l";
+        break;
+      }
+    }
+  }
+
+  if (!$key_array) {
+    for ($l = 0; $l < count($array_pixel_count); $l++) {
+      if ($key[$l] == 3) {
+        $key_array = "$l";
+        break;
+      }
+    }
+  }
+
+  return $key_array;
+}
+
+function coordinate($img) {
+  //$img = file_get_contents("coba9.png");
+  if (300 >= strlen($img)) {
+    print "image not found!";
+    r();
+    return "";
+  }
+  
+  $isx = [
+    [10, 74, 138, 202, 265],
+    [5, 58, 110, 163, 217, 270],
+    [3, 48, 93, 138, 183, 228, 273],
+    [3, 44, 84, 124, 164, 204, 244, 284]
+  ];
+
+  $array_container = [
+    [31, 96, 159, 226, 286],
+    [25, 80, 135, 185, 240, 290],
+    [22, 68, 112, 158, 202, 248, 295],
+    [20, 60, 100, 140, 180, 220, 260, 300]
+  ];
+
+  for ($o = 0; $o < count($isx); $o++) {
+    for ($z = 0; $z < count($isx[$o]); $z++) {
+      ob_start();
+      $image = imagecreatefromstring($img);
+      $width = imagesx($image);
+      $height = imagesy($image);
+      
+      if (count($isx[$o]) == 5) {
+        $cut_width = 45;
+      } elseif (count($isx[$o]) == 6) {
+        $cut_width = 45;
+      } elseif (count($isx[$o]) == 7) {
+        $cut_width = 39;
+      } elseif (count($isx[$o]) == 8) {
+        $cut_width = 33;
+      }
+      
+      for ($x = 0; $x < 2; $x++) {
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+        $transparan = imagecolorallocatealpha($image, 0, 0, 0, 127);
+        imagefill($image, 0, 0, $transparan);
+      }
+
+      $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $cut_width, 'height' => $height]);
+      imagepng($image);
+      imagedestroy($image);
+      
+      $data = ob_get_contents();
+      ob_end_clean();
+      $file[] = $data;
+    }
+
+    $string_array = count_key($file, count($isx[$o]));
+
+    if (!$string_array) {
+      unset($file);
+      continue;
+    }
+    
+    if ($string_array){
+      return [
+        "x" => $array_container[$o][$string_array],
+        "y" => rand($height/2, 30)
+      ];
+    }
+  }
+}
+
 
 
 function demo($methode,$sitekey,$site){
