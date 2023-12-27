@@ -346,6 +346,7 @@ function bypass_shortlinks($url){
   ulang:
     $url = str_replace("http:","https:",$url);
     $coundown = 15;
+    $seconds = 90;
     $host = parse_url(
     $url)["host"];
     $query = parse_url($url);
@@ -360,6 +361,7 @@ function bypass_shortlinks($url){
     if(preg_match("#(cryptoflare.cc|myhealths.icu|clk.st|urlsfly.me|wefly.me|shortsfly.me|linksfly.me)#is",$host)){
       
       $run = build($url);
+      $time = time() + $seconds;
       $r = base_short($url); #print_r($r);
       $link = $r["url"];
      /* if(preg_match("#(limit)#is",$link)){
@@ -383,9 +385,12 @@ function bypass_shortlinks($url){
         return "refresh";
       }
       if($r1){
-        L(90);
         print h."success";
         r();
+        $timer = $time - time();
+          if($timer >= 1){
+            L($timer);
+          }
         return $r1;
       }
     } elseif(preg_match("#(link1s.com|link1s.net|insfly.pw|earnify.pro|links.earnify.pro|shrinke.us|adrev.link|nx.chainfo.xyz|linksly.co|owllink.net|go.birdurls.com|go.owllink.net|mitly.us|go.illink.ne|coinpayz.link|oko.sh|go.mtraffics.com|go.megaurl.in|go.megafly.in|clik.pw|usalink.io|link.usalink.io|go.hatelink.me|ez4short.com|link.shrinkme.link|go.shorti.io|shorti.io|sheralinks.com|linksfly.link|link.adlink.click|url.beycoin.xyz|cryptosh.pro|aii.sh|link.vielink.top|bestlink.pro|ccurl.net|1shorten.com|adbull.me|tmearn.net|ser7.crazyblog.in|ex-foary.com|short.dash-free.com|shrinkme.info|shortplus.xyz|atglinks.com|link.short2url.in|link.revly.click|go.tinygo.co|go.wez.info|go.viewfr.com|cashlinko.com|linkjust.com|dz4link.com|panylink.com|panyflay.me|panyshort.link|droplink.co|oscut.space|oscut.fun|kyshort.xyz|go.revcut.net|go.urlcut.pro|go.faho.us|go.eazyurl.xyz|clockads.in|go.shtfly.com|go.bitss.sbs|dailytime.store|go.foxylinks.site|m.pkr.pw|linkjust.com|adbitfly.com|adshort.co|lollty.com|10short.com|short2money.com|shrinkme.org|teralinks.in|urlpay.in|linksly.pw|short.paylinks.cloud|ez4short.xyz|go.shortsme.in)#is",$host)){
@@ -1199,17 +1204,29 @@ $method = "recaptchav2";
       $api = save("scraperapi");
       #$scrape = scrape_valid();
       $r = base_short("http://api.scraperapi.com?api_key=".$api."&keep_headers=true&url=".$url);
-      #die(print_r($r));
+      $time = time() + $seconds;
+      if(md5($r["res"]) ==  "2334dc46017fbf6c6e1822a69efae72a"){
+        unlink("scraperapi");
+        print m."scraperapi telah mencapai batas limit".n;
+        goto ulang;
+      }
+      #die(print());
       $link = $r["url2"][0];
       if(!$link){
         return "refresh";
       }
       $cookie[] = $r["cookie"];
       while(true){
+        unset($coordinate);
         $r = base_short($link,0,0,$link,0,join('',$cookie));//die(print_r($r));
         if($r["url"]){
+          
           print h."success";
           r();
+          $timer = $time - time();
+          if($timer >= 1){
+            L($timer);
+          }
           return $r["url"];
         }
         $link1 = $r["url1"][0];
@@ -1218,13 +1235,10 @@ $method = "recaptchav2";
         }
         $cookie[] = $r["cookie"];
         $cookie[] = array_reverse($cookie);
-        $node = executeNode($r["res"],1);#die(print_r($node));
+        $node = executeNode($r["res"],1);
         $rs = "https://".parse_url($link1)["host"]."/";
         if($node["token_csrf"][1][1] == "_iconcaptcha-token"){
-          $xxx = rand(200,250);
-          $yyy = rand(33,35);
-          $rsp = array("ic-hf-se" => $xxx.",".$yyy.",320","ic-hf-id" => 1,"ic-hf-hp" => "");
-          $data_post = data_post($node["token_csrf"], "two", $rsp);
+          $data_post = data_post($node["token_csrf"], "two");
           parse_str($data_post, $ic);
           $eol = "\n";
           $boundary = "------WebKitFormBoundary";
@@ -1233,8 +1247,8 @@ $method = "recaptchav2";
           $data = '';
           $data .= $boundary.$code.$eol;
           $data .= $content.$eol.$eol;
-          $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "light", "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
-          $data .= $boundary.$code.'--';
+          $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "dark", "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
+          $data .= $boundary.$code.'--';re:
           $r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),$code);
           if($r["status"] >= 400){
             continue;
@@ -1243,6 +1257,12 @@ $method = "recaptchav2";
           if($r["status"] >= 400 or !$r["res"]){
             continue;
           }
+          if(strlen($r["res"]) >= 100){
+            $coordinate[] = coordinate($r["res"]);
+            if(!$coordinate[0]){
+              continue;
+            }
+          }
           $eol = "\n";
           $boundary = "------WebKitFormBoundary";
           $content = 'Content-Disposition: form-data; name="payload"';
@@ -1250,14 +1270,16 @@ $method = "recaptchav2";
           $data = '';
           $data .= $boundary.$code.$eol;
           $data .= $content.$eol.$eol;
-          $data .= base64_encode(json_encode(["i" => 1, "x" => $xxx, "y" => $yyy, "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
+          $data .= base64_encode(json_encode(["i" => 1, "x" => $coordinate[0]["x"], "y" => $coordinate[0]["y"], "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
           $data .= $boundary.$code.'--';
           $r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),$code);
           if($r["status"] >= 400){
             continue;
           }
+          $rsp = array("ic-hf-se" => $coordinate[0]["x"].",".$coordinate[0]["y"].",320","ic-hf-id" => 1,"ic-hf-hp" => "");
+          $data_post = data_post($node["token_csrf"], "two", $rsp);
         } else {
-          $data_post = $data_post = data_post($node["token_csrf"], "one");
+          $data_post = data_post($node["token_csrf"], "one");
         }
         $r = base_short($link,0,$data_post,$rs,0,join('',$cookie));
         $url = $r["url"];
@@ -1270,6 +1292,7 @@ $method = "recaptchav2";
     } elseif(preg_match("#(clks.pro)#is",$host)){
       $run = build($url);
       $scrape = scrape_valid();
+      $time = time() + $seconds;
       $r = base_short($run["inc"],0,0,"https://mdn.lol/",0,0,0,$scrape);
      # die(print_r($r));
       if(preg_match("#(-cut|final)#is",$r["url"])){
@@ -1277,9 +1300,12 @@ $method = "recaptchav2";
         return "refresh";
       }
       if($r["url"]){
-        L(90);
         print h."success";
         r();
+        $timer = $time - time();
+          if($timer >= 1){
+            L($timer);
+          }
         parse_str(explode("?",$r["url"])[1], $get);
         if($get["get"]){
           return base64_decode($get["get"]);
@@ -1346,6 +1372,7 @@ $method = "recaptchav2";
  
       #die(print_r($node));
     } elseif(preg_match("#(mgnet.xyz|1bit.space)#is",$host)){
+      $time = time() + $seconds;
       $r = base_short($url);
       $cookie[] = $r["cookie"];
       $link = explode("https:",parse_url($r["url"])["path"])[1];
@@ -1355,7 +1382,10 @@ $method = "recaptchav2";
           base_short($r1["url"],0,0,$url,0,join('',$cookie));
           print h."success";
           r();
-          L(90);
+          $timer = $time - time();
+          if($timer >= 1){
+            L($timer);
+          }
           return "https:".$link;
         }
       } else {
@@ -1484,6 +1514,7 @@ function data_post($t, $type, $array = 0){
 
 
 function config(){
+  $config[] = "fly";
   $config[] = "Linksfly";
   $config[] = "linksfly2";
   $config[] = "URLHives";
@@ -1529,6 +1560,7 @@ function config(){
   $config[] = "Insfly";
   $config[] = "insfly.pw";
   $config[] = "Adrevlinks";
+  $config[] = "Ezshort";
   $config[] = "Ez4Short";
   $config[] = "ez4shortx";
   $config[] = "Shrinkme";
@@ -1583,7 +1615,6 @@ function config(){
   $config[] = "insurancly.cc";
   $config[] = "botfly";
   $config[] = "botfly.me";
-  $config[] = "cryptosh";
   $config[] = "shrink.pe";
   $config[] = "limkdam";
   $config[] = "linkdam";
@@ -1626,6 +1657,11 @@ function config(){
   $config[] = "TeraFlyOmoo";
   $config[] = "TeraFlyOtoo";
   $config[] = "TeraFlyOroo";
+  $config[] = "TeraFly/Owoo";
+  $config[] = "TeraFly/Ogoo";
+  $config[] = "TeraFly/Omoo";
+  $config[] = "TeraFly/Otoo";
+  $config[] = "TeraFly/Oroo";
   $config[] = "Panylink";
   $config[] = "Panyflay";
   $config[] = "PanyShort";
@@ -1668,8 +1704,10 @@ function config(){
   $config[] = "clk";
   $config[] = "clkspro";
   $config[] = "clks.pro";
+  $config[] = "Loll";
   $config[] = "Lollty";
   $config[] = "Lollty.com";
+  $config[] = "Cryptosh";
   $config[] = "Cryptosh.pro";
   $config[] = "FoxyLinks";
   $config[] = "10Short";
