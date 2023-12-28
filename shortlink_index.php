@@ -1258,8 +1258,8 @@ $method = "recaptchav2";
             continue;
           }
           if(strlen($r["res"]) >= 100){
-            $coordinate[] = coordinate($r["res"]);
-            if(!$coordinate[0]){
+            $coordinate = coordinate($r["res"]);
+            if(!$coordinate["x"]){
               continue;
             }
           }
@@ -1270,13 +1270,13 @@ $method = "recaptchav2";
           $data = '';
           $data .= $boundary.$code.$eol;
           $data .= $content.$eol.$eol;
-          $data .= base64_encode(json_encode(["i" => 1, "x" => $coordinate[0]["x"], "y" => $coordinate[0]["y"], "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
+          $data .= base64_encode(json_encode(["i" => 1, "x" => $coordinate["x"], "y" => $coordinate["y"], "w" => 320, "a" => 2, "tk" => $ic["_iconcaptcha-token"], "ts" => round(time() * 1000)])).$eol;
           $data .= $boundary.$code.'--';
           $r = base_short($rs."iconcaptchar/captcharequest",1,$data,$rs,0,join('',$cookie),$code);
           if($r["status"] >= 400){
             continue;
           }
-          $rsp = array("ic-hf-se" => $coordinate[0]["x"].",".$coordinate[0]["y"].",320","ic-hf-id" => 1,"ic-hf-hp" => "");
+          $rsp = array("ic-hf-se" => $coordinate["x"].",".$coordinate["y"].",320","ic-hf-id" => 1,"ic-hf-hp" => "");
           $data_post = data_post($node["token_csrf"], "two", $rsp);
         } else {
           $data_post = data_post($node["token_csrf"], "one");
