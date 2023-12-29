@@ -80,6 +80,24 @@ function visit_short($r, $site_url = 0, $data_token = 0){
                   $r1["url"] = $r1["json"]->shortlink;
                   #goto run;
                 }
+            } elseif(mode == "earnbitmoon"){
+              $cap = captcha_bitmoon();
+              if(!$cap){
+                return "refresh";
+              }
+              $data2 = http_build_query([
+                "a" => "getShortlink",
+                "data" => preg_replace("/[^0-9]/","",$r["visit"][$s]),
+                "token" => $r["token"],
+                "ic-hf-id" => 1,
+                "ic-hf-se" => $cap,
+                "ic-hf-hp" => ""
+                ]);
+                $r1 = base_run(host."system/ajax.php",$data2);#die(print_r($r1));
+                if($r1["json"]->shortlink){
+                  $r1["url"] = $r1["json"]->shortlink;
+                  #goto run;
+                }
             } elseif(mode == "no_icon"){
               $data = http_build_query([
                 "a" => "getShortlink",
@@ -198,6 +216,7 @@ function visit_short($r, $site_url = 0, $data_token = 0){
       up:
     }
 }
+
 
 
 function h_short($xml = 0, $referer = 0, $agent =0, $boundary = 0){
@@ -1259,7 +1278,17 @@ $method = "recaptchav2";
           }
           if(strlen($r["res"]) >= 100){
             $coordinate = coordinate($r["res"]);
-            if(!$coordinate["x"]){
+            /*if(!$coordinate["x"]){
+              continue;
+            }*/
+            for ($i = 0; $i < 5; $i++) {
+              $coordinate = coordinate($r["res"], $i);
+              if ($coordinate["x"]) {
+                break;
+              }
+            }
+        
+            if (!$coordinate["x"]) {
               continue;
             }
           }
@@ -1596,6 +1625,7 @@ function config(){
   $config[] = "Cuty";
   $config[] = "Cuti.io";
   $config[] = "cuty.io";
+  $config[] = "Cutyio";
   $config[] = "Usalink";
   $config[] = "usalink-io";
   $config[] = "usalink.io";
@@ -1642,6 +1672,7 @@ function config(){
   $config[] = "ex-foary";
   $config[] = "ex-foary.com";
   $config[] = "Clicksfly";
+  $config[] = "clicksflycom";
   $config[] = "Clicksfly.com";
   $config[] = "Genlink";
   $config[] = "ctr";
@@ -1722,14 +1753,15 @@ function config(){
   $config[] = "Mgnet.xyz";
   $config[] = "reshort";
   $config[] = "rss";
+  $config[] = "rs";
   $config[] = "rsshort";
   $config[] = "rsshort.com";
   $config[] = "Paylinks";
   $config[] = "Paylinks.cloud";
   $config[] = "Shortsme";
   $config[] = "Shortsme.in";
-  $config[] = "adrinolinks";
-  $config[] = "adrinolinks.com";
+ //$config[] = "adrinolinks";
+ // $config[] = "adrinolinks.com";
   $config[] = "teralinks";
   $config[] = "teralinks.in";
   return $config;
