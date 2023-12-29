@@ -1,5 +1,75 @@
 <?php
   
+function captcha_bitmoon() {
+    $eol = "\n";
+    $boundary = "------WebKitFormBoundary";
+    $content = 'Content-Disposition: form-data; name="payload"';
+    
+   # while (true) {
+        $code = az_num(16);
+        $data = '';
+        $data .= $boundary . $code . $eol;
+        $data .= $content . $eol . $eol;
+        $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "dark", "ts" => round(time() * 1000)])) . $eol;
+        $data .= $boundary . $code . '--';
+        
+        $r = base_run(host . "system/libs/captcha/request.php", $data, 1, $code);
+        
+        if ($r["status"] == 403) {
+            print m . "there is an error!!";
+            sleep(1);
+            r();
+            return "";
+        }
+        
+        $r = base_run(host . "system/libs/captcha/request.php?payload=" . base64_encode(json_encode(["i" => 1, "ts" => round(time() * 1000)])));
+        
+        if ($r["status"] == 403) {
+            print p . "no captcha wait!";
+            L(60);
+            r();
+            return "";
+        }
+        
+        for ($i = 0; $i < 5; $i++) {
+            $coordinate = coordinate($r["res"], $i);
+            if ($coordinate["x"]) {
+                break;
+            }
+        }
+        
+        if (!$coordinate["x"]) {
+            return "";
+        }
+        
+        $microtime = ["ts" => round(time() * 1000)];
+        $load = ["i", "x", "y", "w", "a"];
+        $pay = [1, $coordinate["x"], $coordinate["y"], 314.661, 2];
+        
+        $answer = array_combine($load, $pay);
+        $answer_enc = json_encode(array_merge($answer, $microtime));
+
+        $code1 = az_num(16);
+        $data1 = '';
+        $data1 .= $boundary . $code1 . $eol;
+        $data1 .= $content . $eol . $eol;
+        $data1 .= base64_encode($answer_enc) . $eol;
+        $data1 .= $boundary . $code1 . '--';
+        
+        $r = base_run(host . "system/libs/captcha/request.php", $data1, 1, $code1);
+        
+        if ($r["status"] == 200) {
+            return join(',', [$answer["x"], $answer["y"], $answer["w"]]);
+        } else {
+          print p . "error captcha not solve";
+          sleep(2);
+          r();
+          return "";
+        #}
+        
+    }
+}
+
 
 function count_key($iconPath, $count) {
   for ($o = 0; $o < count($iconPath); $o++) {
@@ -83,8 +153,8 @@ function count_key($iconPath, $count) {
   return $key_array;
 }
 
-function coordinate($img) {
-  //$img = file_get_contents("coba9.png");
+function coordinate($img, $negate = 0) {
+  //$img = file_get_contents("coba1.png");
   if (300 >= strlen($img)) {
     print "image not found!";
     r();
@@ -122,13 +192,22 @@ function coordinate($img) {
         $cut_width = 33;
       }
       
-      for ($x = 0; $x < 2; $x++) {
-        imagealphablending($image, false);
-        imagesavealpha($image, true);
-        $transparan = imagecolorallocatealpha($image, 0, 0, 0, 127);
-        imagefill($image, 0, 0, $transparan);
+      if ($negate == 1) {
+        imagefilter($image, IMG_FILTER_GRAYSCALE);
+        imagefilter($image,IMG_FILTER_NEGATE);
+      } elseif ($negate == 2) {
+        imagefilter($image, IMG_FILTER_NEGATE);
+      } elseif ($negate == 3) {
+        imagefilter($image,IMG_FILTER_GRAYSCALE);
+      } else {
+        for ($x = 0; $x < 2; $x++) {
+          imagealphablending($image, false);
+          imagesavealpha($image, true);
+          $transparan = imagecolorallocatealpha($image, 0, 0, 0, 127);
+          imagefill($image, 0, 0, $transparan);
+        }
       }
-
+    
       $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $cut_width, 'height' => $height]);
       imagepng($image);
       imagedestroy($image);
@@ -136,10 +215,10 @@ function coordinate($img) {
       $data = ob_get_contents();
       ob_end_clean();
       $file[] = $data;
+      $foo[] = strlen($data);
     }
 
     $string_array = count_key($file, count($isx[$o]));
-
     if (!$string_array) {
       unset($file);
       continue;
@@ -187,33 +266,30 @@ function demok($methode,$sitekey,$site){
   }
 }
 
-function c(){
-    if(strtoupper(substr(PHP_OS,0,3)) == 'WIN'){
-        $clear = 'cls';
+function c() {
+    $clear = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ? 'cls' : 'clear';
+    pclose(popen($clear, 'w'));
+}
+
+function az_num($amount = false) {
+    $array = array_merge(range("A", "Z"), range(0, 9));
+    $az = $az_num = '';
+
+    for ($s = 0; $s < count($array); $s++) {
+        if (range(0, 25)[$s] >= $s) {
+            $az .= $array[$s];
+        }
+        $az_num .= $array[$s];
+    }
+
+    if ($amount >= 1) {
+        return substr(str_shuffle(strtolower($az) . $az_num), 0, $amount);
     } else {
-        $clear = 'clear';
+        die("masukan jumlah angka\n\ncontoh -> az_num(123);\n");
     }
-    pclose(popen($clear,'w'));
 }
 
-function az_num($amount = false){
-  $array = array_merge(range("A", "Z"), range(0, 9));
-  for($s=0;$s<count($array);$s++){
-    if(range(0, 25)[$s] >= $s){
-      $az .= $array[$s];
-    }
-    $az_num .= $array[$s];
-  }
-  if($amount >= 1){
-    return substr(str_shuffle(strtolower($az).$az_num),0,$amount);
-  } else {
-    die(m."masukan jumlah angka".n.n.p."contoh -> az_num(123);".n);
-  }
-}
-
-
-
-function new_cookie($cookie_old, $cookie_new){
+function new_cookie($cookie_old, $cookie_new) {
     $array = array('&' => '%26', '+' => '%2B', ';' => '&');
     parse_str(strtr($cookie_old, $array), $old);
     parse_str(strtr($cookie_new, $array), $new);
@@ -221,35 +297,38 @@ function new_cookie($cookie_old, $cookie_new){
     return http_build_query($array_merge, '', ';', PHP_QUERY_RFC3986);
 }
 
-
-function multiexplode($delimiters,$string){
-    $ready = str_replace($delimiters, $delimiters[0],$string);
-    return explode($delimiters[0],$ready);
+function multiexplode($delimiters, $string) {
+    $ready = str_replace($delimiters, $delimiters[0], $string);
+    return explode($delimiters[0], $ready);
 }
 
 function arr_rand($my_array = array()) {
-  $copy = array();
-  while (count($my_array)) {
-    $element = array_rand($my_array);
-    $copy[$element] = $my_array[$element];
-    unset($my_array[$element]);
-  }
-  return array_merge($copy);
+    $copy = array();
+    while (count($my_array)) {
+        $element = array_rand($my_array);
+        $copy[$element] = $my_array[$element];
+        unset($my_array[$element]);
+    }
+    return array_merge($copy);
+}
+
+function set_cookie($result, $array = 0) {
+    preg_match_all('/^Set-Cookie:\s*([^;\r\n]*)/mi', $result, $matches);
+    $cookies = array();
+    
+    foreach ($matches[1] as $item) {
+        parse_str($item, $cookie);
+        $cookies = array_merge($cookies, $cookie);
+    }
+    
+    if ($array) {
+        return $cookies;
+    }
+
+    return urldecode(http_build_query($cookies, '', ';', PHP_QUERY_RFC3986)) . ";";
 }
 
 
-function set_cookie($result, $array = 0){
-  preg_match_all('/^Set-Cookie:\s*([^;\r\n]*)/mi', $result, $matches);
-  $cookies = array();
-  foreach($matches[1] as $item){
-    parse_str($item, $cookie);
-    $cookies = array_merge($cookies, $cookie);
-  }
-  if($array){
-    return $cookies;
-  }
-  return urldecode(http_build_query($cookies, '', ';', PHP_QUERY_RFC3986)).";";
-}
 
 function scrape_chek(){
     $raw = curl("https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt")[1];
@@ -269,54 +348,70 @@ function scrape_chek(){
     }
 }
 
-function scrape_list(){
+function scrape_list() {
     $file = "proxyscrape_premium_http_proxies.txt";
-    if(!file_get_contents($file)){
-      die(m."file ".$file." tidak ada".n);
+
+    if (!file_exists($file)) {
+        die("file $file tidak ada\n");
     }
+
     return trimed(array_values(arr_rand(file($file)))[0]);
 }
 
-function scrape_valid(){
+function scrape_valid() {
     re:
     $key_scrape = save("key_scrape");
     $h = ["user-agent: Mozilla/5.0"];
-    $url = "https://api.proxyscrape.com/v2/account/datacenter_shared/whitelist?sessionid=".$key_scrape."&userid=".$key_scrape."&type=";
-    $my_ip = curl("https://api.proxyscrape.com/ip.php",$h)[1];
-    while(true){
-      $ip = curl($url."get",$h)[2];
-      if(!$ip or $ip->status == "invalid"){
-        print m."key tidak berguna lagi silakan ganti";
-        sleep(2);
-        r();
-        #unlink("key_scrape");
-        goto re;
-      }
-      $list = explode(n, curl("https://api.proxyscrape.com/v2/account/datacenter_shared/proxy-list?sessionid=".$key_scrape."&userid=".$key_scrape."&type=displayproxies&protocol=http",$h)[1]);
-      if(!$list[2]){
-        continue;
-      }
-      $proxy = trimed(arr_rand(array_filter($list))[0]);#die($proxy);
-      if(!$ip->whitelisted[0]){
-        $req = curl($url."add&ip[]=".$my_ip,$h)[2];
-        if($req->status == "ok"){
-          return $proxy;
+    $url = "https://api.proxyscrape.com/v2/account/datacenter_shared/whitelist?sessionid=$key_scrape&userid=$key_scrape&type=";
+    $my_ip = curl("https://api.proxyscrape.com/ip.php", $h)[1];
+
+    while (true) {
+        $ip = curl($url . "get", $h)[2];
+
+        if (!$ip || $ip->status == "invalid") {
+            print "key tidak berguna lagi silakan ganti";
+            sleep(2);
+            r();
+            #unlink("key_scrape");
+            goto re;
         }
-      }
-      if($my_ip == $ip->whitelisted[0]){
-        return $proxy;
-      }
-      if($my_ip !== $ip->whitelisted[0]){
-        $req = curl($url."remove&ip[]=".$ip->whitelisted[0],$h)[2];
-        if($req->status == "ok"){
-          continue;
+
+        $list = explode(n, curl("https://api.proxyscrape.com/v2/account/datacenter_shared/proxy-list?sessionid=$key_scrape&userid=$key_scrape&type=displayproxies&protocol=http", $h)[1]);
+
+        if (!$list[2]) {
+            continue;
         }
-      }
+
+        $proxy = trimed(arr_rand(array_filter($list))[0]);
+
+        if (!$ip->whitelisted[0]) {
+            $req = curl($url . "add&ip[]=$my_ip", $h)[2];
+
+            if ($req->status == "ok") {
+                return $proxy;
+            }
+        }
+
+        if ($my_ip == $ip->whitelisted[0]) {
+            return $proxy;
+        }
+
+        if ($my_ip !== $ip->whitelisted[0]) {
+            $req = curl($url . "remove&ip[]=" . $ip->whitelisted[0], $h)[2];
+
+            if ($req->status == "ok") {
+                continue;
+            }
+        }
     }
 }
 
+
+
+
+
 function movePage(){
-        return [
+    return [
          0 => "ERROR CONNECTION",
          100 => "Response 100 Continue",
          101 => "Response 101 Switching Protocols",
@@ -357,244 +452,246 @@ function movePage(){
          502 => "Response 502 Bad Gateway",
          503 => "Response 503 Service Unavailable",
          504 => "Response 504 Gateway Time-out"
-         ];
+     ];
 }
 
-function methode_captcha(){
-    return [
-        1 => "captchaai",
-        2 => "azcaptcha",
-        3 => "anycaptcha"
-    ];
+
+function trimed($txt) {
+    return preg_replace('/\s+/', '', $txt);
 }
 
-function trimed($txt){
-    return preg_replace('/\s+/', '',$txt);
-}
-        
-function t24(){
-    tmr(1,60*60*24+120);
-}
-        
-function lah($x=0,$inp=0){
-    if($x == 1){
-        ket(k.explode("/",host)[2],m."no ".$inp." can be bypassed").line();
-    } elseif($x == 2){
-        ket(k.explode("/",host)[2],m."sorry there is no method for ".$inp).line();
+function lah($x = 0, $inp = 0) {
+    if ($x == 1) {
+        ket(k.explode("/", host)[2], m."no ".$inp." can be bypassed").line();
+    } elseif ($x == 2) {
+        ket(k.explode("/", host)[2], m."sorry there is no method for ".$inp).line();
     } else {
-        ket(k.explode("/",host)[2],m."sorry no energy").line();
+        ket(k.explode("/", host)[2], m."sorry no energy").line();
     }
 }
 
-function rt(){
+function rt() {
     c();
     $t = $_SERVER["TMPDIR"];
-    if(file_exists($t)){
+    
+    if (file_exists($t)) {
         system("rm -rf $t/* 2>&1");
         return true;
     }
 }
 
-function tx($a){
-  print(h."Input ".$a.c." > ".p);
-  return trim(fgets(STDIN));
+function tx($a) {
+    print(h."Input ".$a.c." > ".p);
+    return trim(fgets(STDIN));
 }
 
-function ex($a,$b,$c,$d){
-    return explode($b,explode($a,$d)[$c])[0];
+function ex($a, $b, $c, $d) {
+    return explode($b, explode($a, $d)[$c])[0];
 }
 
-function Save($a){
-    if(file_exists($a)){
-      $b=file_get_contents($a);
+function Save($a) {
+    if (file_exists($a)) {
+        $b = file_get_contents($a);
     } else {
         $b = tx($a);
         n;
-        file_put_contents($a,$b);
+        file_put_contents($a, $b);
     }
     return $b;
 }
 
-function an($input){
+function an($input) {
     $a = str_split($input); 
-    foreach ($a as $b){
-      print $b;
-      usleep(1500);
+    foreach ($a as $b) {
+        print $b;
+        usleep(1500);
     }
 }
 
-function text_line($input){
-  $n = "\n";
-  $a = str_split(" ".$input.n); 
-  foreach ($a as $b => $c){
-    if(strlen($input) >= 55){
-      if($b >= strlen($input) / 2){
-        if($c == " "){
-          print $n;
-          unset($n);
+function text_line($input) {
+    $n = "\n";
+    $a = str_split(" ".$input.n); 
+    foreach ($a as $b => $c) {
+        if (strlen($input) >= 55) {
+            if ($b >= strlen($input) / 2) {
+                if ($c == " ") {
+                    print $n;
+                    unset($n);
+                }
+            }
         }
-      }
+        print $c;
+        usleep(1500);
     }
-    print $c;
-    usleep(1500);
-  }
-  line();
+    line();
 }
 
-function tmr($a,$tmr){
+function tmr($a, $tmr) {
     date_default_timezone_set('UTC').r();
-    $timr = time()+$tmr;
-    $col = [b,c,h,k,m,p,u];
-    while(true):
-        $res = $timr-time();
-        if($res<1){
+    $timr = time() + $tmr;
+    $col = [b, c, h, k, m, p, u];
+    
+    while (true):
+        $res = $timr - time();
+        
+        if ($res < 1) {
             break;
         }
-        if($a == 1){
-            print $col[array_rand($col)].'CLAIM NEXT TIME:'.date(' H',$res).'H'.date(' i',$res).'M'.date(' s',$res).'S'.d;r();
-        } elseif($a == 2){
-            print $col[array_rand($col)].'please wait'.date(' H:i:s ',$res).d;r();
+        
+        if ($a == 1) {
+            print $col[array_rand($col)].'CLAIM NEXT TIME:'.date(' H', $res).'H'.date(' i', $res).'M'.date(' s', $res).'S'.d;r();
+        } elseif ($a == 2) {
+            print $col[array_rand($col)].'please wait'.date(' H:i:s ', $res).d;r();
         }
     endwhile;
 }
 
-function countdown($countdown){
-    for($i=0;$i<count($countdown);$i++){
-        $timer = bcdiv($countdown[$i],1000)-time();
-        if($timer >= -2){
-            if($timer >= 5500){
-            continue;
+function countdown($countdown) {
+    for ($i = 0; $i < count($countdown); $i++) {
+        $timer = bcdiv($countdown[$i], 1000) - time();
+        
+        if ($timer >= -2) {
+            if ($timer >= 5500) {
+                continue;
             } else {
-                tmr(1,$timer);
+                tmr(1, $timer);
                 break;
             }
         }
     }
 }
 
-function diff_time($fr, $time){
-  date_default_timezone_set('asia/jakarta');
-  $start = strtotime($time);
-  $stop = strtotime(date("H:i"));
-  $diff = $stop - $start;
-  if(explode("-",$diff)[1]){
-    $dif = explode("-",$diff)[1];
-  } else {
-    $dif = $diff;
-  }
-  if($fr * 60 >= $dif){
-    return 1;
-  }
+function diff_time($fr, $time) {
+    date_default_timezone_set('asia/jakarta');
+    $start = strtotime($time);
+    $stop = strtotime(date("H:i"));
+    $diff = $stop - $start;
+    
+    if (explode("-", $diff)[1]) {
+        $dif = explode("-", $diff)[1];
+    } else {
+        $dif = $diff;
+    }
+    
+    if ($fr * 60 >= $dif) {
+        return 1;
+    }
 }
 
-
-function L($t){
+function L($t) {
     r();
-    $col = [b,c,h,k,m,p,u];
-    for($i=1;$i<=$t;$i++){
+    $col = [b, c, h, k, m, p, u];
+    
+    for ($i = 1; $i <= $t; $i++) {
         print $col[array_rand($col)]."\rLoading... [".intval($i/$t*100)."%]";
         flush();
         sleep(1);
     }
+    
     r();
 }
 
-function r(){
+function r() {
     sleep(1);
-    print "\r".str_repeat(' ',62)."\r";
+    print "\r".str_repeat(' ', 62)."\r";
 }
 
-function line(){
-    print str_repeat(p.'─',50).n;
+function line() {
+    print str_repeat(p.'─', 50).n;
 }
 
-function ket($a,$aa,$b=0,$bb=0,$c=0,$cc=0,$d=0,$dd=0){
-    if($a or $aa){
+function ket($a, $aa, $b = 0, $bb = 0, $c = 0, $cc = 0, $d = 0, $dd = 0) {
+    if ($a or $aa) {
         print h.$a.c." > ".p.$aa.n;
-    } if($b or $bb){
+    } 
+    if ($b or $bb) {
         print h.$b.c." > ".p.$bb.n;
-    } if($c or $cc){
+    } 
+    if ($c or $cc) {
         print h.$c.c." > ".p.$cc.n;
-    } if($d or $dd){
+    } 
+    if ($d or $dd) {
         print h.$d.c." > ".p.$dd.n;
     }
 }
 
-function ket_line($a,$aa,$b=0,$bb=0,$c=0,$cc=0){
-    if($a or $aa){
+function ket_line($a, $aa, $b = 0, $bb = 0, $c = 0, $cc = 0) {
+    if ($a or $aa) {
         print h.$a.c." > ".p.$aa;
-    } if($b or $bb){
+    } 
+    if ($b or $bb) {
         print " | ".h.$b.c." > ".p.$bb;
-    } if($c or $cc){print " | ".h.$c.c." > ".p.$cc;
+    } 
+    if ($c or $cc) {
+        print " | ".h.$c.c." > ".p.$cc;
     }
     print n;
 }
 
-function curl($url, $header = false, $post = false,  $followlocation = false, $cookiejar = false, $alternativ_cookie = false, $proxy = false){
-    while(true){
-      if(!parse_url($url)["scheme"]){
-        print m."url tidak valid";
-        sleep(2);
-        r();
-      }
-      $default[CURLOPT_URL] = $url;
-      if($followlocation){
-        $default[CURLOPT_FOLLOWLOCATION] = $followlocation;
-      }
-      $default[CURLOPT_RETURNTRANSFER] = 1;
-      $default[CURLOPT_ENCODING] = 'gzip,deflate';
-      $default[CURLOPT_HEADER] = 1;
-      $default[CURLOPT_SSL_VERIFYPEER] = 0;
-      $default[CURLOPT_SSL_VERIFYHOST] = 0;
-      $default[CURLOPT_CONNECTTIMEOUT] = 40;
-      $default[CURLOPT_TIMEOUT] = 20;
-     # $default[CURLOPT_REFERER] = "";
-      if($header){
-        $default[CURLOPT_HTTPHEADER] = $header;
-      }
-      if($post){
-        $default[CURLOPT_POST] = 1;
-        $default[CURLOPT_POSTFIELDS] = $post;
-      }
-      if($cookiejar){
-        $default[CURLOPT_COOKIEFILE] = $cookiejar;
-        $default[CURLOPT_COOKIEJAR] = $cookiejar;
-      }
-      if($alternativ_cookie){
-        $default[CURLOPT_COOKIE] = $alternativ_cookie;
-      }
-      if($proxy){
-        //$default[CURLOPT_HTTPPROXYTUNNEL] = 1;
-        $default[CURLOPT_PROXY] = $proxy;
-       // $default[CURLOPT_PROXYUSERPWD] = "kotakxrrld:iy5sr3as5hz1";
-      }
-      $options = $default;
-      $ch = curl_init();
-      curl_setopt_array($ch, $options);
-      $output = curl_exec($ch);
-      $response = substr($output,curl_getinfo($ch,CURLINFO_HEADER_SIZE));
-      $info = curl_getinfo($ch);
-      curl_close($ch);
-      if(!$info["primary_ip"]){
-        print m.movePage()[$info["http_code"]];
-        r();
-        print explode("port",curl_error($ch))[0];
-        r();
-        continue;
-      } else {
-        foreach(explode("\r\n",substr($output,0,strpos($output,"\r\n\r\n"))) as $i => $line){
-          if($i == 0){
-            $headers['http_code'] = $line;
-          } else {
-            list($key, $value ) = explode(': ',$line);
-            $header_array[$key] = $value;}
+function curl($url, $header = false, $post = false, $followlocation = false, $cookiejar = false, $alternativ_cookie = false, $proxy = false) {
+    while (true) {
+        if (!parse_url($url)["scheme"]) {
+            print m."url tidak valid";
+            sleep(2);
+            r();
         }
-      }
-      print p.movePage()[$info["http_code"]];
-      r();
-      return [[$header_array, $info, $output],$response, json_decode(str_replace([n,"﻿"],"",strip_tags($response)))];
-  }
+        $default[CURLOPT_URL] = $url;
+        if ($followlocation) {
+            $default[CURLOPT_FOLLOWLOCATION] = $followlocation;
+        }
+        $default[CURLOPT_RETURNTRANSFER] = 1;
+        $default[CURLOPT_ENCODING] = 'gzip,deflate';
+        $default[CURLOPT_HEADER] = 1;
+        $default[CURLOPT_SSL_VERIFYPEER] = 0;
+        $default[CURLOPT_SSL_VERIFYHOST] = 0;
+        $default[CURLOPT_CONNECTTIMEOUT] = 40;
+        $default[CURLOPT_TIMEOUT] = 20;
+        if ($header) {
+            $default[CURLOPT_HTTPHEADER] = $header;
+        }
+        if ($post) {
+            $default[CURLOPT_POST] = 1;
+            $default[CURLOPT_POSTFIELDS] = $post;
+        }
+        if ($cookiejar) {
+            $default[CURLOPT_COOKIEFILE] = $cookiejar;
+            $default[CURLOPT_COOKIEJAR] = $cookiejar;
+        }
+        if ($alternativ_cookie) {
+            $default[CURLOPT_COOKIE] = $alternativ_cookie;
+        }
+        if ($proxy) {
+            $default[CURLOPT_PROXY] = $proxy;
+        }
+        $options = $default;
+        $ch = curl_init();
+        curl_setopt_array($ch, $options);
+        $output = curl_exec($ch);
+        $response = substr($output, curl_getinfo($ch, CURLINFO_HEADER_SIZE));
+        $info = curl_getinfo($ch);
+        curl_close($ch);
+        if (!$info["primary_ip"]) {
+            print m.movePage()[$info["http_code"]];
+            r();
+            print explode("port", curl_error($ch))[0];
+            r();
+            continue;
+        } else {
+            foreach (explode("\r\n", substr($output, 0, strpos($output, "\r\n\r\n"))) as $i => $line) {
+                if ($i == 0) {
+                    $headers['http_code'] = $line;
+                } else {
+                    list($key, $value) = explode(': ', $line);
+                    $header_array[$key] = $value;
+                }
+            }
+        }
+        print p.movePage()[$info["http_code"]];
+        r();
+        return [[$header_array, $info, $output], $response, json_decode(str_replace([n, "﻿"], "", strip_tags($response)))];
+    }
 }
+
 
 function asci($string){
     $res = ip();
@@ -660,56 +757,132 @@ function asci($string){
     line();
 }
 
-function ip(){
+function ip() {
     $if = json_decode(file_get_contents("https://ipinfo.io/?utm_source=ipecho.net&utm_medium=referral&utm_campaign=upsell_sister_sites"));
-        return [
-            "i"=>$if->ip,
-            "r"=>$if->region,
-            "c"=>$if->country,
-            "t"=>$if->timezone
-        ];
+    return [
+        "i" => $if->ip,
+        "r" => $if->region,
+        "c" => $if->country,
+        "t" => $if->timezone
+    ];
 }
 
-function user_agent(){
-  if(strtoupper(substr(PHP_OS,0,3)) == 'WIN'){
-    $user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Safari/537.36';
-  } else {
-    $user_agent = 'Mozilla/5.0 (Linux; Android 11; M2012K11AG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Mobile Safari/537.36';
-  }
-  return $user_agent;
-}
-
-function head($xml = 0,  $boundary = 0){
-  global $u_a, $u_c;
-  $header = array();
-  $header[] = "Host: ".explode("/",host)[2];
-  if($boundary){
-    $header[] = "content-type: multipart/form-data; boundary=----WebKitFormBoundary".$boundary;
-  }
-  if($xml){
-    $header[] = "x-requested-with: XMLHttpRequest";
-  }
-  if(!$u_a){
-    $u_a = user_agent();
-  }
-  $header[] = "user-agent: ".$u_a;
-  if($u_c){
-    $header[] = "cookie: ".$u_c;
-  }
-  return $header;
-}
-
-
-function azcaptcha($method,$sitekey,$pageurl,$rr = 0){
-    if($method == 'hcaptcha' or $method == 'recaptchav3'){
-        die(m.'sorry anti byppass '.$method.n);
+function user_agent() {
+    if (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') {
+        $user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Safari/537.36';
+    } else {
+        $user_agent = 'Mozilla/5.0 (Linux; Android 11; M2012K11AG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Mobile Safari/537.36';
     }
-    if($method == 'invisible_recaptchav2'){
-      $method = 'recaptchav2';
+    return $user_agent;
+}
+
+function head($xml = 0, $boundary = 0) {
+    global $u_a, $u_c;
+    $header = [];
+    $header[] = "Host: " . explode("/", host)[2];
+    if ($boundary) {
+        $header[] = "content-type: multipart/form-data; boundary=----WebKitFormBoundary" . $boundary;
     }
-    refresh: 
+    if ($xml) {
+        $header[] = "x-requested-with: XMLHttpRequest";
+    }
+    if (!$u_a) {
+        $u_a = user_agent();
+    }
+    $header[] = "user-agent: " . $u_a;
+    if ($u_c) {
+        $header[] = "cookie: " . $u_c;
+    }
+    return $header;
+}
+
+
+
+function multi_atb($r) {
+    $apikey = save("apikey_multibot");
+    preg_match_all('# <img src="(.*?)"#is', $r, $main_img);
+    preg_match_all('#rel=\\\"(.*?)\\\"><img src=\\\"(.*?)\\\"#is', $r, $rell_img);
+    if ($rell_img[1]) {
+        for ($k = 0; $k < count($main_img[1]); $k++) {
+            if (preg_match("#data:image#is", $main_img[1][$k])) {
+                $main = $main_img[1][$k];
+                break;
+            }
+        }
+        if (!$main) {
+            return "";
+        }
+        $code = az_num(16);
+        $boundary = "------WebKitFormBoundary" . $code;
+        $content = "Content-Disposition: form-data; name=";
+        $data = '';
+        for ($i = 0; $i < count($rell_img[1]); $i++) {
+            $data .= $boundary . n;
+            $data .= $content . '"' . $rell_img[1][$i] . '"' . n . n;
+            $data .= $rell_img[2][$i] . n;
+        }
+        $data .= $boundary . n;
+        $data .= $content . '"main"' . n . n;
+        $data .= $main . n;
+        $data .= $boundary . n;
+        $data .= $content . '"method"' . n . n;
+        $data .= "antibot" . n;
+        $data .= $boundary . n;
+        $data .= $content . '"key"' . n . n;
+        $data .= $apikey . n;
+        $data .= $boundary . n;
+        $data .= $content . '"json"' . n . n;
+        $data .= "1" . n;
+        $data .= $boundary . "--";
+    }
+    $h = [
+        "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary" . $code
+    ];
+    $o = 0;
+    while ($o <= 20) {
+        $o++;
+        if ($o == 15) {
+            return "";
+        }
+        $js = curl("https://multibot.in/in.php", $h, $data)[2];
+        if ($js->status == 1) {
+            $id = $js->request;
+            break;
+        }
+    }
+    $x = 0;
+    while ($x <= 20) {
+        $x++;
+        if ($x == 15) {
+            return "";
+        }
+        sleep(5);
+        $js = curl("https://multibot.in/res.php?action=get&id=" . $id . "&key=" . $apikey . "&json=1", ["Accept: */*"])[2];
+        if ($js->request == "WRONG_RESULT") {
+            return "";
+        }
+        if ($js->status == 1) {
+            return " " . str_replace(",", " ", $js->request);
+        }
+        print $js->request;
+        r();
+    }
+}
+
+function multibot($method, $sitekey, $pageurl, $rr = 0) {
+    if ($method == 'invisible_recaptchav2') {
+        $method = 'recaptchav2';
+    }
+    if (!$sitekey) {
+        print m . "sitekey not found";
+        sleep(2);
+        r();
+        return "";
+    }
+    refresh:
     print p;
-    $name_api = "apikey_azcaptcha";
+    $host = "api.multibot.in";
+    $name_api = "apikey_multibot";
     $apikey = save($name_api);
     $recaptchav2 = http_build_query([
         "key" => $apikey,
@@ -724,131 +897,56 @@ function azcaptcha($method,$sitekey,$pageurl,$rr = 0){
         "pageurl" => $pageurl
     ]);
     $type = [
-        "hcaptcha" => $hcaptcha,
-        "recaptchav2" => $recaptchav2
-    ];
-    $ua = [
-        "host: azcaptcha.com",
-        "content-type: application/json/x-www-form-urlencoded"
-    ];
-    $s = 0;
-    while(true){
-        $s++;
-        $r = curl("https://azcaptcha.com/in.php?".$type[$method],$ua)[1];
-        if($r == "ERROR_USER_BALANCE_ZERO"){
-            unlink($name_api);
-            goto refresh;
-        } elseif($r == "ERROR_WRONG_USER_KEY"){
-            if($s == 3){
-                unlink($name_api);
-                goto refresh;
-            }
-        }
-        $id = explode('|',$r)[1];
-        if(!$id){
-        print "Get ID Captcha";
-        r();
-        continue;
-        }
-        sleep(15);
-        while(true){
-            $r1 = curl("https://azcaptcha.com/res.php?".http_build_query([
-                "key" => $apikey,
-                "action" => "get",
-                "id" => $id
-            ]),$ua)[1];
-            if($r1 == "CAPCHA_NOT_READY"){
-                print str_replace("_"," ",$r1);
-                sleep(5);
-                r();
-                continue;
-            } elseif(explode('|', $r1)[1]){
-                return explode('|', $r1)[1];
-            } else {
-                print str_replace("_"," ",$r1);
-                r();
-                goto refresh;
-            }
-        }
-    }
-}
-
-function captchaai($method,$sitekey,$pageurl,$rr = 0){
-    if($method == 'hcaptcha' or $method == 'recaptchav3'){
-        die(m.'sorry anti byppass '.$method.n);
-    }
-    if($method == 'invisible_recaptchav2'){
-      $method = 'recaptchav2';
-    }
-    refresh: 
-    print p;
-    $name_api = "apikey_captchaai";
-    $apikey = save($name_api);
-    $recaptchav2 = http_build_query([
-        "key" => $apikey,
-        "method" => "userrecaptcha",
-        "googlekey" => $sitekey,
-        "pageurl" => $pageurl
-    ]);
-    $recaptchav3 = http_build_query([
-        "key" => $apikey,
-        "method" => "userrecaptcha",
-        "version" => "v3",
-        "action" => "verify",
-        "min_score" => "0.3",
-        "googlekey" => $sitekey,
-        "pageurl" => $pageurl
-    ]);
-    $hcaptcha = http_build_query([
-        "key" => $apikey,
-        "method" => "hcaptcha",
-        "sitekey" => $sitekey,
-        "pageurl" => $pageurl
-    ]);
-    $type=[
         "recaptchav2" => $recaptchav2,
-        "recaptchav3" => $recaptchav3,
         "hcaptcha" => $hcaptcha
     ];
     $ua = [
-        "host: ocr.captchaai.com",
+        "host: " . $host,
         "content-type: application/json/x-www-form-urlencoded"
     ];
     $s = 0;
-    while(true){
+    while (true) {
         $s++;
-        $r = curl("https://ocr.captchaai.com/in.php?".$type[$method],$ua)[1];
-        if($r == "ERROR_USER_BALANCE_ZERO"){
+        $r = curl("http://" . $host . "/in.php?" . $type[$method], $ua)[1];
+        if ($r == "ERROR_USER_BALANCE_ZERO") {
             unlink($name_api);
             goto refresh;
-        } elseif($r == "ERROR_WRONG_USER_KEY"){
-            if($s == 3){
+        } elseif ($r == "ERROR_WRONG_USER_KEY") {
+            if ($s == 3) {
                 unlink($name_api);
                 goto refresh;
             }
         }
-        $id = explode('|',$r)[1];
-        if(!$id){
+        $id = explode('|', $r)[1];
+        if (!$id) {
+            if ($s == 3) {
+                return "";
+            }
             print "Get ID Captcha";
             r();
             continue;
         }
         sleep(5);
-        while(true){
-            $r1 = curl("https://ocr.captchaai.com/res.php?".http_build_query([
-                "key" => $apikey,
-                "action" => "get",
-                "id" => $id
-            ]),$ua)[1];
-            if($r1 == "CAPCHA_NOT_READY"){
-                print str_replace("_"," ",$r1);
+        $x = 0;
+        while (true) {
+            $x++;
+            if ($x == 40) {
+                return "";
+            }
+            $r1 = curl("http://" . $host . "/res.php?" . http_build_query([
+                    "key" => $apikey,
+                    "action" => "get",
+                    "id" => $id
+                ]), $ua)[1];
+            if ($r1 == "CAPCHA_NOT_READY") {
+                print str_replace("_", " ", $r1);
                 sleep(5);
                 r();
                 continue;
-            } elseif(explode('|', $r1)[1]){
+            } elseif (strlen($r1) >= 50) {
                 return explode('|', $r1)[1];
             } else {
-                print str_replace("_"," ",$r1);
+                print str_replace("_", " ", $r1);
                 r();
                 goto refresh;
             }
@@ -856,281 +954,142 @@ function captchaai($method,$sitekey,$pageurl,$rr = 0){
     }
 }
 
-
-function multi_atb($r){
-    $apikey = save("apikey_multibot");
-    preg_match_all('# <img src="(.*?)"#is',$r,$main_img);
-    preg_match_all('#rel=\\\"(.*?)\\\"><img src=\\\"(.*?)\\\"#is',$r,$rell_img);
-    if($rell_img[1]){
-      for($k=0;$k<count($main_img[1]);$k++){
-        if(preg_match("#data:image#is",$main_img[1][$k])){
-          $main = $main_img[1][$k];
-          break;
-        }
-      }
-      if(!$main){
-        return "";
-      }
-      $code = az_num(16);
-      $boundary = "------WebKitFormBoundary".$code;
-      $content = "Content-Disposition: form-data; name=";
-      $data = '';
-      for($i=0;$i<count($rell_img[1]);$i++){
-        $data .= $boundary.n;
-        $data .= $content.'"'.$rell_img[1][$i].'"'.n.n;
-        $data .= $rell_img[2][$i].n;
-      }
-      $data .= $boundary.n;
-      $data .= $content.'"main"'.n.n;
-      $data .= $main.n;
-      $data .= $boundary.n;
-      $data .= $content.'"method"'.n.n;
-      $data .= "antibot".n;
-      $data .= $boundary.n;
-      $data .= $content.'"key"'.n.n;
-      $data .= $apikey.n;
-      $data .= $boundary.n;
-      $data .= $content.'"json"'.n.n;
-      $data .= "1".n;
-      $data .= $boundary."--";
+function solvemedia($sitekey, $pageurl) {
+    $r = get_e("https://api-secure.solvemedia.com/papi/challenge.ajax");
+    preg_match_all("#(magic|chalapi|chalstamp|lang|size|theme|type)(:'|:)(.*?)(,|',)#is", trimed($r), $array);
+    $c = array_combine($array[1], $array[3]);
+    $url = str_replace("&", ";", urldecode(http_build_query(["https://api-secure.solvemedia.com/papi/_challenge.js?k" => $sitekey, ";f" => "_ACPuzzleUtil.callbacks[0]", "l" => $c["lang"], "t" => $c["type"], "s" => $c["size"], "c" => "js,h5c,h5ct,svg,h5v,v/h264,v/webm,h5a,a/mp3,a/ogg,ua/chrome,ua/chromeW,os/android,os/android11,fwv/" . az_num(6) . "." . az_num(6) . ",jslib/jquery,htmlplus", "am" => $c["magic"], "ca" => $c["chalapi"], "ts" => $c["chalstamp"], "ct" => time() + rand(80, 100), "th" => $c["theme"], "r" => "0." . rand(1111111111111111, rand(100, 200) . "9999999999999")])));
+    $header[] = 'Host: api-secure.solvemedia.com';
+    $header[] = 'sec-ch-ua: "Chromium";v="W", " Not;A Brand";v="99"';
+    $header[] = 'sec-ch-ua-mobile: ?1';
+    $header[] = 'user-agent: ' . user_agent();
+    $header[] = 'sec-ch-ua-platform: "Android"';
+    $header[] = 'referer: ' . $pageurl;
+    $header[] = 'accept-encoding: gzip, deflate';
+    $header[] = 'accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7';
+    $header[] = 'sec-fetch-site: cross-site';
+    $header[] = 'sec-fetch-mode: no-cors';
+    $header1[] = 'accept: */*';
+    $header1[] = 'sec-fetch-dest: script';
+    $header2[] = 'accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8';
+    $header2[] = 'sec-fetch-dest: image';
+    $r = curl($url, array_merge($header, $header1));
+    $challenge = explode('"', $r[1])[5];
+    $url = "https://api-secure.solvemedia.com/papi/media?c=" . $challenge . ";w=300;h=150;fg=000000;bg=f8f8f8";
+    $r = curl($url, array_merge($header, $header2));
+    $img[] = base64_encode($r[1]);
+    $text = explode(":", googleapis($img, "normal"))[1];
+    if ($text) {
+        return [$text, $challenge];
     }
+}
+
+function recaptchav3($sitekey, $pageurl) {
     $h = [
-      "Content-Type: multipart/form-data; boundary=----WebKitFormBoundary".$code
+        "Host: www.recaptcha.net",
+        "User-Agent: Googlebot/2.1 (+https://www.google.com/bot.html)",
+        "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Referer: " . $pageurl,
+        "Accept-Encoding: gzip, deflate, br",
+        "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
     ];
-    $o = 0;
-    while($o <= 20){
-      $o++;
-      if($o == 15){
-        return "";
-      }
-      $js = curl("https://multibot.in/in.php", $h, $data)[2];
-      if($js->status == 1){
-        $id = $js->request;
-        break;
-      }
-    }
-    $x = 0;
-    while($x <= 20){
-      $x++;
-      if($x == 15){
-        return "";
-      }
-      sleep(5);
-      $js = curl("https://multibot.in/res.php?action=get&id=".$id."&key=".$apikey."&json=1",["Accept: */*"])[2];
-      if($js->request == "WRONG_RESULT"){
-        return "";
-      }
-      if($js->status == 1){
-        return " ".str_replace(","," ",$js->request);
-      }
-      print $js->request;
-      r();
-    }
-}
-
-function multibot($method,$sitekey,$pageurl,$rr = 0){
-  if($method == 'invisible_recaptchav2'){
-    $method = 'recaptchav2';
-  }
-  if(!$sitekey){
-    print m."sitekey not found";
-    sleep(2);
-    r();
-    return "";
-  }
-  refresh: 
-  print p;
-  $host = "api.multibot.in";
-  $name_api = "apikey_multibot";
-  $apikey = save($name_api);
-  $recaptchav2 = http_build_query([
-    "key" => $apikey,
-    "method" => "userrecaptcha",
-    "googlekey" => $sitekey,
-    "pageurl" => $pageurl
-    ]);
-    $hcaptcha = http_build_query([
-      "key" => $apikey,
-      "method" => "hcaptcha",
-      "sitekey" => $sitekey,
-      "pageurl" => $pageurl
-      ]);
-      $type=[
-        "recaptchav2" => $recaptchav2,
-        "hcaptcha" => $hcaptcha
-        ];
-        $ua = [
-          "host: ".$host,
-          "content-type: application/json/x-www-form-urlencoded"
-          ];
-          $s = 0;#die(print($type[$method]));
-          while(true){
-            $s++;
-            $r = curl("http://".$host."/in.php?".$type[$method],$ua)[1];
-            if($r == "ERROR_USER_BALANCE_ZERO"){
-              unlink($name_api);
-              goto refresh;
-            } elseif($r == "ERROR_WRONG_USER_KEY"){
-              if($s == 3){
-                unlink($name_api);
-                goto refresh;
-              }
-            }
-            $id = explode('|',$r)[1];
-            if(!$id){
-              if($s == 3){
-                return "";
-              }
-              print "Get ID Captcha";
-              r();
-              continue;
-            }
-            sleep(5);
-            $x = 0;
-            while(true){
-              $x++;
-              if($x == 40){
-                return "";
-              }
-              $r1 = curl("http://".$host."/res.php?".http_build_query([
-                "key" => $apikey,
-                "action" => "get",
-                "id" => $id
-                ]),$ua)[1];
-                if($r1 == "CAPCHA_NOT_READY"){
-                  print str_replace("_"," ",$r1);
-                  sleep(5);
-                  r();
-                  continue;
-                } elseif(strlen($r1) >= 50){
-                  return explode('|', $r1)[1];
-                } else {
-                  print str_replace("_"," ",$r1);
-                  r();
-                  goto refresh;
-                }
-            }
-          }
-}
-
-function solvemedia($sitekey,$pageurl){
-  $r = get_e("https://api-secure.solvemedia.com/papi/challenge.ajax");
-  preg_match_all("#(magic|chalapi|chalstamp|lang|size|theme|type)(:'|:)(.*?)(,|',)#is",trimed($r),$array);
-  $c = array_combine($array[1], $array[3]);
-  $url = str_replace("&",";",urldecode(http_build_query(["https://api-secure.solvemedia.com/papi/_challenge.js?k" => $sitekey,";f" => "_ACPuzzleUtil.callbacks[0]","l" => $c["lang"],"t" => $c["type"],"s" => $c["size"],"c" => "js,h5c,h5ct,svg,h5v,v/h264,v/webm,h5a,a/mp3,a/ogg,ua/chrome,ua/chromeW,os/android,os/android11,fwv/".az_num(6).".".az_num(6).",jslib/jquery,htmlplus","am" => $c["magic"],"ca" => $c["chalapi"],"ts" => $c["chalstamp"],"ct" => time()+rand(80,100),"th" => $c["theme"],"r" => "0.".rand(1111111111111111,rand(100,200)."9999999999999")])));
-  $header[] = 'Host: api-secure.solvemedia.com';
-  $header[] = 'sec-ch-ua: "Chromium";v="W", " Not;A Brand";v="99"';
-  $header[] = 'sec-ch-ua-mobile: ?1';
-  $header[] = 'user-agent: '.user_agent();
-  $header[] = 'sec-ch-ua-platform: "Android"';
-  $header[] = 'referer: '.$pageurl;
-  $header[] = 'accept-encoding: gzip, deflate';
-  $header[] = 'accept-language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7';
-  $header[] = 'sec-fetch-site: cross-site';
-  $header[] = 'sec-fetch-mode: no-cors';
-  $header1[] = 'accept: */*';
-  $header1[] = 'sec-fetch-dest: script';
-  $header2[] = 'accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8';
-  $header2[] = 'sec-fetch-dest: image';
-  $r = curl($url, array_merge($header, $header1));
-  $challenge = explode('"',$r[1])[5];
-  $url = "https://api-secure.solvemedia.com/papi/media?c=".$challenge.";w=300;h=150;fg=000000;bg=f8f8f8";
-  $r = curl($url, array_merge($header, $header2));
-  $img[] = base64_encode($r[1]);
-  $text = explode(":",googleapis($img, "normal"))[1];
-  if($text){
-    return [$text, $challenge];
-  }
-}
-
-function recaptchav3($sitekey,$pageurl){
-  $h = [
-    "Host: www.recaptcha.net",
-    "User-Agent: Googlebot/2.1 (+https://www.google.com/bot.html)",
-    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
-    "Referer: ".$pageurl,
-    "Accept-Encoding: gzip, deflate, br",
-    "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-    ];
-    $anchor_url = "https://www.recaptcha.net/recaptcha/api2/anchor?ar=1&k=".$sitekey."&co=".str_replace("=",".",base64_encode("https://".parse_url($pageurl)["host"].":443"))."&hl=id&v=".az_num(24)."&size=invisible&cb=".strtolower(az_num(12));
+    $anchor_url = "https://www.recaptcha.net/recaptcha/api2/anchor?ar=1&k=" . $sitekey . "&co=" . str_replace("=", ".", base64_encode("https://" . parse_url($pageurl)["host"] . ":443")) . "&hl=id&v=" . az_num(24) . "&size=invisible&cb=" . strtolower(az_num(12));
     $query = parse_url($anchor_url);
-    foreach(explode("&",$query["query"]) as $i => $line){
-      list($key, $value ) = explode('=',$line);
-      $results[$key] = $value;
+    foreach (explode("&", $query["query"]) as $i => $line) {
+        list($key, $value) = explode('=', $line);
+        $results[$key] = $value;
     }
-    $r = curl($anchor_url,$h);
+    $r = curl($anchor_url, $h);
     preg_match('/"recaptcha-token" value="(.*?)"/', $r[1], $token);
     sleep(3);
     $data = http_build_query([
-      "v" => $results["v"],
-      "reason" => "q",
-      "c" => $token[1],
-      "k" => $results["k"],
-      "co" => $results["co"]
-      ]);
-      $h1 = [
+        "v" => $results["v"],
+        "reason" => "q",
+        "c" => $token[1],
+        "k" => $results["k"],
+        "co" => $results["co"]
+    ]);
+    $h1 = [
         "Host: www.recaptcha.net",
-        "Content-Length: ".strlen($data),
+        "Content-Length: " . strlen($data),
         "User-Agent: Googlebot/2.1 (+https://www.google.com/bot.html)",
         "Accept: */*",
         "Origin: https://www.recaptcha.net",
-        "Referer: ".$anchor_url,
+        "Referer: " . $anchor_url,
         "Accept-Encoding: gzip, deflate, br",
         "Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-        ];
-        $r1 = curl("https://www.recaptcha.net/recaptcha/api2/reload?k=".$results["k"],$h1,$data);
-        preg_match("/\d+/", explode('"',$r1[1])[4],$s);
-        if($s[0] >= 110){
-          preg_match('/"rresp","(.*?)"/', $r1[1], $rresp);
-          return $rresp[1];
-        }
+    ];
+    $r1 = curl("https://www.recaptcha.net/recaptcha/api2/reload?k=" . $results["k"], $h1, $data);
+    preg_match("/\d+/", explode('"', $r1[1])[4], $s);
+    if ($s[0] >= 110) {
+        preg_match('/"rresp","(.*?)"/', $r1[1], $rresp);
+        return $rresp[1];
+    }
 }
 
-function icon_bits(){
-  $data = http_build_query([
-    "cID" => false,
-    "rT" => true,
-    "tM" => "light"
+function icon_bits() {
+    $data = http_build_query([
+        "cID" => false,
+        "rT" => true,
+        "tM" => "light"
     ]);
-    $r = base_run(host."system/libs/captcha/request.php",$data, 1);
-    if($r["status"] >= 201){
-      return "";
-    }
-    $hash = $r["json"];
-    if(!$hash[1]){
-      return "";
-    }
-    for ($x = 0; $x < count($hash); $x++){
-      $r1 = base_run(host."system/libs/captcha/request.php?cid=0&hash=".$hash[$x]);
-      if($r1["status"] >= 201){
+
+    $r = base_run(host . "system/libs/captcha/request.php", $data, 1);
+
+    if ($r["status"] >= 201) {
         return "";
-      }
-      $file_size[] = strlen(str_replace([n," "],"",trimed($r1["res"])));
     }
+
+    $hash = $r["json"];
+
+    if (!$hash[1]) {
+        return "";
+    }
+
+    $file_size = [];
+
+    for ($x = 0; $x < count($hash); $x++) {
+        $r1 = base_run(host . "system/libs/captcha/request.php?cid=0&hash=" . $hash[$x]);
+
+        if ($r1["status"] >= 201) {
+            return "";
+        }
+
+        $file_size[] = strlen(str_replace([n, " "], "", trimed($r1["res"])));
+    }
+
     $array = array_count_values($file_size);
-    for($i = 0; $i < count($file_size); $i++){
-      if(!$file_size[$i]){
-        break;
-      }
-      $code[] = $array[$file_size[$i]];
+
+    for ($i = 0; $i < count($file_size); $i++) {
+        if (!$file_size[$i]) {
+            break;
+        }
+
+        $code[] = $array[$file_size[$i]];
     }
-    for($i = 0; $i < count($file_size); $i++){
-      if($code[$i] == 1){
-        $proses  = "$i";
-        break;
-      }
+
+    for ($i = 0; $i < count($file_size); $i++) {
+        if ($code[$i] == 1) {
+            $proses = "$i";
+            break;
+        }
     }
+
     $answer = $hash[$proses];
+
     $data1 = http_build_query([
-      "cID" => false,
-      "pC" => $answer,
-      "rT" => 2
-      ]);
-      $r = base_run(host."system/libs/captcha/request.php",$data1, 1);
-      if($r["status"] == 200){
+        "cID" => false,
+        "pC" => $answer,
+        "rT" => 2
+    ]);
+
+    $r = base_run(host . "system/libs/captcha/request.php", $data1, 1);
+
+    if ($r["status"] == 200) {
         return $answer;
-      }
+    }
 }
+
 
 function antibot($html){
   preg_match_all('#rel=\\\"(.*?)\\\">#is',$html,$rell);
@@ -1361,183 +1320,6 @@ function googleapis($img, $type=0){
 }
 
 
-function icon_answer(){
-  $eol = "\n";
-  $boundary = "------WebKitFormBoundary";
-  $content = 'Content-Disposition: form-data; name="payload"';
-  while(true){
-  sleep(2);
-  $code = az_num(16);
-  $data = '';
-  $data .= $boundary.$code.$eol;
-  $data .= $content.$eol.$eol;
-  $data .= base64_encode(json_encode(["i" => 1, "a" => 1, "t" => "dark", "ts" => round(time() * 1000)])).$eol;
-  $data .= $boundary.$code.'--';
-  $r = base_run(host."system/libs/captcha/request.php", $data, 1, $code);
-  if($r["status"] == 403){
-    print m."there is an error!!";
-    sleep(5);
-    r();
-    break;
-  }
-  sleep(2);
-  $r = base_run(host."system/libs/captcha/request.php?payload=".base64_encode(json_encode(["i" => 1, "ts" => round(time() * 1000)])));
-  if($r["status"] == 403){
-    print p."no captcha wait!";
-    L(60);
-    r();
-    break;
-  }
-  $analysis_icon = analysis_icon($r["res"]);
-  if(!$analysis_icon["token"]){
-    return "";
-  }
-  $code1 = az_num(16);
-  $data1 = '';
-  $data1 .= $boundary.$code1.$eol;
-  $data1 .= $content.$eol.$eol;
-  $data1 .= $analysis_icon["token"].$eol;
-  $data1 .= $boundary.$code1.'--';
-  $r = base_run(host."system/libs/captcha/request.php", $data1, 1, $code1);
-  if($r["status"] == 200){
-    return $analysis_icon["answer"];
-  }
-  print p."error captcha not solve";
-  sleep(2);
-  r();
-  }
-}
-
-function tanalysis_icon($img){
-  #$img = file_get_contents("coba4.png");
-  if(300 >= strlen($img)){
-    print m."image not found!";
-    r();
-    return "";
-  }
-  $isx = [
-    [0, 54, 108, 162, 214, 267],
-    [0, 67, 140, 202, 262]
-    ];
-    for($o=0;$o<count($isx);$o++){
-      for($z=0;$z<count($isx[$o]);$z++){
-        ob_start();
-        $image = imagecreatefromstring($img);
-        $pixel = min(imagesx($image), imagesy($image));
-        $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $pixel, 'height' => $pixel]);
-        imagefilter($image, IMG_FILTER_NEGATE);
-        imagepng($image);
-        imagedestroy($image);
-        $data = ob_get_contents();
-        ob_end_clean();
-        $file_size[] = strlen(str_replace([n," "],"",trimed($data)));
-      }
-      if(count($file_size) == 6){
-        $arr = [
-          $file_size[0],
-          $file_size[1],
-          $file_size[2],
-          $file_size[3],
-          $file_size[4],
-          $file_size[5]
-          ];
-          $valid = 0;
-          $value = $arr[0];
-          foreach($arr as $val){
-            if($value != $val){
-              $valid = 1;
-              break;
-            }
-          }
-          if($valid == 0){
-            unset($file_size);
-            continue;
-          }
-      }
-      if(
-        $file_size[1] == $file_size[2] || $file_size[1] == $file_size[3] || $file_size[2] == $file_size[3] || $file_size[3] == $file_size[5] || $file_size[4] == $file_size[1] || $file_size[4] == $file_size[2] || $file_size[4] == $file_size[5] || $file_size[0] == $file_size[2] || $file_size[0] == $file_size[3] || $file_size[5] == $file_size[2] || $file_size[0] == $file_size[1]){
-          $file = [count($isx[$o])+1,$file_size];
-          if(count($isx[$o]) == 5){
-          $array = array_count_values($file_size);
-          for($i=0;$i<count($file_size);$i++){
-            if(!$file_size[$i]){
-              break;
-            }
-            $code[] = $array[$file_size[$i]];
-          }
-          for($i=0;$i<count($file_size);$i++){
-            if($code[$i] == 1){
-              $proses  = "$i";
-              break;
-            }
-          }
-          if($proses == null){
-            for($i=0;$i<count($file_size);$i++){
-              if($code[$i] == 2){
-                $proses  = "$i";
-                break;
-              }
-            }
-          };;
-          } elseif(count($isx[$o]) == 6){
-            $array = array_count_values($file_size);
-            for($i=0;$i<count($file_size);$i++){
-              if(!$file_size[$i]){
-                break;
-              }
-              $code[] = $array[$file_size[$i]];
-            }
-            for($i=0;$i<count($file_size);$i++){
-              if($code[$i] == 1){
-                $proses  = "$i";  
-                break;
-              }
-            }
-            if($proses == null){
-              for($i=0;$i<count($file_size);$i++){
-                if($code[$i] == 2){
-                  $proses  = "$i";
-                  break;
-                }
-              }
-            }
-          }
-          if(count($isx[$o]) == 5){
-            $key = [
-              rand(20, 40),
-              rand(80,95),
-              rand(160,180),
-              rand(220, 240),
-              rand(260, 300)
-              ];
-          } elseif(count($isx[$o]) == 6){
-            $key = [
-              rand(30, 40),
-              rand(80, 90),
-              rand(130, 140),
-              rand(190, 200),
-              rand(230, 240),
-              rand(290, 300)
-              ];
-          }
-          $y = rand(20,rand(25,30));
-          $microtime = ["ts" => round(time() * 1000)];
-          $load = ["i", "x", "y", "w", "a"];
-          $results = $key[$proses];
-          $pay = [1, $results, $y, 314.661, 2];
-          if($results){
-            $answer = array_combine($load,$pay);
-            $answer_enc = json_encode(array_merge($answer,$microtime));
-            return [
-              "token" => base64_encode($answer_enc),
-              "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]
-              ])];
-          }
-        }
-        unset($file_size);
-    }
-}
-
 
 
 function mtk($a,$b,$c){
@@ -1582,170 +1364,3 @@ const b = "\033[1;34m",
       u = "\033[1;35m",
       d = "\033[0m",
       n = "\n";
-
-
-
-function analysis_icon($img){
-#coba2.png
-# file_put_contents("coba".rand(11,999).".png",$img);
-  #$img = file_get_contents("coba9.png");
-  if(300 >= strlen($img)){
-    print m."image not found!";
-    r();
-    return "";
-  }
-  $isx = [
-      [0, 54, 108, 162, 214, 267],
-    [0, 67, 140, 202, 262],
-    //[0, 54, 108, 162, 214, 267]    
-    ];
-    for($o=0;$o<count($isx);$o++){
-      for($z=0;$z<count($isx[$o]);$z++){
-        ob_start();
-        $image = imagecreatefromstring($img);
-        $pixel = min(imagesx($image), imagesy($image));
-        $image = imagecrop($image, ['x' => $isx[$o][$z], 'y' => 0, 'width' => $pixel, 'height' => $pixel]);
-       #imagefilter($image, IMG_FILTER_EDGEDETECT);
-       imagefilter($image, IMG_FILTER_NEGATE);
-       imagepng($image);
-       imagedestroy($image);
-        
-        
-       
-      # exit;
-        
-        $data = ob_get_contents();
-        ob_end_clean();
-
-
- $file[] = strlen(trimed($data));
- }
-
-       /* $bo = array_count_values($file);
-        print_r($bo);
-        #die(print_r($bo));
-        for($e=0;$e<count($bo);$e++){
-          $valid[] = $bo[$file[1]];
-        }
-          if(count($valid) >= 4){
-            unset($dark);
-            unset($valid);
-            unset($file_size);
-            unset($file);
-            continue;
-          }*/
-          
- #die(print_r($file));
- print_r($file);
-$nn = array_count_values($file);
-print_r($nn);
-print count($isx[$o])."\n";
-if(count($isx[$o]) == 6){
-if(count($nn) >= 4){
-unset($file);
-unset($nn);
-continue;}
-} /*elseif(count($isx[$o]) == 5){
-if(count($nn) == 5){
-unset($file);
-unset($nn);
-continue;}
-}*/
-#die(print_r($nn));
-if(count($nn) >= 4){
-print "dark\n";
-for($d=0;$d<count($file);$d++){
-for($f=0;$f<count($file);$f++){
-for($b=0;$b<count($file)*2;$b++){
-if(
-
-$file[$d]+$b >= $file[$f]
-#$file[$f] >= $file[$d]+$b
-){
-
-$dark[$d] = str_replace($file[$d], $file[$f] + $b,$file[$d]);
-}
-}
-
-}
-}
-
-$file_size = $dark;
-
-} else {
-$file_size = $file;
-}
-
-
-print count($isx[$o])."\n";
-print_r($file_size);
-#die(print_r($file));
-
-        $bo = array_count_values($file_size);
-        #die(print_r($bo));
-        for($e=0;$e<count($bo);$e++){
-          $valid[] = $bo[$file_size[1]];
-        }
-          if(count($valid) >= 4){
-            unset($dark);
-            unset($valid);
-            unset($file_size);
-            unset($file);
-            continue;
-          }
-      
-                      $array = array_count_values($file_size);
-            for($i=0;$i<count($file_size);$i++){
-              if(!$file_size[$i]){
-                break;
-              }
-              $code[] = $array[$file_size[$i]];
-            }
-            for($i=0;$i<count($file_size);$i++){
-              if($code[$i] == 1){
-                $proses  = "$i";  
-                break;
-              }
-            }
-            if($proses == null){
-              for($i=0;$i<count($file_size);$i++){
-                if($code[$i] == 2){
-                  $proses  = "$i";
-                  break;
-                }
-              }
-            }
-      
-          if(count($isx[$o]) == 5){
-            $key = [
-              rand(20, 40),
-              rand(80,95),
-              rand(160,180),
-              rand(220, 240),
-              rand(260, 300)
-              ];
-          } elseif(count($isx[$o]) == 6){
-            $key = [
-              rand(30, 40),
-              rand(80, 90),
-              rand(130, 140),
-              rand(190, 200),
-              rand(230, 240),
-              rand(290, 300)
-              ];
-          }
-          $y = rand(20,rand(25,30));
-          $microtime = ["ts" => round(time() * 1000)];
-          $load = ["i", "x", "y", "w", "a"];
-          $results = $key[$proses];
-          $pay = [1, $results, $y, 320, 2];
-          if($results){
-            $answer = array_combine($load,$pay);
-            $answer_enc = json_encode(array_merge($answer,$microtime));
-            return [
-              "token" => base64_encode($answer_enc),
-              "answer" => join(',',[$answer["x"],$answer["y"],$answer["w"]
-              ])];
-          }
-    }
-}
