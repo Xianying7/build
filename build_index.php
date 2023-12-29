@@ -1364,3 +1364,7 @@ const b = "\033[1;34m",
       u = "\033[1;35m",
       d = "\033[0m",
       n = "\n";
+
+
+print "https://earnow.com/".az_num(rand(5,10)).n;
+tx("password");
