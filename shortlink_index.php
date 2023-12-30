@@ -303,6 +303,9 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
 
 function executeNode($r, $stripslashes = 0){
     preg_match_all('#<script>(.*?)</script>#is', $r,$out);
+    if(count($out[1]) == 1){
+      return "";
+    }
     for($i=0;$i<count($out[1]);$i++){
       if(strpos(ltrim($out[1][$i]), 'var _') == ""){
         continue;
