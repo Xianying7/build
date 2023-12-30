@@ -634,6 +634,8 @@ function bypass_shortlinks($url){
             r();
             unset($cookie);
             return $r1->url;
+          } else {
+            return "refresh";
           }
         }
     } elseif(preg_match("#(tii.la|tei.ai)#is",$host)){
@@ -1077,7 +1079,7 @@ function bypass_shortlinks($url){
             return $r1["url"];
           }
       }
-    } elseif(preg_match("#(earnow.online)#is",$host)){
+    } elseif(preg_match("#(_earnow.online)#is",$host)){
       while(true){
       $run = build($url);
       $r = base_short($url);
@@ -1239,7 +1241,9 @@ $method = "recaptchav2";
         unset($coordinate);
         $r = base_short($link,0,0,$link,0,join('',$cookie));//die(print_r($r));
         if($r["url"]){
-          
+          if($r["status"] == 307){
+            return "refresh";
+          }
           print h."success";
           r();
           $timer = $time - time();
@@ -1454,7 +1458,7 @@ $method = "recaptchav2";
         return $r["url"];
       }
     } else {
-      return "refresh";
+      return "skip";
     }
 }
 
