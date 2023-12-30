@@ -1,5 +1,5 @@
 <?php
-
+#date_interval_create_from_date_string()js
 
 #http://adbits.xyz/gL7kXiP
 #https://urlcorner.com/CBqzuo1tu69
@@ -302,69 +302,62 @@ function base_short($url,$xml=0,$data=0,$referer=0,$agent=0,$alternativ_cookie=0
 }
 
 function executeNode($r, $stripslashes = 0){
-    preg_match_all('#<script>(.*?)</script>#is', $r,$out);
-    if(count($out[1]) == 1){
-      return "";
-    }
-    for($i=0;$i<count($out[1]);$i++){
-      if(strpos(ltrim($out[1][$i]), 'var _') == ""){
-        continue;
-        } elseif(strpos(ltrim($out[1][$i]), 'var _') == 0){
-          $res[] = node_js(str_replace('eval', 'console.log', ltrim($out[1][$i])));
+    if(preg_match_all('#<script>(.*?)</script>#is', $r, $out)){
+        #die(print_r($out[1]));
+        for($i = 0; $i < count($out[1]); $i++){
+            if(preg_match('#0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#is', $out[1][$i], $script)){
+                $input = str_replace("eval", "console.log", rtrim(ltrim($out[1][$i])));
+                $output = exec("node -e '$input' 2>&1");
+                if($output){
+                    $res[] = $output;
+                    continue;
+                    #break;
+                    #exit;
+                }
+            }
         }
-    }
-    if($res[0]){
-      $html = html_entity_decode(str_replace($out[0],$res, $r));
-      if($stripslashes){
-        $x =  stripslashes($html);
-      } else {
-        $x = $html;
-      }
-      preg_match_all('#hidden" name="(.*?)" value="(.*?)"#is',$x,$token);
-      preg_match_all('#<div wire:snapshot="(.*?)" wire:#is',$x,$snapshot);
-      preg_match('#userToken":"(.*?)"#is',$x,$user_token);
-      preg_match('#data-csrf="(.*?)"#is',$x,$csrf);
-      preg_match("#location.replace[(]'(.*?)'#is",$x,$url);
-      preg_match('#p (\d+/\d+)#is',$x,$step);
-      preg_match("#countDown = (\d+)#is",$x,$tmr);
-      if($step[1]){
-        if(explode("/",$step[1])[0] == explode("/",$step[1])[1]){
-        $final = 1;
+        if($res[0]){
+            $html = html_entity_decode(str_replace($out[0], $res, $r));
+            if($stripslashes){
+                $x = stripslashes($html);
+            } else {
+                $x = $html;
+            }
+            preg_match_all('#hidden" name="(.*?)" value="(.*?)"#is', $x, $token);
+            preg_match_all('#<div wire:snapshot="(.*?)" wire:#is', $x, $snapshot);
+            preg_match('#userToken":"(.*?)"#is', $x, $user_token);
+            preg_match('#data-csrf="(.*?)"#is', $x, $csrf);
+            preg_match("#location.replace[(]'(.*?)'#is", $x, $url);
+            preg_match('#p (\d+/\d+)#is', $x, $step);
+            preg_match("#countDown = (\d+)#is", $x, $tmr);
+            if($step[1]){
+                if(explode("/", $step[1])[0] == explode("/", $step[1])[1]){
+                    $final = 1;
+                }
+            }
+            if($token[1][1]){
+                $fix = [
+                    array_values(array_unique($token[0])),
+                    array_values(array_unique($token[1])),
+                    array_values(array_unique($token[2]))
+                ];
+            }
+            return [
+                "res" => $x,
+                "token_csrf" => $fix,
+                "url" => $url[1],
+                "step" => $step[1],
+                "final_step" => $final,
+                "snapshot" => $snapshot[1],
+                "user_token" => $user_token[1],
+                "csrf" => $csrf[1],
+                "timer" => $tmr[1]
+            ];
         }
-      }
-      if($token[1][1]){
-        $fix = [
-          array_values(array_unique($token[0])),
-          array_values(array_unique($token[1])),
-          array_values(array_unique($token[2]))
-          ];
-      }
-      return [
-        "res" => $x,
-        "token_csrf" => $fix,
-        "url" => $url[1],
-        "step" => $step[1],
-        "final_step" => $final,
-        "snapshot" => $snapshot[1],
-        "user_token" => $user_token[1],
-        "csrf" => $csrf[1],
-        "timer" => $tmr[1]
-        ];
     }
 }
 
-
-function node_js($code){
-    $name = "nodejs".az_num(rand(5,20))."txt";
-    file_put_contents($name, $code);
-    $response = exec("node ".$name);
-    unlink($name);
-    if($response){
-      return $response;
-    } 
-}
-
-function bypass_shortlinks($url){
+function bypass_shortlinks($url, $separator){
   ulang:
     $url = str_replace("http:","https:",$url);
     $coundown = 15;
@@ -1461,7 +1454,11 @@ $method = "recaptchav2";
         return $r["url"];
       }
     } else {
-      return "skip";
+      if($separator){
+        return "skip";
+      } else {
+        return "refresh";
+      }
     }
 }
 
