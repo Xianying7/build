@@ -357,7 +357,7 @@ function executeNode($r, $stripslashes = 0){
     }
 }
 
-function bypass_shortlinks($url, $separator){
+function bypass_shortlinks($url, $separator = 0){
   ulang:
     $url = str_replace("http:","https:",$url);
     $coundown = 15;
