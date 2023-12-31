@@ -324,6 +324,8 @@ function executeNode($r, $stripslashes = 0){
                 $x = $html;
             }
             preg_match_all('#hidden" name="(.*?)" value="(.*?)"#is', $x, $token);
+            #preg_match_all('#<input type="hidden" id="(.*?)" name="(.*?)"#is', $x, $id);
+            preg_match_all('#document.getElementById[(]"in(.*?)"[)].value = "(.*?)";#is',$x,$id);
             preg_match_all('#<div wire:snapshot="(.*?)" wire:#is', $x, $snapshot);
             preg_match('#userToken":"(.*?)"#is', $x, $user_token);
             preg_match('#data-csrf="(.*?)"#is', $x, $csrf);
@@ -338,9 +340,18 @@ function executeNode($r, $stripslashes = 0){
             if($token[1][1]){
                 $fix = [
                     array_values(array_unique($token[0])),
-                    array_values(array_unique($token[1])),
+                    array_values(array_unique($token[1])), 
                     array_values(array_unique($token[2]))
+                    
                 ];
+                if($id){
+                  $fix = [
+                      array_merge(array_values(array_unique($token[0])), $id[0]),
+                      array_merge(array_values(array_unique($token[1])), $id[1]),
+                      array_merge(array_values(array_unique($token[2])), $id[2])
+                  ];
+                }
+                
             }
             return [
                 "res" => $x,
@@ -1235,7 +1246,7 @@ $method = "recaptchav2";
       $cookie[] = $r["cookie"];
       while(true){
         unset($coordinate);
-        $r = base_short($link,0,0,$link,0,join('',$cookie));//die(print_r($r));
+        $r = base_short($link,0,0,$link,0,join('',$cookie));#print_r($r);
         if($r["url"]){
           if($r["status"] == 307){
             return "refresh";
@@ -1255,6 +1266,8 @@ $method = "recaptchav2";
         $cookie[] = $r["cookie"];
         $cookie[] = array_reverse($cookie);
         $node = executeNode($r["res"],1);
+        $node = executeNode($node["res"],1);
+       # print_r($node);
         $rs = "https://".parse_url($link1)["host"]."/";
         if($node["token_csrf"][1][1] == "_iconcaptcha-token"){
           $data_post = data_post($node["token_csrf"], "two");
@@ -1760,6 +1773,7 @@ function config(){
   $config[] = "rs";
   $config[] = "rsshort";
   $config[] = "rsshort.com";
+  $config[] = "Rsshorteasy";
   $config[] = "Paylinks";
   $config[] = "Paylinks.cloud";
   $config[] = "Shortsme";
