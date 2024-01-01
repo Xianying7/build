@@ -5,7 +5,7 @@ function captcha_bitmoon() {
     $boundary = "------WebKitFormBoundary";
     $content = 'Content-Disposition: form-data; name="payload"';
     
-   # while (true) {
+   #h while (true) {
         $code = az_num(16);
         $data = '';
         $data .= $boundary . $code . $eol;
@@ -382,7 +382,7 @@ function scrape_valid() {
             continue;
         }
 
-        $proxy = trimed(arr_rand(array_filter($list))[0]);
+        $proxy = str_replace(n,"",trimed(arr_rand(array_filter($list))[0]));
 
         if (!$ip->whitelisted[0]) {
             $req = curl($url . "add&ip[]=$my_ip", $h)[2];
