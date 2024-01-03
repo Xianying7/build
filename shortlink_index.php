@@ -966,7 +966,6 @@ function bypass_shortlinks($url, $separator = 0){
           if(preg_match("#(https)#is",$r1->url)){
             h.$r1->status;
             r();
-            unset($cookie);
             return $r1->url;
           }
         }
@@ -1766,8 +1765,8 @@ function config(){
   $config[] = "clik.pw";
   #$config[] = "shortyearn";
   #$config[] = "shortyearn.com";
-  //$config[] = "doshrink";
-  //$config[] = "doshrink.com";
+  $config[] = "doshrink";
+  $config[] = "doshrink.com";
   $config[] = "linkjust.com";
   $config[] = "Linkjust";
   $config[] = "clks";
