@@ -480,10 +480,25 @@ function rt() {
     }
 }
 
-function tx($a) {
-    print(h."Input ".$a.c." > ".p);
-    return trim(fgets(STDIN));
+function tx($a, $b = 0) {
+    while (true) {
+        print(h . "Input " . $a . c . " > " . p);
+        $tx = trim(fgets(STDIN));
+
+        if ($b) {
+            $num = trimed(preg_replace("/[^0-9]/", "", $tx));
+            
+            if ($num >= 0) {
+                return $num;
+            } else {
+                continue;
+            }
+        }
+
+        return $tx;
+    }
 }
+
 
 function ex($a, $b, $c, $d) {
     return explode($b, explode($a, $d)[$c])[0];
