@@ -47,20 +47,20 @@ function visit_short($r, $site_url = 0, $data_token = 0){
     }
     $config = arr_rand(config());
     $list = $r["name"];
+    $lefts = $r["left"];
     if(!$list[0]){
       return "refresh";
     }
     $exp = 0;
     for($i=0;$i<count($config);$i++){
       for($s=0;$s<count($list);$s++){
-        $lefts = trimed($r["left"][$s]);
         $open = multiexplode(["_","{","[","(","-desktop","-easy","-mid","-hard"],str_replace(" ","",trimed(strtolower($list[$s]))))[0];
         if(strtolower($config[$i]) == $open){
           for($p=0;$p<count($control);$p++){
-            if(strtolower(str_replace(n,"",$control[$p])) == host.$open or strtolower(str_replace(n,"",$control[$p])) == $open or explode("/", $lefts)[0] == "0"){
+            if(strtolower(str_replace(n,"",$control[$p])) == host.$open or strtolower(str_replace(n,"",$control[$p])) == $open or explode("/", $lefts[$s])[0] == "0"){
               goto up;
             }
-            if(preg_match("#(•)#is",$lefts)){
+            if(preg_match("#(•)#is",$lefts[$s])){
               if(explode("•",$r["left"][$s])[0] == explode("•",$r["left"][$s])[1]){
                 goto up;
               }
@@ -648,7 +648,7 @@ function bypass_shortlinks($url, $separator = 0){
             $run["go"][0] = str_replace("forextrader.site","forextrader.site/NewLink",$run["go"][0]);
           }
           $r1 = base_short(str_replace("pwrpa.cc","pwrpa.cc/go",str_replace("jameeltips.us","jameeltips.us/blog",str_replace("techyuth.xyz","techyuth.xyz/blog",$run["go"][0]))),1,$data,0,$cloud,join('',$cookie))["json"];
-          if(preg_match("#(https)#is",$r1->url)){
+          if(preg_match("#(http)#is",$r1->url)){
             print h."success";
             r();
             return $r1->url;
