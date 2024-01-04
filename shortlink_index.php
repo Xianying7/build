@@ -190,9 +190,9 @@ function visit_short($r, $site_url = 0, $data_token = 0){
             }
             if($r1["failed"]){
               if(!file_get_contents($file_name)){
-                file_put_contents($file_name, host.$list[$s]);
+                file_put_contents($file_name, host.$open);
               } else {
-                file_put_contents($file_name, get_e($file_name).n.host.$list[$s]);
+                file_put_contents($file_name, get_e($file_name).n.host.$open);
               }
               print m.$r1["failed"]." ".p.$list[$s];
               r();
@@ -1659,7 +1659,7 @@ function config(){
   $config[] = "LinksFlylink";
   $config[] = "Lksfly";
   $config[] = "LFly";
-  #$config[] = "Chaininfo";
+  ##$config[] = "Chaininfo";
   $config[] = "Clkst";
   $config[] = "Clk.st";
   $config[] = "Insfly";
