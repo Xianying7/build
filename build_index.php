@@ -644,7 +644,9 @@ function ket_line($a, $aa, $b = 0, $bb = 0, $c = 0, $cc = 0) {
 }
 
 function curl($url, $header = false, $post = false, $followlocation = false, $cookiejar = false, $alternativ_cookie = false, $proxy = false) {
+    $i = 0;
     while (true) {
+        $i++;
         if (!parse_url($url)["scheme"]) {
             print m."url tidak valid";
             sleep(2);
@@ -701,6 +703,13 @@ function curl($url, $header = false, $post = false, $followlocation = false, $co
                 }
             }
         }
+        if ($info["http_code"] == 0) {
+            if (10 >= $i) {
+                print k.movePage()[$info["http_code"]];
+                r();
+                continue;
+            }
+        }
         print p.movePage()[$info["http_code"]];
         r();
         return [[$header_array, $info, $output], $response, json_decode(str_replace([n, "﻿"], "", strip_tags($response)))];
@@ -751,7 +760,7 @@ function asci($string){
         "0" => ["┌─┐","│ │","└─┘"]
     ];
     $x = str_split($string);
-    print p."time:".date("H:i").str_repeat(p.' ',7).mp." ▶ ".d.p." Re:Hine".str_repeat(p.' ',7)."date:".date("m/d/Y").n;
+    print p."time:".date("H:i").str_repeat(p.' ',7).mp." ▶ ".d.p." Xianjing7".str_repeat(p.' ',7)."date:".date("m/d/Y").n;
     line();
     print " ";
     foreach($x as $data){
