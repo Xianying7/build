@@ -213,6 +213,7 @@ function visit_short($r, $site_url = 0, $data_token = 0){
             }
             $r2 = bypass_shortlinks($r1["url"]);
             if(!$r2){
+              return "refresh";
               goto refresh;
             }
             return $r2;
@@ -901,6 +902,17 @@ function bypass_shortlinks($url, $separator = 0){
           $r = base_short($link,1,$data,0,0,join('',$cookie));
           $cookie[] = $r["cookie"];
           $t = $r["token_csrf"];
+        } elseif($t[1][1] == "random_token"){
+          $data = data_post($t, "four");
+          $r = base_short($link,1,$data,0,0,join('',$cookie));
+          $cookie[] = $r["cookie"];
+          $t = $r["token_csrf"];
+          if($t[1][8]){
+          $data = data_post($t, "eight");
+          $r = base_short($link,1,$data,0,0,join('',$cookie));
+          $cookie[] = $r["cookie"];
+          $t = $r["token_csrf"];
+        }
         } else {
           $data = data_post($t, "three");
           $r = base_short($link,1,$data,0,0,join('',$cookie));
@@ -1563,6 +1575,29 @@ function data_post($t, $type, $array = 0){
       explode('"',$t[1][4])[0] => $t[2][4],
       explode('"',$t[1][5])[0] => $t[2][5],
       explode('"',$t[1][6])[0] => $t[2][6],
+      );
+  } elseif($type ==  "seven"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => $t[2][2],
+      explode('"',$t[1][3])[0] => $t[2][3],
+      explode('"',$t[1][4])[0] => $t[2][4],
+      explode('"',$t[1][5])[0] => $t[2][5],
+      explode('"',$t[1][6])[0] => $t[2][6],
+      explode('"',$t[1][7])[0] => $t[2][7],
+      );
+  } elseif($type ==  "eight"){
+    $data = array(
+      explode('"',$t[1][0])[0] => $t[2][0],
+      explode('"',$t[1][1])[0] => $t[2][1],
+      explode('"',$t[1][2])[0] => $t[2][2],
+      explode('"',$t[1][3])[0] => $t[2][3],
+      explode('"',$t[1][4])[0] => $t[2][4],
+      explode('"',$t[1][5])[0] => $t[2][5],
+      explode('"',$t[1][6])[0] => $t[2][6],
+      explode('"',$t[1][7])[0] => $t[2][7],
+      explode('"',$t[1][8])[0] => $t[2][8],
       );
   }
   if($array){
