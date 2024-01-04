@@ -211,9 +211,14 @@ function visit_short($r, $site_url = 0, $data_token = 0){
             if($exp == 2){
               goto up;
             }
-            $r2 = bypass_shortlinks($r1["url"]);
+            for($h=0;$h<3;$h++){
+              $r2 = bypass_shortlinks($r1["url"]);
+              if(preg_match("#(http)#is",$r2)){
+                return $r2;
+              }
+            }
             if(!$r2){
-              return "refresh";
+              #return "refresh";
               goto refresh;
             }
             return $r2;
