@@ -1643,6 +1643,7 @@ function config(){
   $config[] = "illink";
   $config[] = "illink.net";
   $config[] = "Bird";
+  $config[] = "BirdUrl";
   $config[] = "BirdURLs";
   $config[] = "Birdsurl";
   $config[] = "birdurls.com";
