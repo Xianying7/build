@@ -1707,6 +1707,7 @@ function config(){
   $config[] = "Usalink";
   $config[] = "usalink-io";
   $config[] = "usalink.io";
+  $config[] = "Shrinkme";
   $config[] = "Shrinkme.io";
   $config[] = "shrinkme-io";
   $config[] = "shrinkmel";
@@ -1734,6 +1735,7 @@ function config(){
   $config[] = "fc-lc";
   $config[] = "fc.lc";
   $config[] = "Bestlink";
+  $config[] = "1short";
   $config[] = "1shorten.com";
   $config[] = "CCurl";
   $config[] = "ccurl.net";
@@ -1751,6 +1753,7 @@ function config(){
   $config[] = "ex-foary.com";
   $config[] = "Clicksfly";
   $config[] = "clicksflycom";
+  $config[] = "Clickflcom";
   $config[] = "Clicksfly.com";
   $config[] = "Genlink";
   $config[] = "ctr";
@@ -1836,6 +1839,7 @@ function config(){
   $config[] = "rs";
   $config[] = "rsshort";
   $config[] = "RSSshort";
+  $config[] = "RSShorTcom";
   $config[] = "rsshort.com";
   $config[] = "Rsshorteasy";
   $config[] = "Paylinks";
