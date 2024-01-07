@@ -227,7 +227,8 @@ function coordinate($img, $negate = 0) {
     if ($string_array){
       return [
         "x" => $array_container[$o][$string_array],
-        "y" => rand($height/2, 30)
+        "y" => rand($height/2, 30),
+        "ans" => base64_encode("1,701,24,915,8,915,Mozilla,0,19,".$array_container[$o][$string_array].",412,24,1,412,Linux armv8l,0,".time())
       ];
     }
   }
@@ -667,8 +668,12 @@ function curl($url, $header = false, $post = false, $followlocation = false, $co
             $default[CURLOPT_HTTPHEADER] = $header;
         }
         if ($post) {
-            $default[CURLOPT_POST] = 1;
-            $default[CURLOPT_POSTFIELDS] = $post;
+            if ($post == 1) {
+                $default[CURLOPT_POST] = 1;
+            } else {
+                $default[CURLOPT_POST] = 1;
+                $default[CURLOPT_POSTFIELDS] = $post;
+            }
         }
         if ($cookiejar) {
             $default[CURLOPT_COOKIEFILE] = $cookiejar;
