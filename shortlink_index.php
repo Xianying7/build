@@ -145,7 +145,7 @@ function visit_short($r, $site_url = 0, $data_token = 0){
               if($r1["url1"]){
                 $r1["url"] = $r1["url1"];
               }
-              
+              #die(print_r($r1));
             } elseif(mode == "only_site"){
               $r1 = base_run($site_url.$r["visit"][$s]);
               if($r1["url1"]){
@@ -670,7 +670,7 @@ function bypass_shortlinks($url, $separator = 0){
           $cookie[] = $r1["cookie"];
           $data = data_post($t, "two");
             $r2 = base_short($run["go"][0],1,$data,0,0,join('',$cookie))["json"];
-            if(preg_match("#(https)#is",$r2->url)){
+            if(preg_match("#(http)#is",$r2->url)){
               print h.$r2->status;
               r();
               unset($cookie);
@@ -697,7 +697,7 @@ function bypass_shortlinks($url, $separator = 0){
           L($coundown);
           $data = data_post($t, "four");
           $r1 = base_short($run["go"][0],1,$data,$url,0,join('',$cookie))["json"];
-          if(preg_match("#(https)#is",$r1->url)){
+          if(preg_match("#(http)#is",$r1->url)){
             h.$r1->status;
             r();
             unset($cookie);
@@ -778,7 +778,7 @@ function bypass_shortlinks($url, $separator = 0){
             $data = data_post($t, "four");
             $r2 = base_short(build($url)["go"][2],1,$data,$url,0,join('',$cookie))["json"];
           }
-          if(preg_match("#(https)#is",$r2->url)){
+          if(preg_match("#(http)#is",$r2->url)){
            print h.$r2->status;
            r();
            unset($cookie);
@@ -839,7 +839,7 @@ function bypass_shortlinks($url, $separator = 0){
         L($coundown);
         $data = data_post($t, "four");
         $r1 = base_short(build($url)["go"][0],1,$data,0,0,join('',$cookie))["json"];
-        if(preg_match("#(https)#is",$r1->url)){
+        if(preg_match("#(http)#is",$r1->url)){
           h.$r1->status;
           r();
           unset($cookie);
@@ -928,7 +928,7 @@ function bypass_shortlinks($url, $separator = 0){
           L($coundown+10);
           $data = data_post($t, "six");
           $r1 = base_short(str_replace("fc-lc.xyz","fc.lc",str_replace("oii.io/links/go","oii.io/links/go1",build($url)["go"][0])),1,$data,$link,0,join('',$cookie))["json"];
-          if(preg_match("#(https)#is",$r1->url)){
+          if(preg_match("#(http)#is",$r1->url)){
             h."success";
             r();
             unset($cookie);
@@ -980,7 +980,7 @@ function bypass_shortlinks($url, $separator = 0){
           L($coundown);
           $data = data_post($t, "four");
           $r1 = base_short($run["go"][0],1,$data,0,0,join('',$cookie))["json"];
-          if(preg_match("#(https)#is",$r1->url)){
+          if(preg_match("#(http)#is",$r1->url)){
             h.$r1->status;
             r();
             return $r1->url;
@@ -1008,7 +1008,7 @@ function bypass_shortlinks($url, $separator = 0){
         L($coundown);
         $data = data_post($t, "two");
         $r1 = base_short(build($url)["go"][0],1,$data,0,0,join('',$cookie))["json"];
-        if(preg_match("#(https)#is",$r1->url)){
+        if(preg_match("#(http)#is",$r1->url)){
         h.$r1->status;
         r();
         unset($cookie);
@@ -1076,7 +1076,7 @@ function bypass_shortlinks($url, $separator = 0){
               $data = data_post($t, "four");
               L($coundown);
               $r1 = base_short(build($final)["go"][0],1,$data,0,0,join('',$cookie))["json"];
-              if(preg_match("#(https)#is",$r1->url)){
+              if(preg_match("#(http)#is",$r1->url)){
                 print h.$r1->status;
                 r();
                 unset($cookie);
@@ -1669,6 +1669,7 @@ function config(){
   $config[] = "Ez4Short";
   $config[] = "ez4shortx";
   $config[] = "Shrinkme";
+  $config[] = "Shrink.me";
   $config[] = "linksly-co";
   $config[] = "linksly.co";
   $config[] = "Linksly";
